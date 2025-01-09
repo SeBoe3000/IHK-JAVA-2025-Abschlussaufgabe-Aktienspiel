@@ -5,7 +5,7 @@ import java.sql.DriverManager;
 import java.sql.SQLException;
 
 public class Datenbankverbindung {
-    private static final String DB_URL = "jdbc:postgresql://localhost:1731/Aktienrechner";
+    private static final String DB_URL = "jdbc:postgresql://localhost:1731/aktienrechner";
     private static final String USER = "postgres";
     private static final String PASS = "verysecure";
 
