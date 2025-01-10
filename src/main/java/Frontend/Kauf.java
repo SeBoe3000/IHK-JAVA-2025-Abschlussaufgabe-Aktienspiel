@@ -8,7 +8,15 @@ import java.awt.event.ActionListener;
 public class Kauf {
     public static final JFrame kauf = new JFrame("Käufe erfassen");
 
-    JButton back = new JButton("Zurück zum Start");
+    static EingabePanel person = new EingabePanel("Person (ID): ");
+    static EingabePanel aktie = new EingabePanel("Aktie: ");
+    static EingabePanel anzahl = new EingabePanel("Anzahl Aktien: ");
+    static EingabePanel restwert = new EingabePanel("Restwert: ");
+
+    JButton create_btn = new JButton("Erfassen");
+    JButton ok_btn = new JButton("OK");
+    JButton cancel_btn = new JButton("Abbrechen");
+    ButtonGroup transaction_group = new ButtonGroup();
 
     private void kauf() {
         JPanel panel = new JPanel();
@@ -18,13 +26,38 @@ public class Kauf {
         GridBagConstraints gbc = new GridBagConstraints();
         panel.setLayout(gridbag);
 
-        // Zurück hinzufügen
+        // Person hinzufügen
         gbc.gridx = 0; // Spalte
         gbc.gridy = 0; // Zeile
         gbc.weightx = 0.1;
         gbc.weighty = 0.1;
         gbc.fill = GridBagConstraints.CENTER;
-        panel.add(back, gbc);
+        panel.add(person, gbc);
+
+        // Aktie hinzufügen
+        gbc.gridy = 1; // Zeile
+        panel.add(aktie, gbc);
+
+        // Anzahl hinzufügen
+        gbc.gridy = 2; // Zeile
+        panel.add(anzahl, gbc);
+
+        // Restwert hinzufügen
+        gbc.gridy = 3; // Zeile
+        panel.add(restwert, gbc);
+
+        // Buttons hinzufügen
+        gbc.gridy = 4; // Zeile
+        transaction_group.add(create_btn);
+        transaction_group.add(ok_btn);
+        transaction_group.add(cancel_btn);
+
+        JPanel transaction_group = new JPanel();
+        transaction_group.setLayout(new BoxLayout(transaction_group, BoxLayout.X_AXIS));
+        transaction_group.add(create_btn);
+        transaction_group.add(ok_btn);
+        transaction_group.add(cancel_btn);
+        panel.add(transaction_group, gbc);
 
         // Panel dem Frame hinzufügen
         kauf.add(panel);
@@ -41,15 +74,59 @@ public class Kauf {
     }
 
     private void buttonListenerstart() {
-
-        ActionListener zurueck = new ActionListener() {
+        ActionListener ok = new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                Start.start.setVisible(true);
-                kauf.setVisible(false);
+                // TODO: Prüfen, ob Element in der Liste vorhanden ist
+                // TODO: Prüfen, ob Element in der Datenbank vorhanden ist
+                // TODO: Element der Liste hinzufügen
             }
         };
-        back.addActionListener(zurueck);
+        ok_btn.addActionListener(ok);
+
+        ActionListener create = new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                // TODO: Prüfen, ob Element in der Liste vorhanden ist
+                // TODO: Prüfen, ob Element in der Datenbank vorhanden ist
+                // TODO: Element Liste hinzufügen
+                // TODO: Element aus Liste in Datenbank übertragen
+                // TODO: Programmschließen
+            }
+        };
+        create_btn.addActionListener(create);
+
+        ActionListener abbrechen = new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                backToStart();
+            }
+        };
+        cancel_btn.addActionListener(abbrechen);
+    }
+
+    // Prüfung, ob ein Feld gefüllt ist
+    private static boolean checkFilled(){
+        Boolean checked = true;
+        if(person.getTextfield().isEmpty() && aktie.getTextfield().isEmpty() && anzahl.getTextfield().isEmpty()){
+            checked = false;
+        }
+        return checked;
+    }
+
+    // Felder leeren
+    private static void clearFields(){
+        person.setTextField("");
+        aktie.setTextField("");
+        anzahl.setTextField("");
+    }
+
+    // Zu Start zurückkehren
+    private static void backToStart(){
+        Start.start.setVisible(true);
+        kauf.setVisible(false);
+        // Felder leeren
+        clearFields();
     }
 
     public void main() {
