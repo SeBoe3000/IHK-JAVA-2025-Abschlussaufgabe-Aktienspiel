@@ -13,10 +13,7 @@ public class Kauf {
     static EingabePanel anzahl = new EingabePanel("Anzahl Aktien: ");
     static EingabePanel restwert = new EingabePanel("Restwert: ");
 
-    JButton create_btn = new JButton("Erfassen");
-    JButton ok_btn = new JButton("OK");
-    JButton cancel_btn = new JButton("Abbrechen");
-    ButtonGroup transaction_group = new ButtonGroup();
+    static Buttons buttons = new Buttons();
 
     private void kauf() {
         JPanel panel = new JPanel();
@@ -48,16 +45,8 @@ public class Kauf {
 
         // Buttons hinzufügen
         gbc.gridy = 4; // Zeile
-        transaction_group.add(create_btn);
-        transaction_group.add(ok_btn);
-        transaction_group.add(cancel_btn);
-
-        JPanel transaction_group = new JPanel();
-        transaction_group.setLayout(new BoxLayout(transaction_group, BoxLayout.X_AXIS));
-        transaction_group.add(create_btn);
-        transaction_group.add(ok_btn);
-        transaction_group.add(cancel_btn);
-        panel.add(transaction_group, gbc);
+        buttons.setVisibleFalse();
+        panel.add(buttons, gbc);
 
         // Panel dem Frame hinzufügen
         kauf.add(panel);
@@ -82,7 +71,7 @@ public class Kauf {
                 // TODO: Element der Liste hinzufügen
             }
         };
-        ok_btn.addActionListener(ok);
+        buttons.ok_btn.addActionListener(ok);
 
         ActionListener create = new ActionListener() {
             @Override
@@ -94,7 +83,7 @@ public class Kauf {
                 // TODO: Programmschließen
             }
         };
-        create_btn.addActionListener(create);
+        buttons.create_btn.addActionListener(create);
 
         ActionListener abbrechen = new ActionListener() {
             @Override
@@ -102,7 +91,7 @@ public class Kauf {
                 backToStart();
             }
         };
-        cancel_btn.addActionListener(abbrechen);
+        buttons.cancel_btn.addActionListener(abbrechen);
     }
 
     // Prüfung, ob ein Feld gefüllt ist

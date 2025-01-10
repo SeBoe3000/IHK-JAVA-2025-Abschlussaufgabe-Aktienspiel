@@ -136,7 +136,7 @@ public class BeispieldatenImportieren {
         }
     }
 
-    // Nach dem Import die Checkboxen demarkieren
+    // Checkboxen demarkieren
     private static void checkboxUnselect(){
         person_chb.setSelected(false);
         aktie_chb.setSelected(false);

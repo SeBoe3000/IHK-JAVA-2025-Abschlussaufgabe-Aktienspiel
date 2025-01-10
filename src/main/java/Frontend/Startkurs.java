@@ -8,9 +8,10 @@ import java.awt.event.ActionListener;
 public class Startkurs {
     public static final JFrame startkurs = new JFrame("Startkurs erfassen");
 
-    JButton backstart = new JButton("Zurück zu Start");
-    JButton backstammdaten = new JButton("Zurück zu Stammdaten");
-    ButtonGroup group_back = new ButtonGroup();
+    static EingabePanel aktie = new EingabePanel("Aktie (ISIN): ");
+    static EingabePanel kurs = new EingabePanel("Startkurs: ");
+
+    static Buttons buttons = new Buttons();
 
     private void startkurs() {
         JPanel panel = new JPanel();
@@ -20,21 +21,21 @@ public class Startkurs {
         GridBagConstraints gbc = new GridBagConstraints();
         panel.setLayout(gridbag);
 
-        // Zurück hinzufügen
+        // Aktie hinzufügen
         gbc.gridx = 0; // Spalte
         gbc.gridy = 0; // Zeile
         gbc.weightx = 0.1;
         gbc.weighty = 0.1;
         gbc.fill = GridBagConstraints.CENTER;
+        panel.add(aktie, gbc);
 
-        group_back.add(backstart);
-        group_back.add(backstammdaten);
+        // Kurs hinzufügen
+        gbc.gridy = 1; // Zeile
+        panel.add(kurs, gbc);
 
-        JPanel group_back = new JPanel();
-        group_back.setLayout(new BoxLayout(group_back, BoxLayout.X_AXIS));
-        group_back.add(backstart);
-        group_back.add(backstammdaten);
-        panel.add(group_back, gbc);
+        // Buttons hinzufügen
+        gbc.gridy = 2; // Zeile
+        panel.add(buttons, gbc);
 
         // Panel dem Frame hinzufügen
         startkurs.add(panel);
@@ -52,23 +53,41 @@ public class Startkurs {
 
     private void buttonListenerstart() {
 
-        ActionListener zurueckStammdaten = new ActionListener() {
+        ActionListener ok = new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
+                // TODO
+            }
+        };
+        buttons.ok_btn.addActionListener(ok);
+
+        ActionListener erfassen = new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                // TODO
+            }
+        };
+        buttons.create_btn.addActionListener(erfassen);
+
+        ActionListener abbrechen = new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                // TODO
                 Stammdaten.stammdaten.setVisible(true);
                 startkurs.setVisible(false);
             }
         };
-        backstammdaten.addActionListener(zurueckStammdaten);
+        buttons.cancel_btn.addActionListener(abbrechen);
 
         ActionListener zurueckStart = new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
+                // TODO
                 Start.start.setVisible(true);
                 startkurs.setVisible(false);
             }
         };
-        backstart.addActionListener(zurueckStart);
+        buttons.backstart.addActionListener(zurueckStart);
     }
 
     public void main() {

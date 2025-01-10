@@ -12,10 +12,7 @@ public class Wert {
     static EingabePanel kurs = new EingabePanel("Kurs: ");
     static EingabePanel kassenbestand = new EingabePanel("Kassenbestand: ");
 
-    JButton create_btn = new JButton("Erfassen");
-    JButton ok_btn = new JButton("OK");
-    JButton cancel_btn = new JButton("Abbrechen");
-    ButtonGroup transaction_group = new ButtonGroup();
+    static Buttons buttons = new Buttons();
 
     private void wert() {
         JPanel panel = new JPanel();
@@ -43,17 +40,8 @@ public class Wert {
 
         // Buttons hinzufügen
         gbc.gridy = 3; // Zeile
-
-        transaction_group.add(create_btn);
-        transaction_group.add(ok_btn);
-        transaction_group.add(cancel_btn);
-
-        JPanel transaction_group = new JPanel();
-        transaction_group.setLayout(new BoxLayout(transaction_group, BoxLayout.X_AXIS));
-        transaction_group.add(create_btn);
-        transaction_group.add(ok_btn);
-        transaction_group.add(cancel_btn);
-        panel.add(transaction_group, gbc);
+        buttons.setVisibleFalse();
+        panel.add(buttons, gbc);
 
         // Panel dem Frame hinzufügen
         wert.add(panel);
@@ -78,7 +66,7 @@ public class Wert {
                 // TODO: Element der Liste hinzufügen
             }
         };
-        ok_btn.addActionListener(ok);
+        buttons.ok_btn.addActionListener(ok);
 
         ActionListener create = new ActionListener() {
             @Override
@@ -90,14 +78,14 @@ public class Wert {
                 // TODO: Programmschließen
             }
         };
-        create_btn.addActionListener(create);
+        buttons.create_btn.addActionListener(create);
         ActionListener abbrechen = new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 backToStart();
             }
         };
-        cancel_btn.addActionListener(abbrechen);
+        buttons.cancel_btn.addActionListener(abbrechen);
     }
 
     // Prüfung, ob eine Feld gefüllt ist

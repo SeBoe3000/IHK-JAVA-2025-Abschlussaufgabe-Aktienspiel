@@ -8,9 +8,11 @@ import java.awt.event.ActionListener;
 public class Person {
     public static final JFrame person = new JFrame("Person erfassen");
 
-    JButton backstart = new JButton("Zurück zu Start");
-    JButton backstammdaten = new JButton("Zurück zu Stammdaten");
-    ButtonGroup group_back = new ButtonGroup();
+    static EingabePanel vorname = new EingabePanel("Vorname: ");
+    static EingabePanel nachname = new EingabePanel("Nachname: ");
+    static EingabePanel alter = new EingabePanel("Alter: ");
+
+    static Buttons buttons = new Buttons();
 
     private void person() {
         JPanel panel = new JPanel();
@@ -20,21 +22,25 @@ public class Person {
         GridBagConstraints gbc = new GridBagConstraints();
         panel.setLayout(gridbag);
 
-        // Zurück hinzufügen
+        // Person hinzufügen
         gbc.gridx = 0; // Spalte
         gbc.gridy = 0; // Zeile
         gbc.weightx = 0.1;
         gbc.weighty = 0.1;
         gbc.fill = GridBagConstraints.CENTER;
+        panel.add(vorname, gbc);
 
-        group_back.add(backstart);
-        group_back.add(backstammdaten);
+        // Nachname hinzufügen
+        gbc.gridy = 1; // Zeile
+        panel.add(nachname, gbc);
 
-        JPanel group_back = new JPanel();
-        group_back.setLayout(new BoxLayout(group_back, BoxLayout.X_AXIS));
-        group_back.add(backstart);
-        group_back.add(backstammdaten);
-        panel.add(group_back, gbc);
+        // Alter hinzufügen
+        gbc.gridy = 2; // Zeile
+        panel.add(alter, gbc);
+
+        // Buttons hinzufügen
+        gbc.gridy = 3; // Zeile
+        panel.add(buttons, gbc);
 
         // Panel dem Frame hinzufügen
         person.add(panel);
@@ -52,23 +58,41 @@ public class Person {
 
     private void buttonListenerstart() {
 
-        ActionListener zurueckStammdaten = new ActionListener() {
+        ActionListener ok = new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
+                // TODO
+            }
+        };
+        buttons.ok_btn.addActionListener(ok);
+
+        ActionListener erfassen = new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                // TODO
+            }
+        };
+        buttons.create_btn.addActionListener(erfassen);
+
+        ActionListener abbrechen = new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                // TODO
                 Stammdaten.stammdaten.setVisible(true);
                 person.setVisible(false);
             }
         };
-        backstammdaten.addActionListener(zurueckStammdaten);
+        buttons.cancel_btn.addActionListener(abbrechen);
 
         ActionListener zurueckStart = new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
+                // TODO
                 Start.start.setVisible(true);
                 person.setVisible(false);
             }
         };
-        backstart.addActionListener(zurueckStart);
+        buttons.backstart.addActionListener(zurueckStart);
     }
 
     public void main() {
