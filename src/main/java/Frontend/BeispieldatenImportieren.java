@@ -8,8 +8,12 @@ import java.awt.event.ActionListener;
 public class BeispieldatenImportieren {
     public static final JFrame importExample = new JFrame("Beispieldaten importieren");
 
-    // Checkboxen für Import
+    static JCheckBox person_chb = new JCheckBox("Personen importieren");
+    static JCheckBox aktie_chb = new JCheckBox("Aktien importieren");
+    static JCheckBox startkapital_chb = new JCheckBox("Startkapital importieren");
+    static JCheckBox startkurs_chb = new JCheckBox("Startkurse importieren");
 
+    JButton create = new JButton("Daten Importieren");
     JButton back = new JButton("Zurück zum Start");
 
     private void beispieldatenImportieren() {
@@ -20,12 +24,30 @@ public class BeispieldatenImportieren {
         GridBagConstraints gbc = new GridBagConstraints();
         panel.setLayout(gridbag);
 
-        // Zurück hinzufügen
+        // Checkboxen hinzufügen
         gbc.gridx = 0; // Spalte
         gbc.gridy = 0; // Zeile
         gbc.weightx = 0.1;
         gbc.weighty = 0.1;
         gbc.fill = GridBagConstraints.CENTER;
+
+        panel.add(person_chb, gbc);
+
+        gbc.gridy = 1; // Zeile
+        panel.add(aktie_chb, gbc);
+
+        gbc.gridy = 2; // Zeile
+        panel.add(startkapital_chb, gbc);
+
+        gbc.gridy = 3; // Zeile
+        panel.add(startkurs_chb, gbc);
+
+        // Import hinzufügen
+        gbc.gridy = 4; // Zeile
+        panel.add(create, gbc);
+
+        // Zurück hinzufügen
+        gbc.gridy = 5; // Zeile
         panel.add(back, gbc);
 
         // Panel dem Frame hinzufügen
@@ -47,11 +69,87 @@ public class BeispieldatenImportieren {
         ActionListener zurueck = new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                Start.start.setVisible(true);
-                importExample.setVisible(false);
+                if(checkSelected()){
+                    Boolean action = Interaction.abbrechen();
+                    if(action) {
+                        importieren();
+                    }
+                }
+                backToStart();
             }
         };
         back.addActionListener(zurueck);
+
+        ActionListener importieren = new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                // Meldung ausgeben, wenn keine Checkbox markiert ist.
+                if(checkSelected() == false) {
+                    Interaction.nothingMarked();
+                } else {
+                    importieren();
+                    checkboxUnselect();
+                }
+            }
+        };
+        create.addActionListener(importieren);
+    }
+
+    // Prüfung, ob eine Checkbox markiert ist
+    private static boolean checkSelected(){
+        Boolean checked = false;
+        if(person_chb.isSelected() || aktie_chb.isSelected() || startkapital_chb.isSelected() || startkurs_chb.isSelected()){
+            checked = true;
+        }
+        return checked;
+    }
+
+    // Import durchführen
+    private static void importieren(){
+        System.out.println("Imports durchführen");
+
+        // Imports durchführen
+        if(person_chb.isSelected()){
+            // TODO: Prüfung Daten korrekt und nicht vorhanden
+            // TODO: Daten importieren
+            // TODO: Meldung ausgeben (Daten vorhanden oder erfolgreich verarbeitet)
+        }
+
+        if(aktie_chb.isSelected()){
+            // TODO: Prüfung Daten korrekt und nicht vorhanden
+            // TODO: Daten importieren
+            // TODO: Meldung ausgeben (Daten vorhanden oder erfolgreich verarbeitet)
+        }
+
+        if(startkapital_chb.isSelected()){
+            // TODO: Prüfung Daten korrekt und nicht vorhanden
+            // TODO: Prüfung Schlüssel vorhanden
+            // TODO: Daten importieren
+            // TODO: Meldung ausgeben (Daten vorhanden oder erfolgreich verarbeitet)
+        }
+
+        if(startkurs_chb.isSelected()){
+            // TODO: Prüfung Daten korrekt und nicht vorhanden
+            // TODO: Prüfung Schlüssel vorhanden
+            // TODO: Daten importieren
+            // TODO: Meldung ausgeben (Daten vorhanden oder erfolgreich verarbeitet)
+        }
+    }
+
+    // Nach dem Import die Checkboxen demarkieren
+    private static void checkboxUnselect(){
+        person_chb.setSelected(false);
+        aktie_chb.setSelected(false);
+        startkapital_chb.setSelected(false);
+        startkurs_chb.setSelected(false);
+    }
+
+    // Zu Start zurückkehren
+    private static void backToStart(){
+        Start.start.setVisible(true);
+        importExample.setVisible(false);
+        // Checkboxen beim Zurückkehren demarkieren
+        checkboxUnselect();
     }
 
     public void main() {
