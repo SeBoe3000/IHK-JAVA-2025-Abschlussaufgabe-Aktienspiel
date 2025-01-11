@@ -1,17 +1,17 @@
 package Backend;
 
-public class Transaktionen {
+public class ElementTransaktionen {
     private String person;
     private String aktie;
     private Integer anzahl;
 
-    public Transaktionen(String person, String aktie, Integer anzahl) {
+    public ElementTransaktionen(String person, String aktie, Integer anzahl) {
         this.person = person;
         this.aktie = aktie;
         this.anzahl = anzahl;
     }
 
-    public Transaktionen() {
+    public ElementTransaktionen() {
     }
 
     public String getPerson() {

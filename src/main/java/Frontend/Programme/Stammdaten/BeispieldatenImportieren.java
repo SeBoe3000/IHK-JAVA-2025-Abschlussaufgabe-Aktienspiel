@@ -1,4 +1,7 @@
-package Frontend;
+package Frontend.Programme.Stammdaten;
+
+import Frontend.Komponenten.Interaction;
+import Frontend.Programme.Start;
 
 import javax.swing.*;
 import java.awt.*;
@@ -146,7 +149,7 @@ public class BeispieldatenImportieren {
 
     // Zu Start zurückkehren
     private static void backToStart(){
-        Start.start.setVisible(true);
+        //Start.start.setVisible(true);
         importExample.setVisible(false);
         // Checkboxen beim Zurückkehren demarkieren
         checkboxUnselect();

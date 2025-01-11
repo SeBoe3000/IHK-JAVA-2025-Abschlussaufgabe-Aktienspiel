@@ -1,15 +1,15 @@
 package Backend;
 
-public class Startkurs {
+public class ElementStartkurs {
     private String aktie;
     private Integer startkurs;
 
-    public Startkurs(String aktie, Integer startkurs) {
+    public ElementStartkurs(String aktie, Integer startkurs) {
         this.aktie = aktie;
         this.startkurs = startkurs;
     }
 
-    public Startkurs() {
+    public ElementStartkurs() {
     }
 
     public String getAktie() {

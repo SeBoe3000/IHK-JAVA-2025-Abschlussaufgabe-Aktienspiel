@@ -1,4 +1,6 @@
-package Frontend;
+package Frontend.Programme.Anzeige;
+
+import Frontend.Programme.Start;
 
 import javax.swing.*;
 import java.awt.*;
@@ -45,7 +47,7 @@ public class Spielstand {
         ActionListener zurueck = new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                Start.start.setVisible(true);
+                //Start.start.setVisible(true);
                 spielstand.setVisible(false);
             }
         };

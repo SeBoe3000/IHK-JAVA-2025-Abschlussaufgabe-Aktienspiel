@@ -1,17 +1,17 @@
 package Backend;
 
-public class Unternehmenswerte {
+public class ElementWert {
     private String aktie;
     private Float kurs;
     private Float kassenbestand;
 
-    public Unternehmenswerte(String aktie, Float kurs, Float kassenbestand) {
+    public ElementWert(String aktie, Float kurs, Float kassenbestand) {
         this.aktie = aktie;
         this.kurs = kurs;
         this.kassenbestand = kassenbestand;
     }
 
-    public Unternehmenswerte() {
+    public ElementWert() {
     }
 
     public String getAktie() {

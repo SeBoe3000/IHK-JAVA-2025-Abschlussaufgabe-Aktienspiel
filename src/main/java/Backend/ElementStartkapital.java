@@ -1,15 +1,15 @@
 package Backend;
 
-public class Startkapital {
+public class ElementStartkapital {
     private String person;
     private Float betrag;
 
-    public Startkapital(String person, Float betrag) {
+    public ElementStartkapital(String person, Float betrag) {
         this.person = person;
         this.betrag = betrag;
     }
 
-    public Startkapital() {
+    public ElementStartkapital() {
     }
 
     public String getPerson() {

@@ -1,4 +1,8 @@
-package Frontend;
+package Frontend.Programme.Stammdaten;
+
+import Frontend.Komponenten.Buttons;
+import Frontend.Komponenten.EingabePanel;
+import Frontend.Programme.Start;
 
 import javax.swing.*;
 import java.awt.*;
@@ -8,11 +12,11 @@ import java.awt.event.ActionListener;
 public class Person {
     public static final JFrame person = new JFrame("Person erfassen");
 
-    static EingabePanel vorname = new EingabePanel("Vorname: ");
-    static EingabePanel nachname = new EingabePanel("Nachname: ");
-    static EingabePanel alter = new EingabePanel("Alter: ");
+    EingabePanel vorname = new EingabePanel("Vorname: ");
+    EingabePanel nachname = new EingabePanel("Nachname: ");
+    EingabePanel alter = new EingabePanel("Alter: ");
 
-    static Buttons buttons = new Buttons();
+    Buttons buttons = new Buttons();
 
     private void person() {
         JPanel panel = new JPanel();
@@ -88,7 +92,7 @@ public class Person {
             @Override
             public void actionPerformed(ActionEvent e) {
                 // TODO
-                Start.start.setVisible(true);
+                //Start.start.setVisible(true);
                 person.setVisible(false);
             }
         };

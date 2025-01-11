@@ -1,4 +1,4 @@
-package Frontend;
+package Frontend.Komponenten;
 
 import javax.swing.*;
 

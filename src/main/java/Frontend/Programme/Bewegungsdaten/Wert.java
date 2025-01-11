@@ -1,4 +1,8 @@
-package Frontend;
+package Frontend.Programme.Bewegungsdaten;
+
+import Frontend.Komponenten.Buttons;
+import Frontend.Komponenten.EingabePanel;
+import Frontend.Programme.Start;
 
 import javax.swing.*;
 import java.awt.*;
@@ -8,11 +12,11 @@ import java.awt.event.ActionListener;
 public class Wert {
     public static final JFrame wert = new JFrame("Unternehmenswert erfassen");
 
-    static EingabePanel aktie = new EingabePanel("Aktie (ISIN): ");
-    static EingabePanel kurs = new EingabePanel("Kurs: ");
-    static EingabePanel kassenbestand = new EingabePanel("Kassenbestand: ");
+    EingabePanel aktie = new EingabePanel("Aktie (ISIN): ");
+    EingabePanel kurs = new EingabePanel("Kurs: ");
+    EingabePanel kassenbestand = new EingabePanel("Kassenbestand: ");
 
-    static Buttons buttons = new Buttons();
+    Buttons buttons = new Buttons();
 
     private void wert() {
         JPanel panel = new JPanel();
@@ -89,7 +93,7 @@ public class Wert {
     }
 
     // Prüfung, ob eine Feld gefüllt ist
-    private static boolean checkFilled(){
+    private boolean checkFilled(){
         Boolean checked = true;
         if(aktie.getTextfield().isEmpty() && kurs.getTextfield().isEmpty() && kassenbestand.getTextfield().isEmpty()){
             checked = false;
@@ -98,15 +102,15 @@ public class Wert {
     }
 
     // Felder leeren
-    private static void clearFields(){
+    private void clearFields(){
         aktie.setTextField("");
         kurs.setTextField("");
         kassenbestand.setTextField("");
     }
 
     // Zu Start zurückkehren
-    private static void backToStart(){
-        Start.start.setVisible(true);
+    private void backToStart(){
+        //Start.start.setVisible(true);
         wert.setVisible(false);
         // Felder leeren
         clearFields();

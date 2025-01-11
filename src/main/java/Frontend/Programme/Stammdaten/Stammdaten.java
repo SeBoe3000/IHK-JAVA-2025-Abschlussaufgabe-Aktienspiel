@@ -1,4 +1,6 @@
-package Frontend;
+package Frontend.Programme.Stammdaten;
+
+import Frontend.Programme.Start;
 
 import javax.swing.*;
 import java.awt.*;
@@ -118,7 +120,7 @@ public class Stammdaten {
         ActionListener zurueck = new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                Start.start.setVisible(true);
+                //Start.start.setVisible(true);
                 stammdaten.setVisible(false);
             }
         };
