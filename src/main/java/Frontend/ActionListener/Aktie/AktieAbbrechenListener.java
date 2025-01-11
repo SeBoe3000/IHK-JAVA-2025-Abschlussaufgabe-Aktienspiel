@@ -3,9 +3,6 @@ package Frontend.ActionListener.Aktie;
 import Frontend.ActionListener.MyAbbrechenListener;
 import Frontend.Programme.Stammdaten.Aktie;
 
-import javax.swing.*;
-import java.awt.*;
-
 public class AktieAbbrechenListener extends MyAbbrechenListener {
 
     @Override
@@ -16,7 +13,7 @@ public class AktieAbbrechenListener extends MyAbbrechenListener {
 
     @Override
     protected boolean checkElemetInList() {
-        Aktie.checkElemetInList();
+        Aktie.checkElementInList();
         return false;
     }
 

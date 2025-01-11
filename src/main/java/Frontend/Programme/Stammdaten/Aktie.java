@@ -31,8 +31,6 @@ public class Aktie extends JPanel{
 
     // Zum Speichern der Ergebnisse
     static ArrayList<ElementAktie> AktieList = new ArrayList<>();
-    // Zum Prüfen, ob Elemente hinzugefügt wurden
-    static Integer anzahlElemente = 0;
 
     public Aktie(CardLayout cardLayout, JPanel cardPanel) {
         // GridBagLayout direkt auf Panel verwenden
@@ -85,7 +83,6 @@ public class Aktie extends JPanel{
         boolean inWork = true;
         int anzahlFelderKorrekt = 0;
 
-        System.out.println("ISIN ist" + isin.getTextfield());
         // Eingaben prüfen und Felder befüllen
         if(checkValues(isin, "isValidString", "Bitte eine ISIN angeben.")){
             eingabeIsin = isin.getTextfield();
@@ -123,8 +120,6 @@ public class Aktie extends JPanel{
                 // Element der Liste hinzufügen
                 ElementAktie aktie = new ElementAktie(eingabeIsin, eingabeName);
                 AktieList.add(aktie);
-                anzahlElemente++;
-                // System.out.println("Element Liste hinzufügen" + anzahlElemente);
                 // Nach Hinzufügen die Felder leeren
                 felderLeeren();
                 // Finaler Check kennzeichnen
@@ -188,12 +183,12 @@ public class Aktie extends JPanel{
     }
 
     // Prüfung, ob ein Wert in der Liste vorhanden ist.
-    public static boolean checkElemetInList() {
-        boolean noElement = true;
-        if (anzahlElemente > 0) {
-            noElement = false;
-            // System.out.println("Wert in Liste vorhanden");
+    public static boolean checkElementInList() {
+        boolean noElement = false;
+        if (AktieList.isEmpty()) {
+            noElement = true;
         }
+        //System.out.println("noElement: " + noElement);
         return noElement;
     }
 
@@ -250,8 +245,6 @@ public class Aktie extends JPanel{
     public static void backToStart(){
         // Arrayliste leeren
         AktieList.clear();
-        // Bei Beendung Programm anzahlElemente auf 0 zurücksetzen. Ansonsten kommt nach Erfassung bei Abbrechen der Dialog.
-        anzahlElemente = 0;
         // Werte und Fehler in Feldern leeren, sonst sind diese beim nächsten Mal gefüllt
         felderLeeren();
         // Frame start wieder anzeigen
