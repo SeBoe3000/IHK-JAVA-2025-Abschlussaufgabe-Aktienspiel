@@ -1,30 +1,27 @@
 package Frontend.Programme.Bewegungsdaten;
 
+import Frontend.Cards;
 import Frontend.Komponenten.Buttons;
 import Frontend.Komponenten.EingabePanel;
-import Frontend.Programme.Start;
 
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
-public class Wert {
-    public static final JFrame wert = new JFrame("Unternehmenswert erfassen");
+import static Frontend.Cards.cardLayout;
 
+public class Wert extends JPanel {
     EingabePanel aktie = new EingabePanel("Aktie (ISIN): ");
     EingabePanel kurs = new EingabePanel("Kurs: ");
     EingabePanel kassenbestand = new EingabePanel("Kassenbestand: ");
 
     Buttons buttons = new Buttons();
 
-    private void wert() {
-        JPanel panel = new JPanel();
-
-        // GridBagLayout
-        GridBagLayout gridbag = new GridBagLayout();
+    public Wert(CardLayout cardLayout, JPanel cardPanel) {
+        // GridBagLayout direkt auf Panel verwenden
+        setLayout(new GridBagLayout());
         GridBagConstraints gbc = new GridBagConstraints();
-        panel.setLayout(gridbag);
 
         // Aktie hinzufügen
         gbc.gridx = 0; // Spalte
@@ -32,41 +29,31 @@ public class Wert {
         gbc.weightx = 0.1;
         gbc.weighty = 0.1;
         gbc.fill = GridBagConstraints.CENTER;
-        panel.add(aktie, gbc);
+        add(aktie, gbc);
 
         // Kurs hinzufügen
         gbc.gridy = 1; // Zeile
-        panel.add(kurs, gbc);
+        add(kurs, gbc);
 
         // Kassenbestand hinzufügen
         gbc.gridy = 2; // Zeile
-        panel.add(kassenbestand, gbc);
+        add(kassenbestand, gbc);
 
         // Buttons hinzufügen
         gbc.gridy = 3; // Zeile
         buttons.setVisibleFalse();
-        panel.add(buttons, gbc);
+        add(buttons, gbc);
 
-        // Panel dem Frame hinzufügen
-        wert.add(panel);
-
-        // Größe vom Fenster auf Hälte der Bildschirmgröße in die Mitte setzen
-        Dimension dim = new Dimension(1920, 1080);
-        dim = Toolkit.getDefaultToolkit().getScreenSize();
-        wert.setSize(dim.width / 2, dim.height / 2);
-        wert.setLocation(dim.width / 4, dim.height / 4);
-        // Fenster Schließen, wenn geschlossen
-        wert.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        // Fenster anzeigen
-        wert.setVisible(true);
+        // ActionListener hinzufügen
+        buttonListener();
     }
 
-    private void buttonListenerstart() {
+    private void buttonListener() {
         ActionListener ok = new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 // TODO: Prüfen, ob Element in der Liste vorhanden ist
-                // TODO:Prüfen, ob Element in der Datenbank vorhanden ist
+                // TODO: Prüfen, ob Element in der Datenbank vorhanden ist
                 // TODO: Element der Liste hinzufügen
             }
         };
@@ -83,10 +70,13 @@ public class Wert {
             }
         };
         buttons.create_btn.addActionListener(create);
+
         ActionListener abbrechen = new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
+                // TODO: Logik einbauen
                 backToStart();
+
             }
         };
         buttons.cancel_btn.addActionListener(abbrechen);
@@ -110,19 +100,9 @@ public class Wert {
 
     // Zu Start zurückkehren
     private void backToStart(){
-        //Start.start.setVisible(true);
-        wert.setVisible(false);
         // Felder leeren
         clearFields();
-    }
-
-    public void main() {
-        javax.swing.SwingUtilities.invokeLater(new Runnable() {
-            @Override
-            public void run() {
-                wert();
-                buttonListenerstart();
-            }
-        });
+        // Panel wechseln
+        cardLayout.show(Cards.cardPanel, "panelStart");
     }
 }

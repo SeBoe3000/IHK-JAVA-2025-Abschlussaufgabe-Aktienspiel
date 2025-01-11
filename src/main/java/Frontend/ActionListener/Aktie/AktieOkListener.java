@@ -3,6 +3,9 @@ package Frontend.ActionListener.Aktie;
 import Frontend.ActionListener.MyOkListener;
 import Frontend.Programme.Stammdaten.Aktie;
 
+import javax.swing.*;
+import java.awt.*;
+
 public class AktieOkListener extends MyOkListener {
 
     @Override
@@ -32,5 +35,4 @@ public class AktieOkListener extends MyOkListener {
         Boolean action = Aktie.elementHinzu();
         return action;
     }
-
 }

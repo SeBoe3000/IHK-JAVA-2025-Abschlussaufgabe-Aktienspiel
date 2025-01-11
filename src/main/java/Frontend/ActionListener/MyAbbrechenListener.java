@@ -2,10 +2,15 @@ package Frontend.ActionListener;
 
 import Frontend.Komponenten.Interaction;
 
+import javax.swing.*;
+import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
 public abstract class MyAbbrechenListener implements ActionListener {
+    private JPanel cardPanel;
+    private CardLayout cardLayout;
+
     @Override
     public void actionPerformed(ActionEvent e) {
         // Prüfung ob 1 Feld gefüllt ist

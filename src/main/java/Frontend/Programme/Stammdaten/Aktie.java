@@ -6,9 +6,9 @@ import Frontend.ActionListener.Aktie.AktieAbbrechenListener;
 import Frontend.ActionListener.Aktie.AktieErfassenListener;
 import Frontend.ActionListener.Aktie.AktieOkListener;
 import Frontend.ActionListener.EingabenCheck;
+import Frontend.Cards;
 import Frontend.Komponenten.Buttons;
 import Frontend.Komponenten.EingabePanel;
-import Frontend.Programme.Start;
 
 import javax.swing.*;
 import java.awt.*;
@@ -21,10 +21,9 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 
 import static Datenbank.SQL.insertTableAktie;
+import static Frontend.Cards.cardLayout;
 
-public class Aktie {
-    public static final JFrame aktie = new JFrame("Aktie erfassen");
-
+public class Aktie extends JPanel{
     static EingabePanel isin = new EingabePanel("ISIN: ");
     static EingabePanel name = new EingabePanel("Name der Aktie: ");
 
@@ -35,13 +34,10 @@ public class Aktie {
     // Zum Prüfen, ob Elemente hinzugefügt wurden
     static Integer anzahlElemente = 0;
 
-    private void aktie() {
-        JPanel panel = new JPanel();
-
-        // GridBagLayout
-        GridBagLayout gridbag = new GridBagLayout();
+    public Aktie(CardLayout cardLayout, JPanel cardPanel) {
+        // GridBagLayout direkt auf Panel verwenden
+        setLayout(new GridBagLayout());
         GridBagConstraints gbc = new GridBagConstraints();
-        panel.setLayout(gridbag);
 
         // ISIN hinzufügen
         gbc.gridx = 0; // Spalte
@@ -49,31 +45,21 @@ public class Aktie {
         gbc.weightx = 0.1;
         gbc.weighty = 0.1;
         gbc.fill = GridBagConstraints.CENTER;
-        panel.add(isin, gbc);
+        add(isin, gbc);
 
         // Name hinzufügen
         gbc.gridy = 1; // Zeile
-        panel.add(name, gbc);
+        add(name, gbc);
 
         // Buttons hinzufügen
         gbc.gridy = 2; // Zeile
-        panel.add(buttons, gbc);
+        add(buttons, gbc);
 
-        // Panel dem Frame hinzufügen
-        aktie.add(panel);
-
-        // Größe vom Fenster auf Hälte der Bildschirmgröße in die Mitte setzen
-        Dimension dim = new Dimension(1920, 1080);
-        dim = Toolkit.getDefaultToolkit().getScreenSize();
-        aktie.setSize(dim.width / 2, dim.height / 2);
-        aktie.setLocation(dim.width / 4, dim.height / 4);
-        // Fenster Schließen, wenn geschlossen
-        aktie.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        // Fenster anzeigen
-        aktie.setVisible(true);
+        // ActionListener hinzufügen
+        buttonListener();
     }
 
-    private void buttonListenerstart() {
+    private void buttonListener() {
         AktieErfassenListener erfassen = new AktieErfassenListener() {
         };buttons.create_btn.addActionListener(erfassen);
 
@@ -87,15 +73,11 @@ public class Aktie {
             @Override
             public void actionPerformed(ActionEvent e) {
                 // TODO
-                //Start.start.setVisible(true);
-                aktie.setVisible(false);
+                cardLayout.show(Cards.cardPanel, "panelStart");
             }
         };
         buttons.backstart.addActionListener(zurueckStart);
     }
-
-
-
 
     public static boolean elementHinzu(){
         String eingabeIsin = "";
@@ -219,7 +201,7 @@ public class Aktie {
     public static boolean checkElementAlreadyInList(String Isin){
         boolean inList = false;
         for(ElementAktie Aktie: AktieList){
-            if (Isin.equals(aktie.getName())){
+            if (Isin.equals(Aktie.getName())){
                 // System.out.println("Bereits vorhanden");
                 inList = true;
             }
@@ -273,19 +255,6 @@ public class Aktie {
         // Werte und Fehler in Feldern leeren, sonst sind diese beim nächsten Mal gefüllt
         felderLeeren();
         // Frame start wieder anzeigen
-        //Start.start.setVisible(true);
-        aktie.setVisible(false);
-    }
-
-
-
-    public void main() {
-        javax.swing.SwingUtilities.invokeLater(new Runnable() {
-            @Override
-            public void run() {
-                aktie();
-                buttonListenerstart();
-            }
-        });
+        cardLayout.show(Cards.cardPanel, "panelStart");
     }
 }

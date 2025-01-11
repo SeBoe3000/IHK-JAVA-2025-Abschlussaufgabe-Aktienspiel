@@ -1,5 +1,6 @@
 package Frontend.Programme.Bewegungsdaten;
 
+import Frontend.Cards;
 import Frontend.Komponenten.Buttons;
 import Frontend.Komponenten.EingabePanel;
 
@@ -7,6 +8,8 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+
+import static Frontend.Cards.cardLayout;
 
 public class Kauf extends JPanel{
     EingabePanel person = new EingabePanel("Person (ID): ");
@@ -47,10 +50,10 @@ public class Kauf extends JPanel{
         add(buttons, gbc);
 
         // ActionListener hinzufügen
-        buttonListener(cardLayout, cardPanel);
+        buttonListener();
     }
 
-    private void buttonListener(CardLayout cardLayout, JPanel cardPanel) {
+    private void buttonListener() {
         ActionListener ok = new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -77,13 +80,11 @@ public class Kauf extends JPanel{
             @Override
             public void actionPerformed(ActionEvent e) {
                 // TODO: Logik einbauen
-                backToStart(cardLayout, cardPanel);
+                backToStart();
 
             }
         };
         buttons.cancel_btn.addActionListener(abbrechen);
-
-
     }
 
     // Prüfung, ob ein Feld gefüllt ist
@@ -103,22 +104,10 @@ public class Kauf extends JPanel{
     }
 
     // Zu Start zurückkehren
-    private void backToStart(CardLayout cardLayout, JPanel cardPanel){
+    private void backToStart(){
         // Felder leeren
         clearFields();
         // Panel wechseln
-        cardLayout.show(cardPanel, "panelStart");
+        cardLayout.show(Cards.cardPanel, "panelStart");
     }
-
-    /*public void main() {
-        javax.swing.SwingUtilities.invokeLater(new Runnable() {
-            @Override
-            public void run() {
-                kauf();
-                buttonListenerstart();
-            }
-        });
-    }
-
-     */
 }

@@ -1,32 +1,32 @@
 package Frontend;
 
+import Frontend.Programme.Anzeige.Spielstand;
 import Frontend.Programme.Bewegungsdaten.Kauf;
+import Frontend.Programme.Bewegungsdaten.Wert;
+import Frontend.Programme.Stammdaten.*;
 import Frontend.Programme.Start;
 
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 
 public class Cards {
     public static final JFrame start = new JFrame("Aktienspiel");
+    // CardLayout
+    public static final CardLayout cardLayout = new CardLayout();
+    public static final JPanel cardPanel = new JPanel(cardLayout);
 
     private void start() {
-        // CardLayout
-        CardLayout cardLayout = new CardLayout();
-        JPanel cardPanel = new JPanel(cardLayout);
-
         // Panels erstellen
         JPanel panelStart = new Start(cardLayout, cardPanel);
-        JPanel panelBeispieldatenImportieren = new BewegungsdatenPanel(cardLayout, cardPanel);
-        JPanel panelStammdaten = new AnzeigePanel(cardLayout, cardPanel);
-        JPanel panelAktie = new AnzeigePanel(cardLayout, cardPanel);
-        JPanel panelPerson = new AnzeigePanel(cardLayout, cardPanel);
-        JPanel panelStartkapital = new AnzeigePanel(cardLayout, cardPanel);
-        JPanel panelStartkurs = new AnzeigePanel(cardLayout, cardPanel);
+        JPanel panelBeispieldatenImportieren = new BeispieldatenImportieren(cardLayout, cardPanel);
+        JPanel panelStammdaten = new Stammdaten(cardLayout, cardPanel);
+        JPanel panelAktie = new Aktie(cardLayout, cardPanel);
+        JPanel panelPerson = new Person(cardLayout, cardPanel);
+        JPanel panelStartkapital = new Startkapital(cardLayout, cardPanel);
+        JPanel panelStartkurs = new Startkurs(cardLayout, cardPanel);
         JPanel panelKauf = new Kauf(cardLayout, cardPanel);
-        JPanel panelWert = new AnzeigePanel(cardLayout, cardPanel);
-        JPanel panelSpielstand = new AnzeigePanel(cardLayout, cardPanel);
+        JPanel panelWert = new Wert(cardLayout, cardPanel);
+        JPanel panelSpielstand = new Spielstand(cardLayout, cardPanel);
 
         // Panels CardLayout hinzufügen
         cardPanel.add(panelStart, "panelStart");
@@ -59,72 +59,6 @@ public class Cards {
             @Override
             public void run() {
                 start();
-            //buttonListenerstart();
-            }
-        });
-    }
-
-
-}
-
-
-class StammdatenPanel extends JPanel {
-    public StammdatenPanel(CardLayout cardLayout, JPanel cardPanel) {
-        setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
-
-        JLabel label = new JLabel("Stammdaten");
-        add(label);
-
-        JButton button1 = new JButton("Weiter zu Bewegungsdaten");
-        add(button1);
-
-        // ActionListener für den Button
-        button1.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                cardLayout.show(cardPanel, "panelStart"); // Wechselt zu Panel 2
-            }
-        });
-    }
-}
-
-// BewegungsdatenPanel - Panel 2
-class BewegungsdatenPanel extends JPanel {
-    public BewegungsdatenPanel(CardLayout cardLayout, JPanel cardPanel) {
-        setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
-
-        JLabel label = new JLabel("Bewegungsdaten");
-        add(label);
-
-        JButton button2 = new JButton("Weiter zu Anzeige");
-        add(button2);
-
-        // ActionListener für den Button
-        button2.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                cardLayout.show(cardPanel, "panelStart"); // Wechselt zu Panel 3
-            }
-        });
-    }
-}
-
-// AnzeigePanel - Panel 3
-class AnzeigePanel extends JPanel {
-    public AnzeigePanel(CardLayout cardLayout, JPanel cardPanel) {
-        setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
-
-        JLabel label = new JLabel("Anzeige");
-        add(label);
-
-        JButton button3 = new JButton("Zurück zu Stammdaten");
-        add(button3);
-
-        // ActionListener für den Button
-        button3.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                cardLayout.show(cardPanel, "panelStart"); // Wechselt zu Panel 1
             }
         });
     }

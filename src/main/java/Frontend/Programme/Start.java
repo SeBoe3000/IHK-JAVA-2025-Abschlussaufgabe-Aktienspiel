@@ -1,9 +1,13 @@
 package Frontend.Programme;
 
+import Frontend.Cards;
+
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+
+import static Frontend.Cards.cardLayout;
 
 public class Start extends JPanel {
     JButton create_importExample = new JButton("Beispieldaten importieren");
@@ -70,15 +74,15 @@ public class Start extends JPanel {
         add(show_spielstand, gbc);
 
         // ActionListener hinzufügen
-        buttonListener(cardLayout, cardPanel);
+        buttonListener();
     }
 
-    private void buttonListener(CardLayout cardLayout, JPanel cardPanel) {
+    private void buttonListener() {
 
         ActionListener importExample = new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                cardLayout.show(cardPanel, "panelBeispieldatenImportieren");
+                cardLayout.show(Cards.cardPanel, "panelBeispieldatenImportieren");
             }
         };
         create_importExample.addActionListener(importExample);
@@ -86,7 +90,7 @@ public class Start extends JPanel {
         ActionListener stammdaten = new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                cardLayout.show(cardPanel, "panelStammdaten");
+                cardLayout.show(Cards.cardPanel, "panelStammdaten");
             }
         };
         open_stammdaten.addActionListener(stammdaten);
@@ -94,7 +98,7 @@ public class Start extends JPanel {
         ActionListener kauf = new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                cardLayout.show(cardPanel, "panelKauf");
+                cardLayout.show(Cards.cardPanel, "panelKauf");
             }
         };
         create_kauf.addActionListener(kauf);
@@ -102,7 +106,7 @@ public class Start extends JPanel {
         ActionListener wert = new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                cardLayout.show(cardPanel, "panelWert");
+                cardLayout.show(Cards.cardPanel, "panelWert");
             }
         };
         create_wert.addActionListener(wert);
@@ -118,7 +122,7 @@ public class Start extends JPanel {
         ActionListener spielstand = new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                cardLayout.show(cardPanel, "panelSpielstand");
+                cardLayout.show(Cards.cardPanel, "panelSpielstand");
             }
         };
         show_spielstand.addActionListener(spielstand);

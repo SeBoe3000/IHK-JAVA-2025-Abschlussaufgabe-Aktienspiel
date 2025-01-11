@@ -1,9 +1,14 @@
 package Frontend.ActionListener;
 
+import javax.swing.*;
+import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
 public abstract class MyOkListener implements ActionListener {
+    private JPanel cardPanel;
+    private CardLayout cardLayout;
+
     @Override
     public void actionPerformed(ActionEvent e) {
         // Prüfung, ob ein Feld gefüllt ist
@@ -26,6 +31,7 @@ public abstract class MyOkListener implements ActionListener {
             backToStart();
         }
     }
+
 
     protected abstract boolean checkFieldsfilled();
     protected abstract boolean checkElemetInList();
