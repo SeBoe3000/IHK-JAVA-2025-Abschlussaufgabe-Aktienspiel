@@ -1,7 +1,7 @@
 package Frontend.Programme.Stammdaten;
 
 import Backend.ElementAktie;
-import Frontend.ActionListener.Aktie.AktienListener;
+import Frontend.ActionListener.AktienListener;
 import Frontend.ActionListener.Checks;
 import Frontend.Cards;
 import Frontend.Komponenten.Buttons;

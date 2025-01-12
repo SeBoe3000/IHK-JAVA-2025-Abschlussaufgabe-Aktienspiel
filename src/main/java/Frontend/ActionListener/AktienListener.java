@@ -1,7 +1,5 @@
-package Frontend.ActionListener.Aktie;
+package Frontend.ActionListener;
 
-import Frontend.ActionListener.Checks;
-import Frontend.ActionListener.MyActionListener;
 import Frontend.Programme.Stammdaten.Aktie;
 
 import javax.swing.*;
