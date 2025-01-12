@@ -1,8 +1,13 @@
 package Frontend.ActionListener;
 
+import Datenbank.Datenbankverbindung;
 import Frontend.Komponenten.EingabePanel;
 
 import javax.swing.*;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.ArrayList;
 
 public class Checks {
@@ -27,29 +32,50 @@ public class Checks {
         return notInWork;
     }
 
-    // Validiert Eingabe String in Kombination mit Methode checkValues. Bei gültiger Angabe wird Eingabe übernommen.
-    // Hinweis: nur verwenden, wenn Feld nicht Null ist.
-    public static String validateInputString(EingabePanel field, String fieldType, String errorMessage) {
-        if (Checks.checkValues(field, fieldType, errorMessage)) {
-            return field.getTextfield();
+    // Prüfung, ob der Wert bereits in der Datenbank vorhanden ist (Übergabe von einem String)
+    public static boolean checkElementAlreadyInDatenbankOneString(String eingabe, String field, String table){
+        boolean inDatenbank = false;
+
+        String sqlSelect = "SELECT count(*) FROM " + table + " WHERE " + field + " = ?";
+        try(
+                Connection conn = Datenbankverbindung.connect();
+                PreparedStatement pstmtSelect = conn.prepareStatement(sqlSelect);
+        ){
+            pstmtSelect.setString(1, eingabe);
+            ResultSet resultSelect = pstmtSelect.executeQuery();
+            int result = 1;
+            while (resultSelect.next()) {
+                result = Integer.parseInt(resultSelect.getString(1));
+                // System.out.println(result);
+                if (result == 1) {
+                    inDatenbank = true;
+                }
+            }
+        } catch (SQLException e){
+            e.printStackTrace();
+        } catch (Exception e){
+            e.printStackTrace();
         }
-        return "";
+        return inDatenbank;
+    }
+
+    // Prüfung auf gültige Eingaben verkürzt darstellen
+    public static void checkField(EingabePanel input, String checkType, String errorMessage, ArrayList<String> errorMessages){
+        if (!Checks.checkValues(input, checkType)) {
+            errorMessages.add(errorMessage);
+        }
     }
 
     // Prüfung auf gültige Eingaben
-    public static boolean checkValues(EingabePanel input, String checkArt, String fehlernachricht) {
+    public static boolean checkValues(EingabePanel input, String checkArt) {
         String check = input.getTextfield();
         boolean check1 = false;
 
         if (checkArt == "isValidString") {
             check1 = EingabenCheck.isValidString(check);
         }  else if (checkArt == "kennzeichen") {
-            check1 = EingabenCheck.isValidKennzeichen(check);
+            check1 = EingabenCheck.isValidString(check);
         }
-
-        // Text für Fehlermeldung
-        String text = fehlernachricht;
-        String title = "Fehler";
 
         // Bei korrekter Eingabe (z.B. nach Fehler) Schriftfarbe zurückändern.
         input.removeError();
@@ -57,10 +83,31 @@ public class Checks {
         if (!(check1)) {
             // Beim Fehler die Schriftfarbe auf rotändern.
             input.setError();
-            JOptionPane.showMessageDialog(null, text, title, JOptionPane.ERROR_MESSAGE);
             return false;
         } else {
             return true;
         }
+    }
+
+    // Fehlermeldungen ausgeben
+    public static void showError (ArrayList<String> errorMessages){
+        if (!errorMessages.isEmpty()) {
+            StringBuilder message = new StringBuilder();
+            if(errorMessages.size() > 1) {
+                message.append("Folgende Fehler sind aufgetreten:\n");
+            }
+            for (String errorMessage : errorMessages) {
+                message.append(errorMessage).append("\n");
+            }
+            JOptionPane.showMessageDialog(null, message.toString(), "Fehler", JOptionPane.ERROR_MESSAGE);
+        } else {
+            JOptionPane.showMessageDialog(null, "Element wurde der Liste hinzugefügt.", "Erfolg", JOptionPane.INFORMATION_MESSAGE);
+        }
+    }
+
+    // Feld leeren und Fehler entfernen
+    public static void clearOneField(EingabePanel field){
+        field.setTextField("");
+        field.removeError();
     }
 }

@@ -1,7 +1,6 @@
 package Frontend.Programme.Stammdaten;
 
 import Backend.ElementAktie;
-import Datenbank.Datenbankverbindung;
 import Frontend.ActionListener.Aktie.AktieAbbrechenListener;
 import Frontend.ActionListener.Aktie.AktieErfassenListener;
 import Frontend.ActionListener.Aktie.AktieOkListener;
@@ -14,10 +13,6 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
 import java.util.ArrayList;
 
 import static Datenbank.SQL.insertTableAktie;
@@ -78,47 +73,54 @@ public class Aktie extends JPanel{
     }
 
     public static boolean elementHinzu(){
+        boolean inWork = true;
+        ArrayList<String> errorMessages = new ArrayList<>(); // Zum Sammeln der Fehlermeldungen
         String eingabeIsin = "";
         String eingabeName = "";
-        boolean inWork = true;
 
-        // Eingaben prüfen und Felder befüllen
-        eingabeIsin = Checks.validateInputString(isin, "isValidString", "Bitte eine ISIN angeben.");
-        eingabeName = Checks.validateInputString(name, "isValidString", "Bitte einen Name angegeben.");
+        // Eingaben prüfen
+        Checks.checkField(isin, "isValidString", "Bitte eine ISIN angeben.", errorMessages);
+        Checks.checkField(name, "isValidString", "Bitte einen Namen angeben.", errorMessages);
 
-        if(checkFieldsfilled()){
-            boolean insertPossible = true;
-            // Hier könnte auf einen doppelten Datensatz geprüft werden.
-            // Beim Insert erfolgt eine Meldung, ob doppelte Datensätze dabei waren, oder nicht. Daher bleibt hier die Überprüfung aus.
-            // Bei einem vorhandenen Datensatz könnte dann insertPossible auf false geändert werden und ggf. das nächste If nach außerhalb angebracht werden und true und false hier getauscht werden.
+        /* Kann auch wie folgt definiert werden:
+        if(!Checks.checkValues(isin, "isValidString")){
+            errorMessages.add("Bitte eine ISIN angeben.");
+        }*/
 
-            // Prüfung, ob Element bereits in der Liste vorhanden ist, falls ja nicht hinzufügen.
-            boolean inList = checkElementAlreadyInList(eingabeIsin);
-            if(inList == true){
-                JOptionPane.showMessageDialog(null, "Die angegebene Aktie befindet sich bereits in der ElementListe. Geben Sie eine andere Aktie an.", "Datensatz bereits in ElementListe vorhanden", JOptionPane.ERROR_MESSAGE);
-                insertPossible = false;
+        // Sofern keine Fehler vorliegen Eingaben übertragen und weitere Prüfungen durchführen
+        if(errorMessages.isEmpty()) {
+            eingabeIsin = isin.getTextfield();
+            eingabeName = name.getTextfield();
+
+            // Prüfung, ob Element in der Liste vorhanden ist.
+            if(checkElementAlreadyInList(eingabeIsin)){
+                errorMessages.add("Das Element befindet sich bereits in der ElementListe. Bitte einen anderen Datensatz angeben.");
             }
 
-            // Prüfung, ob Element bereits in Datenbank vorhanden ist, falls ja nicht hinzufügen.
-            boolean inDatenbank = checkElementAlreadyInDatenbank(eingabeIsin);
-            if(inDatenbank == true){
-                JOptionPane.showMessageDialog(null, "Die angegebene Aktie befindet sich bereits in der Datenbank. Geben Sie eine andere Aktie an.", "Datensatz bereits in Datenbank vorhanden", JOptionPane.ERROR_MESSAGE);
-                insertPossible = false;
-            }
-
-            if(insertPossible) {
-                // Element der Liste hinzufügen
-                ElementAktie aktie = new ElementAktie(eingabeIsin, eingabeName);
-                AktieList.add(aktie);
-                // Nach Hinzufügen die Felder leeren
-                felderLeeren();
-                // Finaler Check kennzeichnen
-                inWork = false;
+            // Prüfung, ob Element bereits in Datenbank vorhanden ist
+            if(Checks.checkElementAlreadyInDatenbankOneString(eingabeIsin, "isin","Aktien")){
+                errorMessages.add("Die Element befindet sich bereits in der Datenbank. Bitte einen anderen Datensatz angeben.");
             }
         }
+
+        // Sofern weiterhin kein Fehler vorliegt, das Element der Liste hinzufügen
+        if (errorMessages.isEmpty()){
+            // Element der Liste hinzufügen
+            ElementAktie aktie = new ElementAktie(eingabeIsin, eingabeName);
+            AktieList.add(aktie);
+            // Nach Hinzufügen die Felder leeren
+            felderLeeren();
+            // Finaler Check kennzeichnen
+            inWork = false;
+        }
+
+        // Fehlermeldungen ausgeben, wenn vorhanden
+        Checks.showError(errorMessages);
+
         return inWork;
     }
 
+    // TODO: Prüfen, warum immer Meldung bezüglich doppelter Datensätze kommt
     public static void elementInsert(){
         // Liste der Elemente abarbeiten und in Datenbank erfassen. Meldung über durchgeführten Insert wird ausgegeben.
         // Wurden in der Zwischenzeit Daten bereits erfasst (mehrbenutzerbetrieb) ist es hier nicht mehr möglich einzugreifen.
@@ -130,8 +132,6 @@ public class Aktie extends JPanel{
         }
     }
 
-
-
     // Prüfung ob Felder gefüllt sind (sobald eines leer ist, wird false übergeben.)
     public static boolean checkFieldsfilled() {
         Boolean filled = true;
@@ -142,12 +142,12 @@ public class Aktie extends JPanel{
         return filled;
     }
 
-
+    // TODO: prüfen, ob Auslagerung möglich ist.
     // Prüfung, ob der Wert bereits in der Liste vorhanden ist
     public static boolean checkElementAlreadyInList(String Isin){
         boolean inList = false;
         for(ElementAktie Aktie: AktieList){
-            if (Isin.equals(Aktie.getName())){
+            if (Isin.equals(Aktie.getIsin())){
                 // System.out.println("Bereits vorhanden");
                 inList = true;
             }
@@ -155,42 +155,10 @@ public class Aktie extends JPanel{
         return inList;
     }
 
-    // Prüfung, ob der Wert bereits in der Datenbank vorhanden ist
-    public static boolean checkElementAlreadyInDatenbank(String Isin){
-        boolean inDatenbank = false;
-
-        String sqlSelect = "SELECT count(*) FROM Aktien WHERE Isin = ?";
-        try(
-                Connection conn = Datenbankverbindung.connect();
-                PreparedStatement pstmtSelect = conn.prepareStatement(sqlSelect);
-        ){
-            pstmtSelect.setString(1, Isin);
-            ResultSet resultSelect = pstmtSelect.executeQuery();
-            int result = 1;
-            while (resultSelect.next()) {
-                result = Integer.parseInt(resultSelect.getString(1));
-                // System.out.println(result);
-                if (result == 1) {
-                    inDatenbank = true;
-                }
-            }
-        } catch (SQLException e){
-            e.printStackTrace();
-        } catch (Exception e){
-            e.printStackTrace();
-        }
-        return inDatenbank;
-    }
-
-    // Felder nach erfolgreicher Verarbeitung oder Abbrechen leeren und Fehler entfernen
+    // Feld leeren und Fehler entfernen
     public static void felderLeeren(){
-        // Felder leeren
-        isin.setTextField("");
-        name.setTextField("");
-
-        // Auch einen etwaigen Fehler aus den Feldern entfernen
-        isin.removeError();
-        name.removeError();
+        Checks.clearOneField(isin);
+        Checks.clearOneField(name);
     }
 
     public static void backToStart(){
@@ -198,7 +166,7 @@ public class Aktie extends JPanel{
         AktieList.clear();
         // Werte und Fehler in Feldern leeren, sonst sind diese beim nächsten Mal gefüllt
         felderLeeren();
-        // Frame start wieder anzeigen
+        // Panel wechseln
         cardLayout.show(Cards.cardPanel, "panelStart");
     }
 }

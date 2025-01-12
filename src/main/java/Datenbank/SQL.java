@@ -38,7 +38,7 @@ public class SQL {
                 int result = 1;
                 while(resultSelect.next()){
                     result = Integer.parseInt(resultSelect.getString(1));
-                    //System.out.println(result);
+                    // System.out.println(result);
                 }
                 if(result == 0) {
                     // INSERT
