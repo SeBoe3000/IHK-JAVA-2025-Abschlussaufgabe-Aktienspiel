@@ -21,7 +21,7 @@ public class Tabellen {
     public static void createTableAktien(){
         SQL.table("CREATE TABLE IF NOT EXISTS Aktien" +
                 "(" +
-                "ISIN Varchar(12) NOT NULL," +
+                "ISIN char(12) NOT NULL," +
                 "Name Varchar(30) NOT NULL," +
                 "PRIMARY KEY(ISIN)" +
                 ")");
@@ -33,7 +33,7 @@ public class Tabellen {
                 "(" +
                 "ID serial NOT NULL," +
                 "Runde integer NOT NULL," +
-                "AktieISIN Varchar(12) NOT NULL," +
+                "AktieISIN char(12) NOT NULL," +
                 "Aktienanzahl integer  NOT NULL," +
                 "Aktienkurs real NOT NULL," +
                 "Kassenbestand real NOT NULL," +
@@ -67,7 +67,7 @@ public class Tabellen {
                 "(" +
                 "Runde integer NOT NULL," +
                 "PersonID integer NOT NULL," +
-                "AktieISIN VARCHAR(12) NOT NULL," +
+                "AktieISIN char(12) NOT NULL," +
                 "Aktienanzahl integer NOT NULL," +
                 // Aktienwert kann über Aktienverlauf ermittelt werden
                 // Dividende wird nach Abschluss der Runde ermittelt

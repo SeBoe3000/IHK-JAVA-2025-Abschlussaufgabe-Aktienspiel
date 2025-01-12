@@ -1,9 +1,7 @@
 package Frontend.Programme.Stammdaten;
 
 import Backend.ElementAktie;
-import Frontend.ActionListener.Aktie.AktieAbbrechenListener;
-import Frontend.ActionListener.Aktie.AktieErfassenListener;
-import Frontend.ActionListener.Aktie.AktieOkListener;
+import Frontend.ActionListener.Aktie.AktienListener;
 import Frontend.ActionListener.Checks;
 import Frontend.Cards;
 import Frontend.Komponenten.Buttons;
@@ -11,8 +9,6 @@ import Frontend.Komponenten.EingabePanel;
 
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.util.ArrayList;
 
 import static Datenbank.SQL.insertTableAktie;
@@ -53,23 +49,18 @@ public class Aktie extends JPanel{
     }
 
     private void buttonListener() {
-        AktieErfassenListener erfassen = new AktieErfassenListener() {
+        AktienListener erfassen = new AktienListener(buttons.create_btn) {
         };buttons.create_btn.addActionListener(erfassen);
 
-        AktieOkListener ok = new AktieOkListener() {
+        AktienListener ok = new AktienListener(buttons.ok_btn) {
         };buttons.ok_btn.addActionListener(ok);
 
-        AktieAbbrechenListener abbrechen = new AktieAbbrechenListener() {
+        AktienListener abbrechen = new AktienListener(buttons.cancel_btn) {
         };buttons.cancel_btn.addActionListener(abbrechen);
 
-        ActionListener zurueckStart = new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                // TODO
-                cardLayout.show(Cards.cardPanel, "panelStart");
-            }
-        };
-        buttons.backstart.addActionListener(zurueckStart);
+        AktienListener zurueckStart = new AktienListener(buttons.backstart) {
+        };buttons.backstart.addActionListener(zurueckStart);
+
     }
 
     public static boolean elementHinzu(){
@@ -80,6 +71,7 @@ public class Aktie extends JPanel{
 
         // Eingaben prüfen
         Checks.checkField(isin, "isValidString", "Bitte eine ISIN angeben.", errorMessages);
+        Checks.checkFieldLenght(isin, 12,12,"isValidStringLaenge", "Die ISIN muss 12 Stellen lang sein.", errorMessages);
         Checks.checkField(name, "isValidString", "Bitte einen Namen angeben.", errorMessages);
 
         /* Kann auch wie folgt definiert werden:
@@ -114,7 +106,7 @@ public class Aktie extends JPanel{
             inWork = false;
         }
 
-        // Fehlermeldungen ausgeben, wenn vorhanden
+        // Fehlermeldung(en) ausgeben (Hinweis über erfolgreiches hinzufügen nur beim Erfassen-Listener)
         Checks.showError(errorMessages);
 
         return inWork;
@@ -132,13 +124,14 @@ public class Aktie extends JPanel{
         }
     }
 
-    // Prüfung ob Felder gefüllt sind (sobald eines leer ist, wird false übergeben.)
+    // TODO: Prüfung überarbeiten
+    // Prüfung ob ein Felder gefüllt sind (sobald eines leer ist, wird false übergeben.)
     public static boolean checkFieldsfilled() {
         Boolean filled = true;
-        if(Checks.checkOneFieldfilled(isin) || Checks.checkOneFieldfilled(name)) {
+        if(!Checks.checkOneFieldfilled(isin) && !Checks.checkOneFieldfilled(name)) {
             filled = false;
         }
-        // System.out.println("filled: " +  filled);
+         System.out.println("filled: " +  filled);
         return filled;
     }
 
@@ -167,6 +160,6 @@ public class Aktie extends JPanel{
         // Werte und Fehler in Feldern leeren, sonst sind diese beim nächsten Mal gefüllt
         felderLeeren();
         // Panel wechseln
-        cardLayout.show(Cards.cardPanel, "panelStart");
+        cardLayout.show(Cards.cardPanel, "panelStammdaten");
     }
 }

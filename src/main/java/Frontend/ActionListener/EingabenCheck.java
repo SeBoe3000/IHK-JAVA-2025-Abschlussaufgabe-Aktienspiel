@@ -232,62 +232,17 @@ public class EingabenCheck {
         return isValid;
     }
 
-    /* Überprüfung String auf Kennzeichen
-    - 1-3 Buchstaben + "-" + 1-2 Buchstaben + "-" + 1-4 Zahlen
-    - nur Großbuchstaben ohne Umlaute.
-    - Zahlenfolge beginnt nicht mit 0
-    - nur gültige Unterscheidungskennzeichen, z.B. Liste hier: https://autokennzeichen.de/a-z/
-    - Verstößt nicht gegen die guten Sitten, d.h. z.B. kein SS.
-    Hinweis: etwaige weitere Regeln wie z.B. historische oder elektronische Fahrzeuge werden hier nicht beachtet. */
-    public static boolean isValidKennzeichen(String eingabe){
-        boolean isValid = true;
-        Pattern pattern = Pattern.compile("^[A-Z]{1,3}-[A-Z]{1,2}-[1-9][0-9]{0,3}$");
-        Matcher matcher = pattern.matcher(eingabe);
-        isValid = matcher.find();
 
-        // Zerlegen nur, wenn richtiger Aufbau, ansonsten kommt es zu einem Fehler.
-        if(isValid) {
 
-            String[] parts = eingabe.split("-");
-            String part1 = parts[0];
-            // System.out.println(part1);
-
-            // TODO: gültige Unterscheidungskennzeichen aus dem Internet laden und in Liste / Datenbank speichern
-            ArrayList<String> Kennzeichen = new ArrayList<>();
-            Kennzeichen.add("A");
-            Kennzeichen.add("KA");
-            Kennzeichen.add("RA");
-            Kennzeichen.add("GAP");
-
-            boolean startFound = false;
-            for (int i = 0; i < Kennzeichen.size(); i++) {
-                if (Kennzeichen.get(i).equals(part1)) {
-                    startFound = true;
-                    // System.out.println("startFound ist: " + startFound);
-                    break;
-                }
-            }
-            if (startFound == false) {
-                isValid = false;
-            }
-            // Verstoß gegen die guten Sitten
-            if (parts[1].equals("SS")) {
-                isValid = false;
-                // System.out.println("Verstoß gegen die guten Sitten");
-            }
-        }
-        return isValid;
-    }
-
-    // Überprüfung auf maximale Länge
-    public static boolean isValidStringLaenge(String eingabe, Integer laenge){
+    // Überprüfung auf Länge von bis
+    public static boolean isValidStringLaenge(String eingabe, Integer von, Integer bis){
         boolean isValid = true;
         Integer anzahlZahl = 0;
 
         for(int i = 0; i < eingabe.length(); i++){
             anzahlZahl ++;
         }
-        if (anzahlZahl > laenge){
+        if (anzahlZahl < von || anzahlZahl > bis){
             isValid = false;
         }
         return isValid;

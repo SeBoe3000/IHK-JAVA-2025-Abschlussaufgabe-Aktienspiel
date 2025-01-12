@@ -24,12 +24,12 @@ public class Checks {
 
     // Prüfung, ob das Feld gefüllt ist
     public static boolean checkOneFieldfilled(EingabePanel field) {
-        Boolean notInWork = false;
+        Boolean filled = true;
         if (field.getTextfield().isEmpty()) {
-            notInWork = true;
+            filled = false;
         }
         // System.out.println("Eingabe:" + field.getTextfield() + "notInWork: " +  notInWork);
-        return notInWork;
+        return filled;
     }
 
     // Prüfung, ob der Wert bereits in der Datenbank vorhanden ist (Übergabe von einem String)
@@ -61,20 +61,27 @@ public class Checks {
 
     // Prüfung auf gültige Eingaben verkürzt darstellen
     public static void checkField(EingabePanel input, String checkType, String errorMessage, ArrayList<String> errorMessages){
-        if (!Checks.checkValues(input, checkType)) {
+        if (!Checks.checkValues(input, checkType, 0,0)) {
+            errorMessages.add(errorMessage);
+        }
+    }
+
+    // Prüfung auf gültige Eingaben verkürzt darstellen
+    public static void checkFieldLenght(EingabePanel input, Integer von, Integer bis, String checkType, String errorMessage, ArrayList<String> errorMessages){
+        if (!Checks.checkValues(input, checkType, von, bis)) {
             errorMessages.add(errorMessage);
         }
     }
 
     // Prüfung auf gültige Eingaben
-    public static boolean checkValues(EingabePanel input, String checkArt) {
+    public static boolean checkValues(EingabePanel input, String checkArt, Integer von, Integer bis) {
         String check = input.getTextfield();
         boolean check1 = false;
 
         if (checkArt == "isValidString") {
             check1 = EingabenCheck.isValidString(check);
-        }  else if (checkArt == "kennzeichen") {
-            check1 = EingabenCheck.isValidString(check);
+        }  else if (checkArt == "isValidStringLaenge") {
+            check1 = EingabenCheck.isValidStringLaenge(check, von, bis);
         }
 
         // Bei korrekter Eingabe (z.B. nach Fehler) Schriftfarbe zurückändern.
@@ -100,8 +107,6 @@ public class Checks {
                 message.append(errorMessage).append("\n");
             }
             JOptionPane.showMessageDialog(null, message.toString(), "Fehler", JOptionPane.ERROR_MESSAGE);
-        } else {
-            JOptionPane.showMessageDialog(null, "Element wurde der Liste hinzugefügt.", "Erfolg", JOptionPane.INFORMATION_MESSAGE);
         }
     }
 

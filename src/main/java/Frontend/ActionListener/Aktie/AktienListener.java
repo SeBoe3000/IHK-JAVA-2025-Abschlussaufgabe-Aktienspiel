@@ -1,10 +1,15 @@
 package Frontend.ActionListener.Aktie;
 
 import Frontend.ActionListener.Checks;
-import Frontend.ActionListener.MyAbbrechenListener;
+import Frontend.ActionListener.MyActionListener;
 import Frontend.Programme.Stammdaten.Aktie;
 
-public class AktieAbbrechenListener extends MyAbbrechenListener {
+import javax.swing.*;
+
+public class AktienListener extends MyActionListener {
+    public AktienListener(JButton Btn) {
+        super(Btn);
+    }
 
     @Override
     protected boolean checkFieldsfilled() {
