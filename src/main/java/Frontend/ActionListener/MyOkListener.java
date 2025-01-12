@@ -15,7 +15,7 @@ public abstract class MyOkListener implements ActionListener {
         boolean notInWork = checkFieldsfilled();
 
         // Check ob Element in Liste vorhanden
-        boolean noElement = checkElemetInList();
+        boolean noElement = !checkElemetInList();
 
         // bei leeren Feldern und vorhandenem Element in der Liste den Insert durchführen und den Dialog schließen
         if(notInWork == true && noElement == false){

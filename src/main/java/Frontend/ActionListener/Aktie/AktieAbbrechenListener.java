@@ -1,5 +1,6 @@
 package Frontend.ActionListener.Aktie;
 
+import Frontend.ActionListener.Checks;
 import Frontend.ActionListener.MyAbbrechenListener;
 import Frontend.Programme.Stammdaten.Aktie;
 
@@ -7,14 +8,14 @@ public class AktieAbbrechenListener extends MyAbbrechenListener {
 
     @Override
     protected boolean checkFieldsfilled() {
-        Aktie.checkFieldsfilled();
-        return false;
+        Boolean action = Aktie.checkFieldsfilled();
+        return action;
     }
 
     @Override
     protected boolean checkElemetInList() {
-        Aktie.checkElementInList();
-        return false;
+        Boolean action = Checks.checkElementInList(Aktie.AktieList);
+        return action;
     }
 
     @Override
@@ -29,7 +30,7 @@ public class AktieAbbrechenListener extends MyAbbrechenListener {
 
     @Override
     protected boolean elementHinzu() {
-        Aktie.elementHinzu();
-        return false;
+        Boolean action = Aktie.elementHinzu();
+        return action;
     }
 }

@@ -1,5 +1,6 @@
 package Frontend.ActionListener.Aktie;
 
+import Frontend.ActionListener.Checks;
 import Frontend.ActionListener.MyOkListener;
 import Frontend.Programme.Stammdaten.Aktie;
 
@@ -13,7 +14,7 @@ public class AktieOkListener extends MyOkListener {
 
     @Override
     protected boolean checkElemetInList(){
-        Boolean action = Aktie.checkElementInList();
+        Boolean action = Checks.checkElementInList(Aktie.AktieList);
         return action;
     }
 

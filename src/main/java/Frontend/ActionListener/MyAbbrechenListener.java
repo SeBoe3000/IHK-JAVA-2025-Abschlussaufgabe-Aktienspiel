@@ -16,7 +16,7 @@ public abstract class MyAbbrechenListener implements ActionListener {
         // Prüfung ob 1 Feld gefüllt ist
         boolean notInWork = checkFieldsfilled();
         // Check ob Element in der Liste
-        boolean noElement = checkElemetInList();
+        boolean noElement = !checkElemetInList();
 
         // System.out.println("Ergebnis Check - notInWork: " + notInWork + " und noElement: " + noElement);
         // Verarbeitung wenn mind. 1 Feld gefüllt oder noch ein Element in der Liste drin ist

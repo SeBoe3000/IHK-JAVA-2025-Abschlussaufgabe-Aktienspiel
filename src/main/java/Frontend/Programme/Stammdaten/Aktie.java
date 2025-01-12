@@ -5,7 +5,7 @@ import Datenbank.Datenbankverbindung;
 import Frontend.ActionListener.Aktie.AktieAbbrechenListener;
 import Frontend.ActionListener.Aktie.AktieErfassenListener;
 import Frontend.ActionListener.Aktie.AktieOkListener;
-import Frontend.ActionListener.EingabenCheck;
+import Frontend.ActionListener.Checks;
 import Frontend.Cards;
 import Frontend.Komponenten.Buttons;
 import Frontend.Komponenten.EingabePanel;
@@ -30,7 +30,7 @@ public class Aktie extends JPanel{
     static Buttons buttons = new Buttons();
 
     // Zum Speichern der Ergebnisse
-    static ArrayList<ElementAktie> AktieList = new ArrayList<>();
+    public static ArrayList<ElementAktie> AktieList = new ArrayList<>();
 
     public Aktie(CardLayout cardLayout, JPanel cardPanel) {
         // GridBagLayout direkt auf Panel verwenden
@@ -81,22 +81,12 @@ public class Aktie extends JPanel{
         String eingabeIsin = "";
         String eingabeName = "";
         boolean inWork = true;
-        int anzahlFelderKorrekt = 0;
 
         // Eingaben prüfen und Felder befüllen
-        if(checkValues(isin, "isValidString", "Bitte eine ISIN angeben.")){
-            eingabeIsin = isin.getTextfield();
+        eingabeIsin = Checks.validateInputString(isin, "isValidString", "Bitte eine ISIN angeben.");
+        eingabeName = Checks.validateInputString(name, "isValidString", "Bitte einen Name angegeben.");
 
-            anzahlFelderKorrekt ++;
-        }
-        if(checkValues(name, "isValidString", "Bitte ein Name angegeben.")){
-            eingabeName = name.getTextfield();
-            anzahlFelderKorrekt ++;
-        }
-
-        // System.out.println("Anzahlkorrekter Felder " + anzahlFelderKorrekt);
-
-        if(anzahlFelderKorrekt == 2){
+        if(checkFieldsfilled()){
             boolean insertPossible = true;
             // Hier könnte auf einen doppelten Datensatz geprüft werden.
             // Beim Insert erfolgt eine Meldung, ob doppelte Datensätze dabei waren, oder nicht. Daher bleibt hier die Überprüfung aus.
@@ -140,57 +130,18 @@ public class Aktie extends JPanel{
         }
     }
 
-    // Prüfung auf gültige Eingaben
-    public static boolean checkValues(EingabePanel input, String checkArt, String fehlernachricht) {
-        String check = input.getTextfield();
-        boolean check1 = false;
 
-        if (checkArt == "isValidString") {
-            check1 = EingabenCheck.isValidString(check);
-        }  else if (checkArt == "kennzeichen") {
-            check1 = EingabenCheck.isValidKennzeichen(check);
-        }
 
-        // Text für Fehlermeldung
-        String text = fehlernachricht;
-        String title = "Fehler";
-
-        // Bei korrekter Eingabe (z.B. nach Fehler) Schriftfarbe zurückändern.
-        input.removeError();
-
-        if (!(check1)) {
-            // Beim Fehler die Schriftfarbe auf rotändern.
-            input.setError();
-            JOptionPane.showMessageDialog(null, text, title, JOptionPane.ERROR_MESSAGE);
-            return false;
-        } else {
-            return true;
-        }
-    }
-
-    // Prüfung ob 1 Feld gefüllt ist
+    // Prüfung ob Felder gefüllt sind (sobald eines leer ist, wird false übergeben.)
     public static boolean checkFieldsfilled() {
-        Boolean notInWork = true;
-        if (!(isin.getTextfield().isEmpty())) {
-            notInWork = false;
-            // System.out.println("Noch nicht fertig - ISIN");
+        Boolean filled = true;
+        if(Checks.checkOneFieldfilled(isin) || Checks.checkOneFieldfilled(name)) {
+            filled = false;
         }
-        if (!(name.getTextfield().isEmpty())) {
-            notInWork = false;
-            // System.out.println("Noch nicht fertig - Name");
-        }
-        return notInWork;
+        // System.out.println("filled: " +  filled);
+        return filled;
     }
 
-    // Prüfung, ob ein Wert in der Liste vorhanden ist.
-    public static boolean checkElementInList() {
-        boolean noElement = false;
-        if (AktieList.isEmpty()) {
-            noElement = true;
-        }
-        //System.out.println("noElement: " + noElement);
-        return noElement;
-    }
 
     // Prüfung, ob der Wert bereits in der Liste vorhanden ist
     public static boolean checkElementAlreadyInList(String Isin){
