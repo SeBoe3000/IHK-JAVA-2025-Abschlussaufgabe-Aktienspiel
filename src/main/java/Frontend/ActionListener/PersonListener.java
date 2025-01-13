@@ -84,7 +84,7 @@ public class PersonListener extends MyActionListener{
         if(!Checks.checkOneFieldfilled(Person.vorname) && !Checks.checkOneFieldfilled(Person.nachname) && !Checks.checkOneFieldfilled(Person.alter)) {
             filled = false;
         }
-        System.out.println("filled: " +  filled);
+        // System.out.println("filled: " +  filled);
         return filled;
     }
 

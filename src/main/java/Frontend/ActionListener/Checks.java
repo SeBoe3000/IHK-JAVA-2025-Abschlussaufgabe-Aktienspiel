@@ -53,6 +53,8 @@ public class Checks {
             check1 = EingabenCheck.isValidStringLaenge(check, von, bis);
         } else if (checkArt == "isValidInteger") {
             check1 = EingabenCheck.isValidInteger(check);
+        } else if (checkArt == "isValidFloat") {
+            check1 = EingabenCheck.isValidFloat(check);
         } else if (checkArt == "isValidIntegerVonBis") {
             check1 = EingabenCheck.isValidIntegerVonBis(check, von, bis);
         }

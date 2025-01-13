@@ -85,7 +85,7 @@ public class AktienListener extends MyActionListener {
         if(!Checks.checkOneFieldfilled(Aktie.isin) && !Checks.checkOneFieldfilled(Aktie.name)) {
             filled = false;
         }
-        System.out.println("filled: " +  filled);
+        // System.out.println("filled: " +  filled);
         return filled;
     }
 
@@ -95,7 +95,6 @@ public class AktienListener extends MyActionListener {
         return action;
     }
 
-    // TODO: Prüfen, warum immer Meldung bezüglich doppelter Datensätze kommt
     @Override
     protected void elementInsert() {
         // Option 1: Liste Elemente abarbeiten und in Datenbank erfassen. Meldung über durchgeführten Insert ausgeben.

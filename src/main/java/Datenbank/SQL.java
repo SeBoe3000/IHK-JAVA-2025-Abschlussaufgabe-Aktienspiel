@@ -43,7 +43,33 @@ public class SQL {
         return inDatenbank;
     }
 
-    // Prüfung, ob Wert bereits in Datenbank vorhanden (Übergabe von einem String)
+    // Prüfung, ob Wert bereits in Datenbank vorhanden (Übergabe von einem Integer)
+    public static boolean checkElementAlreadyInDatenbankOneInteger(Integer eingabe, String field, String table){
+        boolean inDatenbank = false;
+        String sqlSelect = "SELECT count(*) FROM " + table + " WHERE " + field + " = ?";
+        try(
+                Connection conn = Datenbankverbindung.connect();
+                PreparedStatement pstmtSelect = conn.prepareStatement(sqlSelect);
+        ){
+            pstmtSelect.setInt(1, eingabe);
+            ResultSet resultSelect = pstmtSelect.executeQuery();
+            int result = 1;
+            while (resultSelect.next()) {
+                result = Integer.parseInt(resultSelect.getString(1));
+                // System.out.println(result);
+                if (result == 1) {
+                    inDatenbank = true;
+                }
+            }
+        } catch (SQLException e){
+            e.printStackTrace();
+        } catch (Exception e){
+            e.printStackTrace();
+        }
+        return inDatenbank;
+    }
+
+    // Prüfung, ob Wert bereits in Datenbank vorhanden (Übergabe von der Kombination String, String, Integer)
     public static boolean checkElementAlreadyInDatenbankStringStringInteger(String eingabe1, String eingabe2, Integer eingabe3, String field1, String field2, String field3, String table){
         boolean inDatenbank = false;
 

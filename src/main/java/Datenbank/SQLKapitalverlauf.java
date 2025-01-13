@@ -1,6 +1,6 @@
 package Datenbank;
 
-import Backend.ElementPerson;
+import Backend.ElementKapitalverlauf;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -8,12 +8,12 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.List;
 
-public class SQLPerson {
-    // Tabelle Person füllen - mit Rückgabe mind. ein Datensatz bereits in Datenbank vorhanden
-    public static boolean selectInsertTablePerson(List<ElementPerson> person){
+public class SQLKapitalverlauf {
+    // Tabelle Kapitalverlauf füllen - mit Rückgabe mind. ein Datensatz bereits in Datenbank vorhanden
+    public static boolean selectInsertTableKapitalverlauf(List<ElementKapitalverlauf> kapitalverlauf){
         Boolean insert = false;
-        String sqlSelect = "SELECT count(*) FROM Personen WHERE Vorname = ? AND Nachname = ? AND Alter = ?";
-        String sqlInsert = "INSERT INTO Personen (Vorname, Nachname, Alter) VALUES(?,?,?)";
+        String sqlSelect = "SELECT count(*) FROM Kapitalverlauf WHERE Runde = ? AND PersonID = ? AND Kapital = ?";
+        String sqlInsert = "INSERT INTO Kapitalverlauf (Runde, Personid, Kapital) VALUES(?,?,?)";
         final int batchSize = 5;
         int count = 0;
         try(
@@ -21,11 +21,11 @@ public class SQLPerson {
                 PreparedStatement pstmtSelect = conn.prepareStatement(sqlSelect);
                 PreparedStatement pstmtInsert = conn.prepareStatement(sqlInsert);
         ){
-            for(ElementPerson Person: person){
+            for(ElementKapitalverlauf Kapitalverlauf: kapitalverlauf){
                 // SELECT
-                pstmtSelect.setString(1, Person.getVorname());
-                pstmtSelect.setString(2, Person.getNachname());
-                pstmtSelect.setInt(3, Person.getAlter());
+                pstmtSelect.setInt(1, Kapitalverlauf.getRunde());
+                pstmtSelect.setInt(2, Kapitalverlauf.getPerson());
+                pstmtSelect.setFloat(3, Kapitalverlauf.getBetrag());
                 ResultSet resultSelect = pstmtSelect.executeQuery();
                 int result = 1;
                 while(resultSelect.next()){
@@ -34,9 +34,9 @@ public class SQLPerson {
                 }
                 if(result == 0) {
                     // INSERT
-                    pstmtInsert.setString(1, Person.getVorname());
-                    pstmtInsert.setString(2, Person.getNachname());
-                    pstmtInsert.setInt(3, Person.getAlter());
+                    pstmtInsert.setInt(1, Kapitalverlauf.getRunde());
+                    pstmtInsert.setInt(2, Kapitalverlauf.getPerson());
+                    pstmtInsert.setFloat(3, Kapitalverlauf.getBetrag());
                     pstmtInsert.addBatch();
                     if (++count % batchSize == 0) {
                         pstmtInsert.executeBatch();
