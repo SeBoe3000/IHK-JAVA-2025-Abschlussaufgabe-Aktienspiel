@@ -1,23 +1,19 @@
 package Frontend.Programme.Bewegungsdaten;
 
-import Frontend.Cards;
+import Frontend.ActionListener.KaufListener;
 import Frontend.Komponenten.Buttons;
 import Frontend.Komponenten.EingabePanel;
 
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-
-import static Frontend.Cards.cardLayout;
 
 public class Kauf extends JPanel{
-    EingabePanel person = new EingabePanel("Person (ID): ");
-    EingabePanel aktie = new EingabePanel("Aktie: ");
-    EingabePanel anzahl = new EingabePanel("Anzahl Aktien: ");
-    EingabePanel restwert = new EingabePanel("Restwert: ");
+    public static EingabePanel person = new EingabePanel("Person (ID): ");
+    public static EingabePanel aktie = new EingabePanel("Aktie: ");
+    public static EingabePanel anzahl = new EingabePanel("Anzahl Aktien: ");
+    public static EingabePanel restwert = new EingabePanel("Restwert: ");
 
-    Buttons buttons = new Buttons();
+    static Buttons buttons = new Buttons();
 
     public Kauf(CardLayout cardLayout, JPanel cardPanel) {
         // GridBagLayout direkt auf Panel verwenden
@@ -54,60 +50,16 @@ public class Kauf extends JPanel{
     }
 
     private void buttonListener() {
-        ActionListener ok = new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                // TODO: Prüfen, ob Element in der Liste vorhanden ist
-                // TODO: Prüfen, ob Element in der Datenbank vorhanden ist
-                // TODO: Element der Liste hinzufügen
-            }
-        };
-        buttons.ok_btn.addActionListener(ok);
+        KaufListener erfassen = new KaufListener(buttons.create_btn) {
+        };buttons.create_btn.addActionListener(erfassen);
 
-        ActionListener create = new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                // TODO: Prüfen, ob Element in der Liste vorhanden ist
-                // TODO: Prüfen, ob Element in der Datenbank vorhanden ist
-                // TODO: Element Liste hinzufügen
-                // TODO: Element aus Liste in Datenbank übertragen
-                // TODO: Programmschließen
-            }
-        };
-        buttons.create_btn.addActionListener(create);
+        KaufListener ok = new KaufListener(buttons.ok_btn) {
+        };buttons.ok_btn.addActionListener(ok);
 
-        ActionListener abbrechen = new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                // TODO: Logik einbauen
-                backToStart();
+        KaufListener abbrechen = new KaufListener(buttons.cancel_btn) {
+        };buttons.cancel_btn.addActionListener(abbrechen);
 
-            }
-        };
-        buttons.cancel_btn.addActionListener(abbrechen);
-    }
-
-    // Prüfung, ob ein Feld gefüllt ist
-    private boolean checkFilled(){
-        Boolean checked = true;
-        if(person.getTextfield().isEmpty() && aktie.getTextfield().isEmpty() && anzahl.getTextfield().isEmpty()){
-            checked = false;
-        }
-        return checked;
-    }
-
-    // Felder leeren
-    private void clearFields(){
-        person.setTextField("");
-        aktie.setTextField("");
-        anzahl.setTextField("");
-    }
-
-    // Zu Start zurückkehren
-    private void backToStart(){
-        // Felder leeren
-        clearFields();
-        // Panel wechseln
-        cardLayout.show(Cards.cardPanel, "panelStart");
+        KaufListener zurueckStart = new KaufListener(buttons.backstart) {
+        };buttons.backstart.addActionListener(zurueckStart);
     }
 }

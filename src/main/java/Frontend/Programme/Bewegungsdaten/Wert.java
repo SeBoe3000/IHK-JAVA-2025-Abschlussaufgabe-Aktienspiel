@@ -1,15 +1,11 @@
 package Frontend.Programme.Bewegungsdaten;
 
-import Frontend.Cards;
+import Frontend.ActionListener.WertListener;
 import Frontend.Komponenten.Buttons;
 import Frontend.Komponenten.EingabePanel;
 
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-
-import static Frontend.Cards.cardLayout;
 
 public class Wert extends JPanel {
     EingabePanel aktie = new EingabePanel("Aktie (ISIN): ");
@@ -49,60 +45,16 @@ public class Wert extends JPanel {
     }
 
     private void buttonListener() {
-        ActionListener ok = new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                // TODO: Prüfen, ob Element in der Liste vorhanden ist
-                // TODO: Prüfen, ob Element in der Datenbank vorhanden ist
-                // TODO: Element der Liste hinzufügen
-            }
-        };
-        buttons.ok_btn.addActionListener(ok);
+        WertListener erfassen = new WertListener(buttons.create_btn) {
+        };buttons.create_btn.addActionListener(erfassen);
 
-        ActionListener create = new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                // TODO: Prüfen, ob Element in der Liste vorhanden ist
-                // TODO: Prüfen, ob Element in der Datenbank vorhanden ist
-                // TODO: Element Liste hinzufügen
-                // TODO: Element aus Liste in Datenbank übertragen
-                // TODO: Programmschließen
-            }
-        };
-        buttons.create_btn.addActionListener(create);
+        WertListener ok = new WertListener(buttons.ok_btn) {
+        };buttons.ok_btn.addActionListener(ok);
 
-        ActionListener abbrechen = new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                // TODO: Logik einbauen
-                backToStart();
+        WertListener abbrechen = new WertListener(buttons.cancel_btn) {
+        };buttons.cancel_btn.addActionListener(abbrechen);
 
-            }
-        };
-        buttons.cancel_btn.addActionListener(abbrechen);
-    }
-
-    // Prüfung, ob eine Feld gefüllt ist
-    private boolean checkFilled(){
-        Boolean checked = true;
-        if(aktie.getTextfield().isEmpty() && kurs.getTextfield().isEmpty() && kassenbestand.getTextfield().isEmpty()){
-            checked = false;
-        }
-        return checked;
-    }
-
-    // Felder leeren
-    private void clearFields(){
-        aktie.setTextField("");
-        kurs.setTextField("");
-        kassenbestand.setTextField("");
-    }
-
-    // Zu Start zurückkehren
-    private void backToStart(){
-        // Felder leeren
-        clearFields();
-        // Panel wechseln
-        cardLayout.show(Cards.cardPanel, "panelStart");
+        WertListener zurueckStart = new WertListener(buttons.backstart) {
+        };buttons.backstart.addActionListener(zurueckStart);
     }
 }

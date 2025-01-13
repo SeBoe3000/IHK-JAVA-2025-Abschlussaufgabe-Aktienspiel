@@ -3,7 +3,6 @@ package Frontend.ActionListener;
 import Datenbank.Datenbankverbindung;
 import Frontend.Komponenten.EingabePanel;
 
-import javax.swing.*;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -93,20 +92,6 @@ public class Checks {
             return false;
         } else {
             return true;
-        }
-    }
-
-    // Fehlermeldungen ausgeben
-    public static void showError (ArrayList<String> errorMessages){
-        if (!errorMessages.isEmpty()) {
-            StringBuilder message = new StringBuilder();
-            if(errorMessages.size() > 1) {
-                message.append("Folgende Fehler sind aufgetreten:\n");
-            }
-            for (String errorMessage : errorMessages) {
-                message.append(errorMessage).append("\n");
-            }
-            JOptionPane.showMessageDialog(null, message.toString(), "Fehler", JOptionPane.ERROR_MESSAGE);
         }
     }
 

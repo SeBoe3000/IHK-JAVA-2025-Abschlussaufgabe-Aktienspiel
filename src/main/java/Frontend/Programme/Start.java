@@ -90,7 +90,7 @@ public class Start extends JPanel {
         ActionListener stammdaten = new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                cardLayout.show(Cards.cardPanel, "panelStammdaten");
+                cardLayout.show(Cards.cardPanel, Cards.nameStammdaten);
             }
         };
         open_stammdaten.addActionListener(stammdaten);
@@ -98,7 +98,7 @@ public class Start extends JPanel {
         ActionListener kauf = new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                cardLayout.show(Cards.cardPanel, "panelKauf");
+                cardLayout.show(Cards.cardPanel, Cards.nameKauf);
             }
         };
         create_kauf.addActionListener(kauf);
@@ -106,7 +106,7 @@ public class Start extends JPanel {
         ActionListener wert = new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                cardLayout.show(Cards.cardPanel, "panelWert");
+                cardLayout.show(Cards.cardPanel, Cards.nameWert);
             }
         };
         create_wert.addActionListener(wert);
@@ -122,7 +122,7 @@ public class Start extends JPanel {
         ActionListener spielstand = new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                cardLayout.show(Cards.cardPanel, "panelSpielstand");
+                cardLayout.show(Cards.cardPanel, Cards.nameSpielstand);
             }
         };
         show_spielstand.addActionListener(spielstand);

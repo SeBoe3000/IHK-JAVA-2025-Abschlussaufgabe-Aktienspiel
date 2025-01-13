@@ -15,6 +15,18 @@ public class Cards {
     public static final CardLayout cardLayout = new CardLayout();
     public static final JPanel cardPanel = new JPanel(cardLayout);
 
+    // Name Cards als String für späteren Zugriff
+    public static String nameStart = "Start";
+    public static String nameBeispieldatenImportieren = "BeispieldatenImportieren";
+    public static String nameStammdaten = "Stammdaten";
+    public static String nameAktie = "Aktie";
+    public static String namePerson = "Person";
+    public static String nameStartkapital = "Startkapital";
+    public static String nameStartkurs = "Startkurs";
+    public static String nameKauf = "Kauf";
+    public static String nameWert = "Wert";
+    public static String nameSpielstand = "Spielstand";
+
     private void start() {
         // Panels erstellen
         JPanel panelStart = new Start(cardLayout, cardPanel);
@@ -29,16 +41,16 @@ public class Cards {
         JPanel panelSpielstand = new Spielstand(cardLayout, cardPanel);
 
         // Panels CardLayout hinzufügen
-        cardPanel.add(panelStart, "panelStart");
-        cardPanel.add(panelBeispieldatenImportieren, "panelBeispieldatenImportieren");
-        cardPanel.add(panelStammdaten, "panelStammdaten");
-        cardPanel.add(panelAktie, "panelAktie");
-        cardPanel.add(panelPerson, "panelPerson");
-        cardPanel.add(panelStartkapital, "panelStartkapital");
-        cardPanel.add(panelStartkurs, "panelStartkurs");
-        cardPanel.add(panelKauf, "panelKauf");
-        cardPanel.add(panelWert, "panelWert");
-        cardPanel.add(panelSpielstand, "panelSpielstand");
+        cardPanel.add(panelStart, nameStart);
+        cardPanel.add(panelBeispieldatenImportieren, nameBeispieldatenImportieren);
+        cardPanel.add(panelStammdaten, nameStammdaten);
+        cardPanel.add(panelAktie, nameAktie);
+        cardPanel.add(panelPerson, namePerson);
+        cardPanel.add(panelStartkapital, nameStartkapital);
+        cardPanel.add(panelStartkurs, nameStartkurs);
+        cardPanel.add(panelKauf, nameKauf);
+        cardPanel.add(panelWert, nameWert);
+        cardPanel.add(panelSpielstand, nameSpielstand);
 
         // Panel dem Frame hinzufügen
         start.add(cardPanel);

@@ -2,8 +2,8 @@ package Frontend.ActionListener;
 
 import javax.swing.*;
 
-public class StartkapitalListener extends MyActionListener{
-    public StartkapitalListener(JButton Btn) {
+public class WertListener extends MyActionListener{
+    public WertListener(JButton Btn) {
         super(Btn);
     }
 

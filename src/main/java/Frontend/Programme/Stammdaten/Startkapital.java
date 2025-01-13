@@ -1,21 +1,17 @@
 package Frontend.Programme.Stammdaten;
 
-import Frontend.Cards;
+import Frontend.ActionListener.StartkapitalListener;
 import Frontend.Komponenten.Buttons;
 import Frontend.Komponenten.EingabePanel;
 
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-
-import static Frontend.Cards.cardLayout;
 
 public class Startkapital extends JPanel{
-    EingabePanel person = new EingabePanel("Person (ID): ");
-    EingabePanel betrag = new EingabePanel("Betrag: ");
+    public static EingabePanel person = new EingabePanel("Person (ID): ");
+    public static EingabePanel betrag = new EingabePanel("Betrag: ");
 
-    Buttons buttons = new Buttons();
+    static Buttons buttons = new Buttons();
 
     public Startkapital(CardLayout cardLayout, JPanel cardPanel) {
         // GridBagLayout direkt auf Panel verwenden
@@ -43,39 +39,16 @@ public class Startkapital extends JPanel{
     }
 
     private void buttonListener() {
+        StartkapitalListener erfassen = new StartkapitalListener(buttons.create_btn) {
+        };buttons.create_btn.addActionListener(erfassen);
 
-        ActionListener ok = new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                // TODO
-            }
-        };
-        buttons.ok_btn.addActionListener(ok);
+        StartkapitalListener ok = new StartkapitalListener(buttons.ok_btn) {
+        };buttons.ok_btn.addActionListener(ok);
 
-        ActionListener erfassen = new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                // TODO
-            }
-        };
-        buttons.create_btn.addActionListener(erfassen);
+        StartkapitalListener abbrechen = new StartkapitalListener(buttons.cancel_btn) {
+        };buttons.cancel_btn.addActionListener(abbrechen);
 
-        ActionListener abbrechen = new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                // TODO
-            }
-        };
-        buttons.cancel_btn.addActionListener(abbrechen);
-
-        ActionListener zurueckStart = new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                // TODO
-                // Panel wechseln
-                cardLayout.show(Cards.cardPanel, "panelStart");
-            }
-        };
-        buttons.backstart.addActionListener(zurueckStart);
+        StartkapitalListener zurueckStart = new StartkapitalListener(buttons.backstart) {
+        };buttons.backstart.addActionListener(zurueckStart);
     }
 }

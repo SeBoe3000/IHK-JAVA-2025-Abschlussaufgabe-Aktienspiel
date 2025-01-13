@@ -1,22 +1,18 @@
 package Frontend.Programme.Stammdaten;
 
-import Frontend.Cards;
+import Frontend.ActionListener.PersonListener;
 import Frontend.Komponenten.Buttons;
 import Frontend.Komponenten.EingabePanel;
 
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-
-import static Frontend.Cards.cardLayout;
 
 public class Person extends JPanel{
-    EingabePanel vorname = new EingabePanel("Vorname: ");
-    EingabePanel nachname = new EingabePanel("Nachname: ");
-    EingabePanel alter = new EingabePanel("Alter: ");
+    public static EingabePanel vorname = new EingabePanel("Vorname: ");
+    public static EingabePanel nachname = new EingabePanel("Nachname: ");
+    public static EingabePanel alter = new EingabePanel("Alter: ");
 
-    Buttons buttons = new Buttons();
+    static Buttons buttons = new Buttons();
 
     public Person(CardLayout cardLayout, JPanel cardPanel) {
         // GridBagLayout direkt auf Panel verwenden
@@ -48,39 +44,16 @@ public class Person extends JPanel{
     }
 
     private void buttonListener() {
+        PersonListener erfassen = new PersonListener(buttons.create_btn) {
+        };buttons.create_btn.addActionListener(erfassen);
 
-        ActionListener ok = new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                // TODO
-            }
-        };
-        buttons.ok_btn.addActionListener(ok);
+        PersonListener ok = new PersonListener(buttons.ok_btn) {
+        };buttons.ok_btn.addActionListener(ok);
 
-        ActionListener erfassen = new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                // TODO
-            }
-        };
-        buttons.create_btn.addActionListener(erfassen);
+        PersonListener abbrechen = new PersonListener(buttons.cancel_btn) {
+        };buttons.cancel_btn.addActionListener(abbrechen);
 
-        ActionListener abbrechen = new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                // TODO
-            }
-        };
-        buttons.cancel_btn.addActionListener(abbrechen);
-
-        ActionListener zurueckStart = new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                // TODO
-                // Panel wechseln
-                cardLayout.show(Cards.cardPanel, "panelStart");
-            }
-        };
-        buttons.backstart.addActionListener(zurueckStart);
+        PersonListener zurueckStart = new PersonListener(buttons.backstart) {
+        };buttons.backstart.addActionListener(zurueckStart);
     }
 }
