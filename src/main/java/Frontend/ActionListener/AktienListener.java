@@ -1,13 +1,15 @@
 package Frontend.ActionListener;
 
 import Backend.ElementAktie;
+import Datenbank.SQL;
+import Datenbank.SQLAktien;
 import Frontend.Cards;
 import Frontend.Programme.Stammdaten.Aktie;
 
 import javax.swing.*;
 import java.util.ArrayList;
+import java.util.List;
 
-import static Datenbank.SQL.insertTableAktie;
 import static Frontend.Cards.cardLayout;
 
 public class AktienListener extends MyActionListener {
@@ -19,14 +21,15 @@ public class AktienListener extends MyActionListener {
     public static ArrayList<ElementAktie> AktieList = new ArrayList<>();
 
     // Zu füllende Felder
-    String eingabeIsin = "";
+    static String eingabeIsin = "";
     String eingabeName = "";
 
     @Override
     public void checkFields(){
         Checks.checkField(Aktie.isin, "isValidString", "Bitte eine ISIN angeben.", errorMessages);
         Checks.checkFieldLenght(Aktie.isin, 12,12,"isValidStringLaenge", "Die ISIN muss 12 Stellen lang sein.", errorMessages);
-        Checks.checkField(Aktie.name, "isValidString", "Bitte einen Namen angeben.", errorMessages);
+        Checks.checkField(Aktie.name, "isValidString", "Bitte einen gültigen Namen angeben.", errorMessages);
+        Checks.checkFieldLenght(Aktie.name, 0,30,"isValidStringLaenge", "Der Name kann bis zu 30 stellen lang sein.", errorMessages);
 
         /* Kann auch wie folgt definiert werden:
         if(!Checks.checkValues(Aktie.isin, "isValidString", 0,0)){
@@ -47,7 +50,7 @@ public class AktienListener extends MyActionListener {
             errorMessages.add("Das Element befindet sich bereits in der ElementListe. Bitte einen anderen Datensatz angeben.");
         }
         // Prüfung, ob Element bereits in Datenbank vorhanden ist
-        if(Checks.checkElementAlreadyInDatenbankOneString(eingabeIsin, "isin","Aktien")){
+        if(SQL.checkElementAlreadyInDatenbankOneString(eingabeIsin, "isin","Aktien")){
             errorMessages.add("Die Element befindet sich bereits in der Datenbank. Bitte einen anderen Datensatz angeben.");
         }
     }
@@ -95,14 +98,39 @@ public class AktienListener extends MyActionListener {
     // TODO: Prüfen, warum immer Meldung bezüglich doppelter Datensätze kommt
     @Override
     protected void elementInsert() {
-        // Liste der Elemente abarbeiten und in Datenbank erfassen. Meldung über durchgeführten Insert wird ausgegeben.
-        // Wurden in der Zwischenzeit Daten bereits erfasst (mehrbenutzerbetrieb) ist es hier nicht mehr möglich einzugreifen.
-        // Dafür müssten die bereits erfassten Daten als Liste angezeigt werden und eine nachträgliche Bearbeitung der Daten möglich sein.
-        if(insertTableAktie(AktieList) == true) {
+        // Option 1: Liste Elemente abarbeiten und in Datenbank erfassen. Meldung über durchgeführten Insert ausgeben.
+        // Kein Eingriff bei in der Zwischenzeit geänderten Daten.
+        if(SQLAktien.selectInsertTableAktie(AktieList) == true) {
             JOptionPane.showMessageDialog(null, "Die Datensätze wurden alle erfolgreich erfasst.");
         } else {
             JOptionPane.showMessageDialog(null, "Es waren doppelte Datensätze vorhanden. Diese wurden nicht erfasst. Der Rest wurde verarbeitet.");
         }
+
+        /*
+        // Option 2: Datensätze nur verarbeiten, wenn Elemente in der Zwischenzeit nicht in Datenbank erfasst wurden
+        // TODO: Daten nachträglich bearbeitbar machen (Liste anzeigen)
+        // TODO: Rückgabe, damit Dialog nur bei erfolgreicher Verarbeitung geschlossen wird
+        // TODO: prüfen, ob Select-SQL gesammelt im Batch verarbeitet werden könnte
+        if(checkInDatenbank(AktieList)) {
+            JOptionPane.showMessageDialog(null, "Datensatz aus ElementListe ist bereits in Datenbank vorhanden.");
+        } else {
+            SQLAktien.insertTableAktie(AktieList);
+            JOptionPane.showMessageDialog(null, "Die Datensätze wurden alle erfolgreich erfasst.");
+        }
+        */
+    }
+
+    // prüfen, ob Element aus ElementListe in Datenbank vorhanden ist
+    // Für Option 2 im AktienListener.elementInsert benötigt.
+    public static Boolean checkInDatenbank(List<ElementAktie> aktie){
+        Boolean inDatenbank = false;
+        for(ElementAktie Aktie: aktie){
+            if(SQL.checkElementAlreadyInDatenbankOneString(eingabeIsin, "isin","Aktien")){
+                inDatenbank = true;
+                break;
+            }
+        }
+        return inDatenbank;
     }
 
     // Feld leeren und Fehler entfernen
@@ -118,6 +146,6 @@ public class AktienListener extends MyActionListener {
         // Werte und Fehler in Feldern leeren, sonst sind diese beim nächsten Mal gefüllt
         felderLeeren();
         // Panel wechseln
-        cardLayout.show(Cards.cardPanel, Cards.nameStart);
+        cardLayout.show(Cards.cardPanel, Cards.nameStammdaten);
     }
 }

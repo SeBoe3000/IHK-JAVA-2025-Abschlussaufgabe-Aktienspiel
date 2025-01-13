@@ -1,49 +1,123 @@
 package Frontend.ActionListener;
 
+import Backend.ElementPerson;
+import Datenbank.SQL;
+import Datenbank.SQLPerson;
+import Frontend.Cards;
+import Frontend.Programme.Stammdaten.Person;
+
 import javax.swing.*;
+import java.util.ArrayList;
+
+import static Frontend.Cards.cardLayout;
 
 public class PersonListener extends MyActionListener{
     public PersonListener(JButton Btn) {
         super(Btn);
     }
 
+    // Zum Speichern der Ergebnisse
+    public static ArrayList<ElementPerson> PersonList = new ArrayList<>();
+
+    // Zu füllende Felder
+    String eingabeVorname = "";
+    String eingabeNachname = "";
+    Integer eingabeAlter = 0;
+
     @Override
     protected void checkFields() {
-
+        Checks.checkField(Person.vorname, "isValidString", "Bitte einen gültigen Vorname angeben.", errorMessages);
+        Checks.checkFieldLenght(Person.vorname, 0,20,"isValidStringLaenge", "Der Vorname darf maximal 20 Stellen lang sein.", errorMessages);
+        Checks.checkField(Person.nachname, "isValidString", "Bitte einen gültigen Nachname angeben.", errorMessages);
+        Checks.checkFieldLenght(Person.nachname, 0,20,"isValidStringLaenge", "Der Nachname darf maximal 20 Stellen lang sein.", errorMessages);
+        Checks.checkFieldLenght(Person.alter, 18,130,"isValidIntegerVonBis", "Bitte ein Alter zwischen 18 und 130 angeben.", errorMessages);
     }
 
     @Override
     protected void fillFields() {
-
+        eingabeVorname = Person.vorname.getTextfield();
+        eingabeNachname = Person.nachname.getTextfield();
+        eingabeAlter = Integer.valueOf(Person.alter.getTextfield());
     }
 
     @Override
     protected void nextChecks() {
+        // Prüfung, ob Element in der Liste vorhanden ist.
+        if(checkElementAlreadyInList(eingabeVorname, eingabeNachname, eingabeAlter)){
+            errorMessages.add("Das Element befindet sich bereits in der ElementListe. Bitte einen anderen Datensatz angeben.");
+        }
+        // Prüfung, ob Element bereits in Datenbank vorhanden ist
+        if(SQL.checkElementAlreadyInDatenbankStringStringInteger(eingabeVorname, eingabeNachname, eingabeAlter, "Vorname", "Nachname", "Alter","Personen")){
+            errorMessages.add("Die Element befindet sich bereits in der Datenbank. Bitte einen anderen Datensatz angeben.");
+        }
+    }
 
+    // TODO: prüfen, ob Auslagerung möglich ist.
+    // Prüfung, ob der Wert bereits in der Liste vorhanden ist
+    public static boolean checkElementAlreadyInList(String vorname, String nachname, Integer alter){
+        boolean inList = false;
+        for(ElementPerson Person: PersonList){
+            if (vorname.equals(Person.getVorname()) &&
+                    nachname.equals(Person.getNachname()) &&
+                    alter.equals(Person.getAlter())){
+                // System.out.println("Bereits vorhanden");
+                inList = true;
+            }
+        }
+        return inList;
     }
 
     @Override
     protected void elementInList() {
-
+        // Element der Liste hinzufügen
+        ElementPerson aktie = new ElementPerson(eingabeVorname, eingabeNachname, eingabeAlter);
+        PersonList.add(aktie);
+        // Nach Hinzufügen die Felder leeren
+        felderLeeren();
+        // Finaler Check kennzeichnen
     }
+
 
     @Override
     protected boolean checkFieldsfilled() {
-        return false;
+        Boolean filled = true;
+        if(!Checks.checkOneFieldfilled(Person.vorname) && !Checks.checkOneFieldfilled(Person.nachname) && !Checks.checkOneFieldfilled(Person.alter)) {
+            filled = false;
+        }
+        System.out.println("filled: " +  filled);
+        return filled;
     }
 
     @Override
     protected boolean checkElementInList() {
-        return false;
+        Boolean action = Checks.checkElementInList(PersonList);
+        return action;
     }
 
     @Override
     protected void elementInsert() {
+        // TODO: Option 2 prüfen, siehe AktienListener
+        if(SQLPerson.selectInsertTablePerson(PersonList) == true) {
+            JOptionPane.showMessageDialog(null, "Die Datensätze wurden alle erfolgreich erfasst.");
+        } else {
+            JOptionPane.showMessageDialog(null, "Es waren doppelte Datensätze vorhanden. Diese wurden nicht erfasst. Der Rest wurde verarbeitet.");
+        }
+    }
 
+    // Feld leeren und Fehler entfernen
+    public static void felderLeeren(){
+        Checks.clearOneField(Person.vorname);
+        Checks.clearOneField(Person.nachname);
+        Checks.clearOneField(Person.alter);
     }
 
     @Override
     protected void backToStart() {
-
+        // Arrayliste leeren
+        PersonList.clear();
+        // Werte und Fehler in Feldern leeren, sonst sind diese beim nächsten Mal gefüllt
+        felderLeeren();
+        // Panel wechseln
+        cardLayout.show(Cards.cardPanel, Cards.nameStammdaten);
     }
 }

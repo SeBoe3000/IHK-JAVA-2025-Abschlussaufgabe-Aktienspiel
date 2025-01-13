@@ -40,7 +40,14 @@ public abstract class MyActionListener implements ActionListener {
         boolean notInWork = !checkFieldsfilled(); // Prüfung, ob ein Feld gefüllt ist
         boolean noElement = checkElementInList(); // Prüfung, ob Element in Liste vorhanden ist
         System.out.println("Ergebnis Check - notInWork: " + notInWork + " und noElement: " + noElement);
-        doCheckInsertBack(notInWork, noElement);
+
+        // Bei keiner Angabe und keinem Element - Fehlermeldungen hochbringen
+        if(notInWork == true && noElement == true) {
+            checkFields();
+            showError(errorMessages);
+        } else {
+            doCheckInsertBack(notInWork, noElement);
+        }
     }
 
     public void erfassen(){
@@ -66,6 +73,11 @@ public abstract class MyActionListener implements ActionListener {
                 doCheckInsertBack(notInWork, noElement);
             }
         }
+        // Schließen, wenn keine Angabe und Element vorhanden
+        if(notInWork == true && noElement == true) {
+            backToStart();
+        }
+        //
     }
 
     protected boolean elementHinzu() {
@@ -86,23 +98,26 @@ public abstract class MyActionListener implements ActionListener {
 
     // TODO: einzelne Fälle prüfen
     public void doCheckInsertBack(Boolean notInWork, Boolean noElement){
+        Boolean next = true;
+
         // Sind die Felder gefüllt, dann Elemente einfügen (wenn keine Fehlermeldung vorhanden)
-        if(notInWork == false && noElement == true) {
-            if(elementHinzu() == false){
-                // Elemente aus Liste verarbeiten und Dialog schließen
-                insertAndBack();
+        if(notInWork == false) {
+            if(elementHinzu() == true){
+                next = false;
+            } else {
+                noElement = checkElementInList(); // noElement ändern, ansonsten wird insert nicht aufgerufen
             }
         }
-        // Sind die Felder nicht gefüllt, aber Elemente in der Liste, dann diese verarbeiten und Dialog schließen
-        if(notInWork == false && noElement == false) {
-            insertAndBack();
-        }
-    }
 
-    public void insertAndBack() {
-        elementInsert();
-        // Dialog nur bei keinen doppelten Datensätzen schließen wäre nur möglich, wenn Daten in einer Liste angezeigt werden.
-        backToStart();
+        // Sind Elemente in der Liste, dann diese Einfügen
+        if(noElement == false && next) {
+            // Dialog nur bei keinen doppelten Datensätzen schließen wäre nur möglich, wenn Daten in einer Liste angezeigt werden.
+            elementInsert();
+        }
+
+        if(next){
+            backToStart();
+        }
     }
 
     // Fehlermeldungen ausgeben
@@ -116,6 +131,8 @@ public abstract class MyActionListener implements ActionListener {
                 message.append(errorMessage).append("\n");
             }
             JOptionPane.showMessageDialog(null, message.toString(), "Fehler", JOptionPane.ERROR_MESSAGE);
+            // Nach der Ausgabe die Liste leeren
+            errorMessages.clear();
         }
     }
 

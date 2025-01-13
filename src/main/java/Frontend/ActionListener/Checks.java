@@ -1,12 +1,7 @@
 package Frontend.ActionListener;
 
-import Datenbank.Datenbankverbindung;
 import Frontend.Komponenten.EingabePanel;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
 import java.util.ArrayList;
 
 public class Checks {
@@ -31,32 +26,7 @@ public class Checks {
         return filled;
     }
 
-    // Prüfung, ob der Wert bereits in der Datenbank vorhanden ist (Übergabe von einem String)
-    public static boolean checkElementAlreadyInDatenbankOneString(String eingabe, String field, String table){
-        boolean inDatenbank = false;
 
-        String sqlSelect = "SELECT count(*) FROM " + table + " WHERE " + field + " = ?";
-        try(
-                Connection conn = Datenbankverbindung.connect();
-                PreparedStatement pstmtSelect = conn.prepareStatement(sqlSelect);
-        ){
-            pstmtSelect.setString(1, eingabe);
-            ResultSet resultSelect = pstmtSelect.executeQuery();
-            int result = 1;
-            while (resultSelect.next()) {
-                result = Integer.parseInt(resultSelect.getString(1));
-                // System.out.println(result);
-                if (result == 1) {
-                    inDatenbank = true;
-                }
-            }
-        } catch (SQLException e){
-            e.printStackTrace();
-        } catch (Exception e){
-            e.printStackTrace();
-        }
-        return inDatenbank;
-    }
 
     // Prüfung auf gültige Eingaben verkürzt darstellen
     public static void checkField(EingabePanel input, String checkType, String errorMessage, ArrayList<String> errorMessages){
@@ -81,6 +51,10 @@ public class Checks {
             check1 = EingabenCheck.isValidString(check);
         }  else if (checkArt == "isValidStringLaenge") {
             check1 = EingabenCheck.isValidStringLaenge(check, von, bis);
+        } else if (checkArt == "isValidInteger") {
+            check1 = EingabenCheck.isValidInteger(check);
+        } else if (checkArt == "isValidIntegerVonBis") {
+            check1 = EingabenCheck.isValidIntegerVonBis(check, von, bis);
         }
 
         // Bei korrekter Eingabe (z.B. nach Fehler) Schriftfarbe zurückändern.

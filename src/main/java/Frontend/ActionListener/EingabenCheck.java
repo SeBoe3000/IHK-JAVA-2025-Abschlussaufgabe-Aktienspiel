@@ -97,7 +97,6 @@ public class EingabenCheck {
                 anzahlZahl ++;
             }
         }
-
         if (anzahlZahl > 0) {
             try {
                 Integer eingabeZahl = Integer.parseInt(eingabe);
@@ -106,17 +105,19 @@ public class EingabenCheck {
                 // System.out.println("Zu große Zahl");
             }
         }
-
         return isValid;
     }
 
-    /* Überprüfung Integer (nach Umwandlung) auf
-    - kleiner gleich 3
-    */
-    public static boolean isValidVergehen(Integer eingabe){
+    // Überprüfung Integer zwischen von bis (darf nicht leer, d.h. null sein)
+    public static boolean isValidIntegerVonBis(String eingabe,Integer von, Integer bis){
         boolean isValid = true;
-
-        if(eingabe > 3){
+        Integer zahl = 0;
+        try {
+            zahl = Integer.parseInt(eingabe);
+        } catch (Exception e) {
+            isValid = false;
+        }
+        if(zahl < von || zahl > bis){
             isValid = false;
         }
         return isValid;
