@@ -39,6 +39,8 @@ public class Kauf extends JPanel{
         // Restwert hinzufügen
         gbc.gridy = 3; // Zeile
         add(restwert, gbc);
+        // Restwert ausgrauen, da Anzeigefeld
+        restwert.setEnabledFalse();
 
         // Buttons hinzufügen
         gbc.gridy = 4; // Zeile

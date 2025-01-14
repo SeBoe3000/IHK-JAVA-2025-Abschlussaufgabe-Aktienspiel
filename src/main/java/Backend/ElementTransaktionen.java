@@ -1,24 +1,36 @@
 package Backend;
 
 public class ElementTransaktionen {
-    private String person;
+    private Integer runde;
+    private Integer person;
     private String aktie;
     private Integer anzahl;
+    private Float dividende;
 
-    public ElementTransaktionen(String person, String aktie, Integer anzahl) {
+    public ElementTransaktionen(Integer runde, Integer person, String aktie, Integer anzahl, Float dividende) {
+        this.runde = runde;
         this.person = person;
         this.aktie = aktie;
         this.anzahl = anzahl;
+        this.dividende = dividende;
     }
 
     public ElementTransaktionen() {
     }
 
-    public String getPerson() {
+    public Integer getRunde() {
+        return runde;
+    }
+
+    public void setRunde(Integer anzahl) {
+        this.runde = runde;
+    }
+
+    public Integer getPerson() {
         return person;
     }
 
-    public void setPerson(String person) {
+    public void setPerson(Integer person) {
         this.person = person;
     }
 
@@ -36,5 +48,13 @@ public class ElementTransaktionen {
 
     public void setAnzahl(Integer anzahl) {
         this.anzahl = anzahl;
+    }
+
+    public Float getDividende() {
+        return dividende;
+    }
+
+    public void setDividende(Float anzahl) {
+        this.dividende = dividende;
     }
 }

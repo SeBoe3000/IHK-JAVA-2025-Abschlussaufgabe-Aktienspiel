@@ -10,6 +10,9 @@ import java.awt.event.ActionListener;
 import static Frontend.Cards.cardLayout;
 
 public class Start extends JPanel {
+    // Zum Zählen der Runden
+    public static Integer runde = 1;
+
     JButton create_importExample = new JButton("Beispieldaten importieren");
     JButton open_stammdaten = new JButton("Stammdaten erfassen");
     ButtonGroup group_stammdaten = new ButtonGroup();
@@ -114,7 +117,32 @@ public class Start extends JPanel {
         ActionListener runde = new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                // TODO
+                // TODO: aktuelle Runde Kapitalverlauf und Aktienverlauf ermitteln per SQL
+                // TODO: Runde Kapitalverkauf = 0 --> Fehlermeldung Startkapital erfassen
+                // TODO: Runde Aktienverlauf = 0 --> Fehlermeldung Startkurs erfassen
+                // TODO: Runde Kapitalverlauf < Aktienverlauf --> Fehlermeldung Unternehmenswerte erfassen
+                // TODO: Runde Kapitalverlauf > Aktienverlauf --> Fehlermeldung Käufe erfassen
+                // TODO: Runde Kapitalverlauf = Aktienverlauf dann:
+                    // TODO: Prüfung in aktueller Runde wurden 3 bis 14 Aktien bzw. Personen angesprochen
+                    // TODO: Prüfung zu jeder gekauften Aktie liegt ein Aktienkurs und Kassenbestand vor
+                    // TODO: Sofern die beiden Prüfungen erfolgreich: Dividende berechnen
+                        // TODO: Pro verwendeter Aktie die Personen nach Aktien sortieren (größter Wert oben)
+                        // TODO: Prüfung: wie oft kommt die Aktienanzahl vom ersten Platz vor?
+                            // TODO: bei mehr als 1 mal
+                                // TODO: 40% vom Kassenbestand durch die Anzahl teilen
+                                // TODO: den Personen als Dividende einfügen
+                            // TODO: bei genau einem
+                                // TODO: 30% vom Kassenbestand der Person als Dividende einfügen
+                                // TODO: Prüfung: wie oft kommt die Aktienanzahl vom zweiten Platz vor?
+                                    // TODO: bei mehr als 1 mal
+                                        // TODO: 10% vom Kassenbestand durch die Anzahl teilen
+                                        // TODO: den Personen als Dividende einfügen
+                                    // TODO: bei genau einem
+                                        // TODO: 10% vom Kassenbestand der Person als Dividende einfügen
+                    // TODO: Runde erhöhen
+                    // TODO: Meldung über erfolgreich gespielte Runde bringen
+                    // TODO: Abfragen für Spielstand ggf. aktualisieren
+
             }
         };
         create_runde.addActionListener(runde);

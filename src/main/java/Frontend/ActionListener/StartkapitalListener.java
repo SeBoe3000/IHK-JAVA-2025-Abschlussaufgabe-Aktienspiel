@@ -4,7 +4,6 @@ import Backend.ElementKapitalverlauf;
 import Datenbank.SQL;
 import Datenbank.SQLKapitalverlauf;
 import Frontend.Cards;
-import Frontend.Programme.Stammdaten.Aktie;
 import Frontend.Programme.Stammdaten.Startkapital;
 
 import javax.swing.*;
@@ -26,7 +25,7 @@ public class StartkapitalListener extends MyActionListener{
 
     @Override
     protected void checkFields() {
-        Checks.checkField(Startkapital.person, "isValidInteger", "Bitte eine gültige Zahl angeben.", errorMessages);
+        Checks.checkField(Startkapital.person, "isValidInteger", "Bitte eine gültige Zahl im Fled Person (ID) angeben.", errorMessages);
         Checks.checkField(Startkapital.betrag, "isValidFloat", "Bitte einen gültigen Betrag angeben.", errorMessages);
 
     }
