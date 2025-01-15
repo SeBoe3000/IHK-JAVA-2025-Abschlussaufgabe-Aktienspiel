@@ -9,14 +9,6 @@ import javax.swing.*;
 import java.awt.*;
 
 public class EinstellungenTransaktionen extends JPanel{
-    // Integer maxAktienPersonRunde = 30;
-    // Integer minPersonRunde = 3;
-    // Integer maxPersonRunde = 14;
-    // Integer minAktieRunde = 3;
-    // Integer maxAktieRunde = 14;
-    // Float firstDividende = 30F;
-    // Float secondDividende = 10F;
-
     public static EingabePanel maxAktienPersonRunde = new EingabePanel("Maximale Aktien pro Person und Runde: ");
     public static EingabePanelVonBis personRunde = new EingabePanelVonBis("Personen pro Runde: ");
     public static EingabePanelVonBis aktieRunde = new EingabePanelVonBis("Unternehmen pro Runde: ");

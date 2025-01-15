@@ -8,8 +8,6 @@ import javax.swing.*;
 import java.awt.*;
 
 public class EinstellungenPersonen extends JPanel{
-    // Integer defaultStrartkapital = 5000;
-
     public static EingabePanel defaultStrartkapital = new EingabePanel("Default Startkapital: ");
 
     static Buttons buttons = new Buttons();

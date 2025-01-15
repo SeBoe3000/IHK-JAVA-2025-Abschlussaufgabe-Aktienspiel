@@ -8,8 +8,6 @@ import javax.swing.*;
 import java.awt.*;
 
 public class EinstellungenAktien extends JPanel{
-    //Integer maxAnzahlAktien = 100;
-
     public static EingabePanel maxAnzahlAktien = new EingabePanel("Maximale Anzahl Aktien pro Unternehmen: ");
 
     static Buttons buttons = new Buttons();
