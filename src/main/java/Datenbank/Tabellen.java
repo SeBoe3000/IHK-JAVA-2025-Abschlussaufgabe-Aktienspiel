@@ -91,8 +91,8 @@ public class Tabellen {
         SQL.table("INSERT INTO Einstellungen VALUES" +
                 "('AKT', '100')," +
                 "('PER', '5000')," +
-                "('ORD', '0,100000,10')," +
-                "('TRN', '30,3,14,3,14,30,10')" +
+                "('ORD', '0.0,100000.0,10.0')," +
+                "('TRN', '30,3,14,3,14,30.0,10.0')" +
                 " ON CONFLICT DO NOTHING");
     }
 
