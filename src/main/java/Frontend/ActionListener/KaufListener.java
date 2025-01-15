@@ -1,6 +1,5 @@
 package Frontend.ActionListener;
 
-import Backend.ElementAktie;
 import Backend.ElementTransaktionen;
 import Datenbank.SQL;
 import Datenbank.SQLTransaktionen;
@@ -10,7 +9,6 @@ import Frontend.Programme.Start;
 
 import javax.swing.*;
 import java.util.ArrayList;
-import java.util.List;
 
 import static Frontend.Cards.cardLayout;
 
@@ -48,14 +46,13 @@ public class KaufListener extends MyActionListener{
         if(!SQL.checkElementAlreadyInDatenbankOneInteger(eingabePersonID, "id","Personen")){
             errorMessages.add("Die ausgewählte Person ist nicht in der Tabelle Personen vorhanden.");
         }
-
         // Aktie muss in Tabelle Aktien vorhanden sein.
         if(!SQL.checkElementAlreadyInDatenbankOneString(eingabeAktie, "isin","Aktien")){
             errorMessages.add("Die ausgewählte Aktie ist nicht in der Tabelle Aktien vorhanden.");
         }
-
         // Prüfung, ob Element in der Liste vorhanden ist.
         if(checkElementAlreadyInList(eingabePersonID, eingabeAktie)){
+            // TODO: ggf. den Kauf erhöhen
             errorMessages.add("Das Element befindet sich bereits in der ElementListe. Bitte einen anderen Datensatz angeben.");
         }
         // Prüfung, ob Element bereits in Datenbank vorhanden ist
@@ -77,7 +74,6 @@ public class KaufListener extends MyActionListener{
     public static boolean checkElementAlreadyInList(Integer person, String aktie){
         boolean inList = false;
         for(ElementTransaktionen Transaktion: TransaktionenList){
-            // TODO: ggf. den Kauf erhöhen
             if (person.equals(Transaktion.getPerson()) && aktie.equals(Transaktion.getAktie())){
                 // System.out.println("Bereits vorhanden");
                 inList = true;
@@ -93,7 +89,6 @@ public class KaufListener extends MyActionListener{
         TransaktionenList.add(transaktionen);
         // Nach Hinzufügen die Felder leeren
         felderLeeren();
-        // Finaler Check kennzeichnen
     }
 
     @Override
@@ -121,34 +116,23 @@ public class KaufListener extends MyActionListener{
         } else {
             JOptionPane.showMessageDialog(null, "Es waren doppelte Datensätze vorhanden. Diese wurden nicht erfasst. Der Rest wurde verarbeitet.");
         }
+        // TODO: Option 2 prüfen, siehe AktienListener
     }
 
-    // prüfen, ob Element aus ElementListe in Datenbank vorhanden ist
-    // Für Option 2 im AktienListener.elementInsert benötigt.
-    public static Boolean checkInDatenbank(List<ElementAktie> aktie){
-        Boolean inDatenbank = false;
-        for(ElementAktie Aktie: aktie){
-            if(SQL.checkElementAlreadyInDatenbankIntegerIntegerString(Start.runde, eingabePersonID, eingabeAktie, "runde", "PersonID", "AktieISIN", "Transaktionen")){
-                inDatenbank = true;
-                break;
-            }
-        }
-        return inDatenbank;
+    @Override
+    protected void clearliste() {
+        TransaktionenList.clear();
     }
 
-    public static void felderLeeren(){
+    @Override
+    protected void felderLeeren(){
         Checks.clearOneField(Kauf.person);
         Checks.clearOneField(Kauf.aktie);
         Checks.clearOneField(Kauf.anzahl);
     }
 
     @Override
-    protected void backToStart() {
-        // Arrayliste leeren
-        TransaktionenList.clear();
-        // Werte und Fehler in Feldern leeren, sonst sind diese beim nächsten Mal gefüllt
-        felderLeeren();
-        // Panel wechseln
+    protected void changePanel() {
         cardLayout.show(Cards.cardPanel, Cards.nameStart);
     }
 }

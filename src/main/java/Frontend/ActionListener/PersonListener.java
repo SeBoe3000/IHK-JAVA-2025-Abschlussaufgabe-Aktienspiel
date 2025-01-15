@@ -74,9 +74,7 @@ public class PersonListener extends MyActionListener{
         PersonList.add(aktie);
         // Nach Hinzufügen die Felder leeren
         felderLeeren();
-        // Finaler Check kennzeichnen
     }
-
 
     @Override
     protected boolean checkFieldsfilled() {
@@ -96,28 +94,30 @@ public class PersonListener extends MyActionListener{
 
     @Override
     protected void elementInsert() {
-        // TODO: Option 2 prüfen, siehe AktienListener
+        // Option 1: Liste Elemente abarbeiten und in Datenbank erfassen. Meldung über durchgeführten Insert ausgeben.
+        // Kein Eingriff bei in der Zwischenzeit geänderten Daten.
         if(SQLPerson.selectInsertTablePerson(PersonList) == true) {
             JOptionPane.showMessageDialog(null, "Die Datensätze wurden alle erfolgreich erfasst.");
         } else {
             JOptionPane.showMessageDialog(null, "Es waren doppelte Datensätze vorhanden. Diese wurden nicht erfasst. Der Rest wurde verarbeitet.");
         }
+        // TODO: Option 2 prüfen, siehe AktienListener
     }
 
-    // Feld leeren und Fehler entfernen
-    public static void felderLeeren(){
+    @Override
+    protected void clearliste() {
+        PersonList.clear();
+    }
+
+    @Override
+    protected void felderLeeren(){
         Checks.clearOneField(Person.vorname);
         Checks.clearOneField(Person.nachname);
         Checks.clearOneField(Person.alter);
     }
 
     @Override
-    protected void backToStart() {
-        // Arrayliste leeren
-        PersonList.clear();
-        // Werte und Fehler in Feldern leeren, sonst sind diese beim nächsten Mal gefüllt
-        felderLeeren();
-        // Panel wechseln
+    protected void changePanel() {
         cardLayout.show(Cards.cardPanel, Cards.nameStammdaten);
     }
 }

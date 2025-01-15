@@ -95,8 +95,6 @@ public abstract class MyActionListener implements ActionListener {
         return inWork;
     }
 
-
-    // TODO: einzelne Fälle prüfen
     public void doCheckInsertBack(Boolean notInWork, Boolean noElement){
         Boolean next = true;
 
@@ -136,13 +134,26 @@ public abstract class MyActionListener implements ActionListener {
         }
     }
 
+    protected void backToStart(){
+        // Arrayliste leeren
+        clearliste();
+        // Werte und Fehler in Feldern leeren, sonst sind diese beim nächsten Mal gefüllt
+        felderLeeren();
+        // Panel wechseln
+        changePanel();
+    }
+
     // Zu implementierende Funktionen
     protected abstract void checkFields();
     protected abstract void fillFields();
     protected abstract void nextChecks();
     protected abstract void elementInList();
+    // Prüfung, ob ein Feld gefüllt sind (sobald eines leer ist, wird false übergeben.)
     protected abstract boolean checkFieldsfilled();
     protected abstract boolean checkElementInList();
     protected abstract void elementInsert();
-    protected abstract void backToStart();
+    protected abstract void clearliste();
+    // Feld leeren und Fehler entfernen
+    protected abstract void felderLeeren();
+    protected abstract void changePanel();
 }

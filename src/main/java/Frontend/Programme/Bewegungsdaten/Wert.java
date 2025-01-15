@@ -8,9 +8,9 @@ import javax.swing.*;
 import java.awt.*;
 
 public class Wert extends JPanel {
-    EingabePanel aktie = new EingabePanel("Aktie (ISIN): ");
-    EingabePanel kurs = new EingabePanel("Kurs: ");
-    EingabePanel kassenbestand = new EingabePanel("Kassenbestand: ");
+    public static EingabePanel aktie = new EingabePanel("Aktie (ISIN): ");
+    public static EingabePanel kurs = new EingabePanel("Kurs: ");
+    public static EingabePanel kassenbestand = new EingabePanel("Kassenbestand: ");
 
     Buttons buttons = new Buttons();
 

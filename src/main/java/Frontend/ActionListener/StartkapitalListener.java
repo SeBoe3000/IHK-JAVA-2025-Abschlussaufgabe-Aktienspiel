@@ -27,7 +27,6 @@ public class StartkapitalListener extends MyActionListener{
     protected void checkFields() {
         Checks.checkField(Startkapital.person, "isValidInteger", "Bitte eine gültige Zahl im Fled Person (ID) angeben.", errorMessages);
         Checks.checkField(Startkapital.betrag, "isValidFloat", "Bitte einen gültigen Betrag angeben.", errorMessages);
-
     }
 
     @Override
@@ -42,14 +41,12 @@ public class StartkapitalListener extends MyActionListener{
         if(!SQL.checkElementAlreadyInDatenbankOneInteger(eingabePersonID, "id","Personen")){
             errorMessages.add("Die ausgewählte Person ist nicht in der Tabelle Personen vorhanden.");
         }
-
         // Prüfung, ob Element in der Liste vorhanden ist.
         if(checkElementAlreadyInList(eingabePersonID)){
             errorMessages.add("Das Element befindet sich bereits in der ElementListe. Bitte einen anderen Datensatz angeben.");
         }
         // Prüfung, ob Element bereits in Datenbank vorhanden ist
-        // TODO: nur auf die Runde 0 beziehen? prüfen.
-        if(SQL.checkElementAlreadyInDatenbankOneInteger(eingabePersonID, "id","Kapitalverlauf")){
+        if(SQL.checkElementAlreadyInDatenbankIntegerInteger(eingabePersonID, 0, "id", "Runde", "Kapitalverlauf")){
             errorMessages.add("Die Element befindet sich bereits in der Datenbank. Bitte einen anderen Datensatz angeben.");
         }
     }
@@ -74,7 +71,6 @@ public class StartkapitalListener extends MyActionListener{
         StartkapitalList.add(startkapital);
         // Nach Hinzufügen die Felder leeren
         felderLeeren();
-        // Finaler Check kennzeichnen
     }
 
     @Override
@@ -86,7 +82,6 @@ public class StartkapitalListener extends MyActionListener{
         // System.out.println("filled: " +  filled);
         return filled;
     }
-
 
     @Override
     protected boolean checkElementInList() {
@@ -103,21 +98,22 @@ public class StartkapitalListener extends MyActionListener{
         } else {
             JOptionPane.showMessageDialog(null, "Es waren doppelte Datensätze vorhanden. Diese wurden nicht erfasst. Der Rest wurde verarbeitet.");
         }
+        // TODO: Option 2 prüfen, siehe AktienListener
     }
 
-    // Feld leeren und Fehler entfernen
-    public static void felderLeeren(){
+    @Override
+    protected void clearliste() {
+        StartkapitalList.clear();
+    }
+
+    @Override
+    protected void felderLeeren(){
         Checks.clearOneField(Startkapital.person);
         Checks.clearOneField(Startkapital.betrag);
     }
 
     @Override
-    protected void backToStart() {
-        // Arrayliste leeren
-        StartkapitalList.clear();
-        // Werte und Fehler in Feldern leeren, sonst sind diese beim nächsten Mal gefüllt
-        felderLeeren();
-        // Panel wechseln
+    protected void changePanel() {
         cardLayout.show(Cards.cardPanel, Cards.nameStammdaten);
     }
 }

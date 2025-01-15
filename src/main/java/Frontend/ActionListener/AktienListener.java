@@ -75,10 +75,8 @@ public class AktienListener extends MyActionListener {
         AktieList.add(aktie);
         // Nach Hinzufügen die Felder leeren
         felderLeeren();
-        // Finaler Check kennzeichnen
     }
 
-    // Prüfung, ob ein Feld gefüllt sind (sobald eines leer ist, wird false übergeben.)
     @Override
     protected boolean checkFieldsfilled() {
         Boolean filled = true;
@@ -132,19 +130,19 @@ public class AktienListener extends MyActionListener {
         return inDatenbank;
     }
 
-    // Feld leeren und Fehler entfernen
-    public static void felderLeeren(){
+    @Override
+    protected void clearliste() {
+        AktieList.clear();
+    }
+
+    @Override
+    protected void felderLeeren(){
         Checks.clearOneField(Aktie.isin);
         Checks.clearOneField(Aktie.name);
     }
 
     @Override
-    protected void backToStart() {
-        // Arrayliste leeren
-        AktieList.clear();
-        // Werte und Fehler in Feldern leeren, sonst sind diese beim nächsten Mal gefüllt
-        felderLeeren();
-        // Panel wechseln
+    protected void changePanel() {
         cardLayout.show(Cards.cardPanel, Cards.nameStammdaten);
     }
 }
