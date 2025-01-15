@@ -15,6 +15,7 @@ public class Start extends JPanel {
 
     JButton create_importExample = new JButton("Beispieldaten importieren");
     JButton open_stammdaten = new JButton("Stammdaten erfassen");
+    JButton open_einstellung = new JButton("Einstellungen");
     ButtonGroup group_stammdaten = new ButtonGroup();
 
     JLabel bewegungsdaten = new JLabel("Bewegungsdaten");
@@ -41,11 +42,13 @@ public class Start extends JPanel {
 
         group_stammdaten.add(create_importExample);
         group_stammdaten.add(open_stammdaten);
+        group_stammdaten.add(open_einstellung);
 
         JPanel group_stammdaten = new JPanel();
         group_stammdaten.setLayout(new BoxLayout(group_stammdaten, BoxLayout.X_AXIS));
         group_stammdaten.add(create_importExample);
         group_stammdaten.add(open_stammdaten);
+        group_stammdaten.add(open_einstellung);
         add(group_stammdaten, gbc);
 
         // Label Bewegungsdaten hinzufügen
@@ -85,7 +88,7 @@ public class Start extends JPanel {
         ActionListener importExample = new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                cardLayout.show(Cards.cardPanel, "panelBeispieldatenImportieren");
+                Cards.changeCard(Cards.nameBeispieldatenImportieren);
             }
         };
         create_importExample.addActionListener(importExample);
@@ -93,15 +96,23 @@ public class Start extends JPanel {
         ActionListener stammdaten = new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                cardLayout.show(Cards.cardPanel, Cards.nameStammdaten);
+                Cards.changeCard(Cards.nameStammdaten);
             }
         };
         open_stammdaten.addActionListener(stammdaten);
 
+        ActionListener einstellung = new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                Cards.changeCard(Cards.nameEinstellungen);
+            }
+        };
+        open_einstellung.addActionListener(einstellung);
+
         ActionListener kauf = new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                cardLayout.show(Cards.cardPanel, Cards.nameKauf);
+                Cards.changeCard(Cards.nameKauf);
             }
         };
         create_kauf.addActionListener(kauf);
@@ -109,7 +120,7 @@ public class Start extends JPanel {
         ActionListener wert = new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                cardLayout.show(Cards.cardPanel, Cards.nameWert);
+                Cards.changeCard(Cards.nameWert);
             }
         };
         create_wert.addActionListener(wert);
@@ -150,7 +161,7 @@ public class Start extends JPanel {
         ActionListener spielstand = new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                cardLayout.show(Cards.cardPanel, Cards.nameSpielstand);
+                Cards.changeCard(Cards.nameSpielstand);
             }
         };
         show_spielstand.addActionListener(spielstand);

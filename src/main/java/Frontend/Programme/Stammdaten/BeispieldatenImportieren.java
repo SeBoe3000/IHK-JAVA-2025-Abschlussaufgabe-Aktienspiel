@@ -137,7 +137,7 @@ public class BeispieldatenImportieren extends JPanel{
     // Zu Start zurückkehren
     private static void backToStart(){
         // Panel wechseln
-        cardLayout.show(Cards.cardPanel, "panelStart");
+        Cards.changeCard(Cards.nameStart);
         // Checkboxen beim Zurückkehren demarkieren
         checkboxUnselect();
     }

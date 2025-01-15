@@ -1,18 +1,17 @@
-package Frontend.ActionListener;
+package Frontend.ActionListenerInsert;
 
 import Backend.ElementAktie;
 import Datenbank.SQL;
 import Datenbank.SQLAktien;
 import Frontend.Cards;
+import Frontend.Checks.Checks;
 import Frontend.Programme.Stammdaten.Aktie;
 
 import javax.swing.*;
 import java.util.ArrayList;
 import java.util.List;
 
-import static Frontend.Cards.cardLayout;
-
-public class AktienListener extends MyActionListener {
+public class AktienListener extends MyActionListenerInsert {
     public AktienListener(JButton Btn) {
         super(Btn);
     }
@@ -143,6 +142,6 @@ public class AktienListener extends MyActionListener {
 
     @Override
     protected void changePanel() {
-        cardLayout.show(Cards.cardPanel, Cards.nameStammdaten);
+        Cards.changeCard(Cards.nameStammdaten);
     }
 }

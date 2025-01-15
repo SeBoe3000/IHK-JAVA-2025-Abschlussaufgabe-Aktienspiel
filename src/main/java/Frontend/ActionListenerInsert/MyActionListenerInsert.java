@@ -1,4 +1,4 @@
-package Frontend.ActionListener;
+package Frontend.ActionListenerInsert;
 
 import Frontend.Cards;
 import Frontend.Komponenten.Interaction;
@@ -8,15 +8,13 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
 
-import static Frontend.Cards.cardLayout;
-
-public abstract class MyActionListener implements ActionListener {
+public abstract class MyActionListenerInsert implements ActionListener {
     // Zum Speichern der Fehlermeldungen
     ArrayList<String> errorMessages = new ArrayList<>();
 
     // Von der aufrufenden Methode wird Btn übergeben und über den Konstruktor in der Variable gespeichert.
     private JButton Btn;
-    public MyActionListener(JButton Btn) {
+    public MyActionListenerInsert(JButton Btn) {
         this.Btn = Btn;
     }
 
@@ -32,7 +30,7 @@ public abstract class MyActionListener implements ActionListener {
             abbrechen();
         } else if (buttonText == "Zurück zu Start") {
             abbrechen();
-            cardLayout.show(Cards.cardPanel, Cards.nameStart);
+            Cards.changeCard(Cards.nameStart);
         }
     }
 

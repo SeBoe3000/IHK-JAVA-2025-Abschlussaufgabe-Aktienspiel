@@ -1,18 +1,17 @@
-package Frontend.ActionListener;
+package Frontend.ActionListenerInsert;
 
 import Backend.ElementTransaktionen;
 import Datenbank.SQL;
 import Datenbank.SQLTransaktionen;
 import Frontend.Cards;
+import Frontend.Checks.Checks;
 import Frontend.Programme.Bewegungsdaten.Kauf;
 import Frontend.Programme.Start;
 
 import javax.swing.*;
 import java.util.ArrayList;
 
-import static Frontend.Cards.cardLayout;
-
-public class KaufListener extends MyActionListener{
+public class KaufListener extends MyActionListenerInsert {
     public KaufListener(JButton Btn) {
         super(Btn);
     }
@@ -133,6 +132,6 @@ public class KaufListener extends MyActionListener{
 
     @Override
     protected void changePanel() {
-        cardLayout.show(Cards.cardPanel, Cards.nameStart);
+        Cards.changeCard(Cards.nameStart);
     }
 }

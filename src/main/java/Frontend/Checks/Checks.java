@@ -1,4 +1,4 @@
-package Frontend.ActionListener;
+package Frontend.Checks;
 
 import Frontend.Komponenten.EingabePanel;
 

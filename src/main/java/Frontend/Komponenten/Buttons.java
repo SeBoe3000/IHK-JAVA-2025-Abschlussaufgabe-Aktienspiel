@@ -23,8 +23,13 @@ public class Buttons extends JPanel {
     }
 
     // Methode zum Verschwinden von "Zurück zum Start"
-    public void setVisibleFalse(){
+    public void setVisibleStartFalse(){
         backstart.setVisible(false);
+    }
+
+    // Methode zum Verschwinden von "Zurück zum Start"
+    public void setVisibleErfassenFalse(){
+        create_btn.setVisible(false);
     }
 }
 

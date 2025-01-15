@@ -66,7 +66,7 @@ public class Stammdaten extends JPanel{
         ActionListener person = new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                cardLayout.show(Cards.cardPanel, Cards.namePerson);
+                Cards.changeCard(Cards.namePerson);
             }
         };
         create_person.addActionListener(person);
@@ -74,7 +74,7 @@ public class Stammdaten extends JPanel{
         ActionListener aktie = new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                cardLayout.show(Cards.cardPanel, Cards.nameAktie);
+                Cards.changeCard(Cards.nameAktie);
             }
         };
         create_aktie.addActionListener(aktie);
@@ -82,7 +82,7 @@ public class Stammdaten extends JPanel{
         ActionListener startkapital = new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                cardLayout.show(Cards.cardPanel, Cards.nameStartkapital);
+                Cards.changeCard(Cards.nameStartkapital);
             }
         };
         create_startkapital.addActionListener(startkapital);
@@ -90,7 +90,7 @@ public class Stammdaten extends JPanel{
         ActionListener startkurs = new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                cardLayout.show(Cards.cardPanel, Cards.nameStartkurs);
+                Cards.changeCard(Cards.nameStartkurs);
             }
         };
         create_startkurs.addActionListener(startkurs);
@@ -98,7 +98,7 @@ public class Stammdaten extends JPanel{
         ActionListener zurueck = new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                cardLayout.show(Cards.cardPanel, Cards.nameStart);
+                Cards.changeCard(Cards.nameStart);
             }
         };
         back.addActionListener(zurueck);

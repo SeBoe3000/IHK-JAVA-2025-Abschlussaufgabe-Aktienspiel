@@ -1,6 +1,6 @@
 package Frontend.Programme.Bewegungsdaten;
 
-import Frontend.ActionListener.KaufListener;
+import Frontend.ActionListenerInsert.KaufListener;
 import Frontend.Komponenten.Buttons;
 import Frontend.Komponenten.EingabePanel;
 
@@ -44,7 +44,7 @@ public class Kauf extends JPanel{
 
         // Buttons hinzufügen
         gbc.gridy = 4; // Zeile
-        buttons.setVisibleFalse();
+        buttons.setVisibleStartFalse();
         add(buttons, gbc);
 
         // ActionListener hinzufügen

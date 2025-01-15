@@ -1,6 +1,6 @@
 package Frontend.Programme.Bewegungsdaten;
 
-import Frontend.ActionListener.WertListener;
+import Frontend.ActionListenerInsert.WertListener;
 import Frontend.Komponenten.Buttons;
 import Frontend.Komponenten.EingabePanel;
 
@@ -37,7 +37,7 @@ public class Wert extends JPanel {
 
         // Buttons hinzufügen
         gbc.gridy = 3; // Zeile
-        buttons.setVisibleFalse();
+        buttons.setVisibleStartFalse();
         add(buttons, gbc);
 
         // ActionListener hinzufügen

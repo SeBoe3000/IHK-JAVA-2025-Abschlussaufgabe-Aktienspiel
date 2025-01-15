@@ -1,65 +1,63 @@
-package Frontend.ActionListener;
+package Frontend.ActionListenerInsert;
 
 import Backend.ElementAktienverlauf;
 import Datenbank.SQL;
 import Datenbank.SQLAktienverlauf;
 import Frontend.Cards;
-import Frontend.Programme.Bewegungsdaten.Wert;
-import Frontend.Programme.Start;
+import Frontend.Checks.Checks;
+import Frontend.Programme.Stammdaten.Startkurs;
 
 import javax.swing.*;
 import java.util.ArrayList;
 
-import static Frontend.Cards.cardLayout;
-
-public class WertListener extends MyActionListener{
-    public WertListener(JButton Btn) {
+public class StartkursListener extends MyActionListenerInsert {
+    public StartkursListener(JButton Btn) {
         super(Btn);
     }
 
     // Zum Speichern der Ergebnisse
-    public static ArrayList<ElementAktienverlauf> WertList = new ArrayList<>();
+    public static ArrayList<ElementAktienverlauf> AktienverlaufList = new ArrayList<>();
 
     // Zu füllende Felder
-    String eingabeAktieIsin = "";
-    Float eingabeKurs = 0F;
-    Float eingabeKassenbestand = 0F;
+    static String eingabeAktieIsin = "";
+    Float eingabeStartkurs = 0F;
 
     @Override
     protected void checkFields() {
-        Checks.checkField(Wert.aktie, "isValidString", "Bitte eine gültige ISIN angeben.", errorMessages);
-        Checks.checkFieldLenght(Wert.aktie, 12,12,"isValidStringLaenge", "Die ISIN muss 12 Stellen lang sein.", errorMessages);
-        Checks.checkField(Wert.kurs, "isValidFloat", "Bitte einen gültigen Kurs angeben.", errorMessages);
-        Checks.checkField(Wert.kassenbestand, "isValidFloat", "Bitte einen gültigen Kassenbestand angeben.", errorMessages);
-        // TODO: Prüfen nur im bestimmten Rahmen möglich.
+        Checks.checkField(Startkurs.aktie, "isValidString", "Bitte eine gültige ISIN angeben.", errorMessages);
+        Checks.checkFieldLenght(Startkurs.aktie, 12,12,"isValidStringLaenge", "Die ISIN muss 12 Stellen lang sein.", errorMessages);
+        Checks.checkField(Startkurs.kurs, "isValidFloat", "Bitte einen gültigen Kurs angeben.", errorMessages);
     }
 
     @Override
     protected void fillFields() {
-        eingabeAktieIsin = Wert.aktie.getTextfield();
-        eingabeKurs = Float.valueOf(Wert.kurs.getTextfield());
-        eingabeKassenbestand = Float.valueOf(Wert.kassenbestand.getTextfield());
+        eingabeAktieIsin = Startkurs.aktie.getTextfield();
+        eingabeStartkurs = Float.valueOf(Startkurs.kurs.getTextfield());
     }
 
     @Override
     protected void nextChecks() {
+        // Aktie muss in Tabelle Aktien vorhanden sein.
+        if(!SQL.checkElementAlreadyInDatenbankOneString(eingabeAktieIsin, "isin","Aktien")){
+            errorMessages.add("Die ausgewählte Aktie ist nicht in der Tabelle Aktien vorhanden.");
+        }
         // Prüfung, ob Element in der Liste vorhanden ist.
         if(checkElementAlreadyInList(eingabeAktieIsin)){
             errorMessages.add("Das Element befindet sich bereits in der ElementListe. Bitte einen anderen Datensatz angeben.");
         }
         // Prüfung, ob Element bereits in Datenbank vorhanden ist
         // Runde wird doppelt angegeben, damit keine neue Methode angelegt werden muss.
-        if(SQL.checkElementAlreadyInDatenbankIntegerIntegerString(Start.runde, Start.runde, eingabeAktieIsin, "Runde", "Runde", "AktieIsin","Aktienverlauf")){
+        if(SQL.checkElementAlreadyInDatenbankIntegerIntegerString(0,0, eingabeAktieIsin, "Runde", "Runde", "AktieIsin", "Aktienverlauf")){
             errorMessages.add("Die Element befindet sich bereits in der Datenbank. Bitte einen anderen Datensatz angeben.");
         }
     }
 
     // TODO: prüfen, ob Auslagerung möglich ist.
     // Prüfung, ob der Wert bereits in der Liste vorhanden ist
-    public static boolean checkElementAlreadyInList(String Isin){
+    public static boolean checkElementAlreadyInList(String AktieIsin){
         boolean inList = false;
-        for(ElementAktienverlauf Wert: WertList){
-            if (Isin.equals(Wert.getAktie())){
+        for(ElementAktienverlauf Aktienverlauf: AktienverlaufList){
+            if (AktieIsin.equals(Aktienverlauf.getAktie())){
                 // System.out.println("Bereits vorhanden");
                 inList = true;
             }
@@ -70,9 +68,9 @@ public class WertListener extends MyActionListener{
     @Override
     protected void elementInList() {
         // Element der Liste hinzufügen
-        ElementAktienverlauf wert = new ElementAktienverlauf(Start.runde, eingabeAktieIsin, 100, eingabeKurs, eingabeKassenbestand);
-        // TODO: Eingabe Anzahl prüfen.
-        WertList.add(wert);
+        ElementAktienverlauf aktienverlauf = new ElementAktienverlauf(0, eingabeAktieIsin, 0, eingabeStartkurs, 0F);
+        // TODO:Anzahl prüfen.
+        AktienverlaufList.add(aktienverlauf);
         // Nach Hinzufügen die Felder leeren
         felderLeeren();
     }
@@ -80,7 +78,7 @@ public class WertListener extends MyActionListener{
     @Override
     protected boolean checkFieldsfilled() {
         Boolean filled = true;
-        if(!Checks.checkOneFieldfilled(Wert.aktie) && !Checks.checkOneFieldfilled(Wert.kurs) && !Checks.checkOneFieldfilled(Wert.kassenbestand)) {
+        if(!Checks.checkOneFieldfilled(Startkurs.aktie) && !Checks.checkOneFieldfilled(Startkurs.kurs)) {
             filled = false;
         }
         // System.out.println("filled: " +  filled);
@@ -89,7 +87,7 @@ public class WertListener extends MyActionListener{
 
     @Override
     protected boolean checkElementInList() {
-        Boolean action = Checks.checkElementInList(WertList);
+        Boolean action = Checks.checkElementInList(AktienverlaufList);
         return action;
     }
 
@@ -97,7 +95,7 @@ public class WertListener extends MyActionListener{
     protected void elementInsert() {
         // Option 1: Liste Elemente abarbeiten und in Datenbank erfassen. Meldung über durchgeführten Insert ausgeben.
         // Kein Eingriff bei in der Zwischenzeit geänderten Daten.
-        if(SQLAktienverlauf.selectInsertTableAktienverlauf(WertList) == true) {
+        if(SQLAktienverlauf.selectInsertTableAktienverlauf(AktienverlaufList) == true) {
             JOptionPane.showMessageDialog(null, "Die Datensätze wurden alle erfolgreich erfasst.");
         } else {
             JOptionPane.showMessageDialog(null, "Es waren doppelte Datensätze vorhanden. Diese wurden nicht erfasst. Der Rest wurde verarbeitet.");
@@ -107,18 +105,17 @@ public class WertListener extends MyActionListener{
 
     @Override
     protected void clearliste() {
-        WertList.clear();
+        AktienverlaufList.clear();
     }
 
     @Override
     protected void felderLeeren(){
-        Checks.clearOneField(Wert.aktie);
-        Checks.clearOneField(Wert.kurs);
-        Checks.clearOneField(Wert.kassenbestand);
+        Checks.clearOneField(Startkurs.aktie);
+        Checks.clearOneField(Startkurs.kurs);
     }
 
     @Override
     protected void changePanel() {
-        cardLayout.show(Cards.cardPanel, Cards.nameStammdaten);
+        Cards.changeCard(Cards.nameStammdaten);
     }
 }

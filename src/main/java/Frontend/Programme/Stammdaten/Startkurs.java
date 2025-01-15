@@ -1,6 +1,6 @@
 package Frontend.Programme.Stammdaten;
 
-import Frontend.ActionListener.StartkursListener;
+import Frontend.ActionListenerInsert.StartkursListener;
 import Frontend.Komponenten.Buttons;
 import Frontend.Komponenten.EingabePanel;
 

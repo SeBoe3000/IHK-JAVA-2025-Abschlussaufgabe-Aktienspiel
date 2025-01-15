@@ -78,12 +78,32 @@ public class Tabellen {
                 ")");
     }
 
+    public static void createTableEinstellungen(){
+        SQL.table("CREATE TABLE IF NOT EXISTS Einstellungen" +
+                "(" +
+                "Typ char(3) NOT NULL," +
+                "Einstellung text," +
+                "PRIMARY KEY(Typ)" +
+                ")");
+    }
+
+    public static void insertDefaultEinstellungen(){
+        SQL.table("INSERT INTO Einstellungen VALUES" +
+                "('AKT', '100')," +
+                "('PER', '5000')," +
+                "('ORD', '0,100000,10')," +
+                "('TRN', '30,3,14,3,14,30,10')" +
+                " ON CONFLICT DO NOTHING");
+    }
+
     public static void createTableall(){
         createTablePersonen();
         createTableAktien();
         createTableAktienverlauf();
         createTableKapitalverlauf();
         createTableTransaktionen();
+        createTableEinstellungen();
+        insertDefaultEinstellungen();
     }
 
     private static void dropTableall() {
@@ -91,7 +111,8 @@ public class Tabellen {
                 "DROP TABLE Kapitalverlauf;" +
                 "DROP TABLE Aktienverlauf;" +
                 "DROP TABLE Aktien;" +
-                "DROP TABLE Personen");
+                "DROP TABLE Personen;" +
+                "DROP TABLE Einstellungen");
     }
 
     public static void main(String[] args) {

@@ -1,6 +1,6 @@
 package Frontend.Programme.Stammdaten;
 
-import Frontend.ActionListener.AktienListener;
+import Frontend.ActionListenerInsert.AktienListener;
 import Frontend.Komponenten.Buttons;
 import Frontend.Komponenten.EingabePanel;
 

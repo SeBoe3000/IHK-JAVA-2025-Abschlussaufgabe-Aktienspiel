@@ -1,17 +1,16 @@
-package Frontend.ActionListener;
+package Frontend.ActionListenerInsert;
 
 import Backend.ElementKapitalverlauf;
 import Datenbank.SQL;
 import Datenbank.SQLKapitalverlauf;
 import Frontend.Cards;
+import Frontend.Checks.Checks;
 import Frontend.Programme.Stammdaten.Startkapital;
 
 import javax.swing.*;
 import java.util.ArrayList;
 
-import static Frontend.Cards.cardLayout;
-
-public class StartkapitalListener extends MyActionListener{
+public class StartkapitalListener extends MyActionListenerInsert {
     public StartkapitalListener(JButton Btn) {
         super(Btn);
     }
@@ -114,6 +113,6 @@ public class StartkapitalListener extends MyActionListener{
 
     @Override
     protected void changePanel() {
-        cardLayout.show(Cards.cardPanel, Cards.nameStammdaten);
+        Cards.changeCard(Cards.nameStammdaten);
     }
 }

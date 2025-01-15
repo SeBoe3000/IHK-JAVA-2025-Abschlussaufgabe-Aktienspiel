@@ -1,17 +1,16 @@
-package Frontend.ActionListener;
+package Frontend.ActionListenerInsert;
 
 import Backend.ElementPerson;
 import Datenbank.SQL;
 import Datenbank.SQLPerson;
 import Frontend.Cards;
+import Frontend.Checks.Checks;
 import Frontend.Programme.Stammdaten.Person;
 
 import javax.swing.*;
 import java.util.ArrayList;
 
-import static Frontend.Cards.cardLayout;
-
-public class PersonListener extends MyActionListener{
+public class PersonListener extends MyActionListenerInsert {
     public PersonListener(JButton Btn) {
         super(Btn);
     }
@@ -118,6 +117,6 @@ public class PersonListener extends MyActionListener{
 
     @Override
     protected void changePanel() {
-        cardLayout.show(Cards.cardPanel, Cards.nameStammdaten);
+        Cards.changeCard(Cards.nameStammdaten);
     }
 }
