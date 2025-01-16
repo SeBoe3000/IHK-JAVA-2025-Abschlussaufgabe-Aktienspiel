@@ -10,14 +10,16 @@ public class EingabenCheck {
     /* Überprüfung String auf gültige Fließkommazahl, d.h.:
     - Nur Zahlen und Punkte sind zulässige Zeichen
     - Nur ein Punkt darf vorhanden sein.
-    - Mindestens eine Zahl zwischen 1 und 9 muss angegeben sein. (Dadurch Überprüfung auf nicht leerer Wert)
+    - bei NOTNULL: Mindestens eine Zahl zwischen 1 und 9 muss angegeben sein.
+    - bei NULL: darf auch Null sein
+    - bei Empty: darf auch leer sein
     - Darf nicht Infinity sein
-    - Darf nicht leer sein
      */
-    public static boolean isValidFloat(String eingabe){
+    public static boolean isValidFloat(String eingabe, String art){
         boolean isValid = true;
         Integer anzahlPunkte = 0;
         Integer anzahlZahl = 0;
+        Integer anzahlZahlNull = 0;
 
         for(int i = 0; i < eingabe.length(); i++){
             if(!((eingabe.charAt(i) >= '0' && eingabe.charAt(i) <= '9')||eingabe.charAt(i) == '.')){
@@ -27,34 +29,56 @@ public class EingabenCheck {
             if((eingabe.charAt(i) >= '1' && eingabe.charAt(i) <= '9')){
                 anzahlZahl ++;
             }
+            if(eingabe.charAt(i) == '0'){
+                anzahlZahlNull ++;
+            }
             if(eingabe.charAt(i) == '.'){
                 anzahlPunkte ++;
             }
         }
-        //System.out.println("anzahlPunkte " + anzahlPunkte + " anzahlZahl " + anzahlZahl);
-        if (anzahlPunkte > 1 || anzahlZahl == 0){
+        //System.out.println("Punkte: " + anzahlPunkte + " Zahlen: " + anzahlZahl + " Nullen: " + anzahlZahlNull);
+
+        // nur ein Punkt ist gültig
+        if (anzahlPunkte > 1) {
             isValid = false;
         }
+
+        // eine Zahl von 1-9 muss enthalten sein
+        if (art == "NOTNULL" && anzahlZahl == 0){
+            isValid = false;
+        }
+
+        // es muss mindestens eine 0 vorkommen
+        if(art == "NULL" && anzahlZahlNull == 0 && anzahlZahl == 0) {
+                isValid = false;
+        }
+
+        // Abfangen zu großer Zahlen
         // Infinity abfangen und dabei leere Eingabe berücksichtigen
-        try {
-            Float eingabeZahl = Float.parseFloat(eingabe);
-            if (Float.isInfinite(eingabeZahl)){
+        if (anzahlZahl > 0) {
+            try {
+                Float eingabeZahl = Float.parseFloat(eingabe);
+                if (Float.isInfinite(eingabeZahl)) {
+                    isValid = false;
+                }
+            } catch (Exception e) {
                 isValid = false;
             }
-        } catch (Exception e) {
-            isValid = false;
         }
         return isValid;
     }
 
     /* Überprüfung String auf gültige Integer, d.h:
-    - Nur Zahlen zulässige Zeichen
-    - Mindestens eine Zahl zwischen 1 und 9 muss angegeben sein. (Dadurch Überprüfung auf nicht leerer Wert)
-    - wird per try versucht zu parsen, falls erfolglos deutet dies auf eine zu große Zahl hin.
+    - Nur Zahlen sind zulässige Zeichen
+    - bei NOTNULL: Mindestens eine Zahl zwischen 1 und 9 muss angegeben sein.
+    - bei NULL: darf auch 0 sein
+    - bei EMPTY: darf auch leer sein
+    - Abfangen von zu großer Zahl, durch try.
     */
-    public static boolean isValidInteger(String eingabe){
+    public static boolean isValidInteger(String eingabe, String art){
         boolean isValid = true;
         Integer anzahlZahl = 0;
+        Integer anzahlZahlNull = 0;
 
         for(int i = 0; i < eingabe.length(); i++){
             if(!(eingabe.charAt(i) >= '0' && eingabe.charAt(i) <= '9')){
@@ -64,38 +88,22 @@ public class EingabenCheck {
             if((eingabe.charAt(i) >= '1' && eingabe.charAt(i) <= '9')){
                 anzahlZahl ++;
             }
+            if(eingabe.charAt(i) == '0'){
+                anzahlZahlNull ++;
+            }
         }
-        if (anzahlZahl == 0){
+
+        // eine Zahl von 1-9 muss enthalten sein
+        if(art == "NOTNULL" && anzahlZahl == 0) {
             isValid = false;
         }
 
-        try {
-            Integer eingabeZahl = Integer.parseInt(eingabe);
-        } catch (Exception e) {
+        // es muss mindestens eine 0 vorkommen
+        if(art == "NULL" && anzahlZahlNull == 0 && anzahlZahl == 0) {
             isValid = false;
-            // System.out.println("Zu große Zahl");
         }
 
-        return isValid;
-    }
-
-    /* Überprüfung String auf gültige Integer, d.h:
-    - Nur Zahlen oder leere Eingabe als zulässige Zeichen
-    - Sofern mind. eine Zahl zwischen 1 und 9 angegeben ist, wird per try versucht zu parsen, falls erfolglos deutet dies auf eine zu große Zahl hin.
-    */
-    public static boolean isValidIntegerNull(String eingabe){
-        boolean isValid = true;
-        Integer anzahlZahl = 0;
-
-        for(int i = 0; i < eingabe.length(); i++){
-            if(!(eingabe.charAt(i) >= '0' && eingabe.charAt(i) <= '9')){
-                isValid = false;
-                break;
-            }
-            if((eingabe.charAt(i) >= '1' && eingabe.charAt(i) <= '9')){
-                anzahlZahl ++;
-            }
-        }
+        // Abfangen zu großer Zahlen
         if (anzahlZahl > 0) {
             try {
                 Integer eingabeZahl = Integer.parseInt(eingabe);
@@ -108,7 +116,7 @@ public class EingabenCheck {
     }
 
     // Überprüfung Integer zwischen von bis (darf nicht leer, d.h. null sein)
-    public static boolean isValidIntegerVonBis(String eingabe,Integer von, Integer bis){
+    public static boolean isValidIntegerVonBis(String eingabe, Integer von, Integer bis){
         boolean isValid = true;
         Integer zahl = 0;
         try {
@@ -154,7 +162,7 @@ public class EingabenCheck {
     }
 
     /* Überprüfung String auf Datumsformat
-    - Prüfung auf richtiges Datums- / Uhrzeitformat u
+    - Prüfung auf richtiges Datums- / Uhrzeitformat
     */
     public static boolean isValidDatum(String eingabe){
         boolean isValid = true;

@@ -37,8 +37,12 @@ public abstract class MyActionListenerUpdate implements ActionListener{
         checkfields(); // Felder prüfen
         if(errorMessages.isEmpty()) { // Sofern keine Fehler vorliegen
             fillFields(); // Felder füllen
-            insertUpdateEinstellungen(); // insert durchführen
-            Interaction.einstellungChanged(); // Meldung über erfolgreiches ändern
+            if(checkChanged()){
+                insertUpdateEinstellungen(); // insert durchführen
+                Interaction.einstellungChanged(); // Meldung über erfolgreiches ändern
+            } else {
+                Interaction.einstellungNotChanged();
+            }
             backToStart();
         } else {
             Checks.showError(errorMessages); // Ausgabe Fehlermeldung(en)

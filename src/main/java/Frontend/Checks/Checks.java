@@ -51,9 +51,11 @@ public class Checks {
         }  else if (checkArt == "isValidStringLaenge") {
             check1 = EingabenCheck.isValidStringLaenge(check, von, bis);
         } else if (checkArt == "isValidInteger") {
-            check1 = EingabenCheck.isValidInteger(check);
+            check1 = EingabenCheck.isValidInteger(check, "NOTNULL");
         } else if (checkArt == "isValidFloat") {
-            check1 = EingabenCheck.isValidFloat(check);
+            check1 = EingabenCheck.isValidFloat(check, "NOTNULL");
+        } else if (checkArt == "isValidFloatNull") {
+            check1 = EingabenCheck.isValidFloat(check, "NULL");
         } else if (checkArt == "isValidIntegerVonBis") {
             check1 = EingabenCheck.isValidIntegerVonBis(check, von, bis);
         }
@@ -98,11 +100,17 @@ public class Checks {
         boolean check1Bis = false;
 
         if (checkArt == "isValidInteger") {
-            check1Von = EingabenCheck.isValidInteger(checkVon);
-            check1Bis = EingabenCheck.isValidInteger(checkBis);
+            check1Von = EingabenCheck.isValidInteger(checkVon, "NOTNULL");
+            check1Bis = EingabenCheck.isValidInteger(checkBis, "NOTNULL");
+        } else if (checkArt == "isValidIntegerNull") {
+            check1Von = EingabenCheck.isValidInteger(checkVon, "NULL");
+            check1Bis = EingabenCheck.isValidInteger(checkBis, "NULL");
         } else if (checkArt == "isValidFloat") {
-            check1Von = EingabenCheck.isValidFloat(checkVon);
-            check1Bis = EingabenCheck.isValidFloat(checkBis);
+            check1Von = EingabenCheck.isValidFloat(checkVon,"NOTNULL");
+            check1Bis = EingabenCheck.isValidFloat(checkBis,"NOTNULL");
+        }else if (checkArt == "isValidFloatNull") {
+            check1Von = EingabenCheck.isValidFloat(checkVon,"NULL");
+            check1Bis = EingabenCheck.isValidFloat(checkBis,"NULL");
         }
 
         // Bei korrekter Eingabe (z.B. nach Fehler) Schriftfarbe zurückändern.

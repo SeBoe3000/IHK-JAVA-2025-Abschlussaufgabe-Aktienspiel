@@ -36,6 +36,13 @@ public class Interaction {
         JOptionPane.showMessageDialog(null, text, title, JOptionPane.INFORMATION_MESSAGE);
     }
 
+    // Hinweismeldung, wenn keine Einstellung geändert wurde
+    public static void einstellungNotChanged(){
+        String title = "Erfolg";
+        String text = "Es wurde nichts geändert.";
+        JOptionPane.showMessageDialog(null, text, title, JOptionPane.INFORMATION_MESSAGE);
+    }
+
     // Fehlermeldung, wenn keine Checkbox markiert
     public static void nothingMarked(){
         String title = "Keine Auswahl getroffen";
