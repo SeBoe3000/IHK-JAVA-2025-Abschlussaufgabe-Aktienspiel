@@ -32,17 +32,17 @@ public class Tabellen {
         SQL.table("CREATE TABLE IF NOT EXISTS Aktienverlauf" +
                 "(" +
                 "ID serial NOT NULL," +
-                "Runde integer NOT NULL," +
+                "Runde integer NULL," +
                 "AktieISIN char(12) NOT NULL," +
-                "Aktienanzahl integer  NOT NULL," +
+                "Aktienanzahl integer NULL," +
                 "Aktienkurs real NOT NULL," +
-                "Kassenbestand real NOT NULL," +
+                "Kassenbestand real NULL," +
                 "PRIMARY KEY(ID)," +
                 "UNIQUE(Runde, AktieISIN)," +
                 "CONSTRAINT fk_Aktie FOREIGN KEY (AktieISIN) REFERENCES Aktien (ISIN)," +
-                "CONSTRAINT check_Aktienanzahl CHECK (Aktienanzahl = 100)," +
+                "CONSTRAINT check_Aktienanzahl CHECK ((Runde > 0 AND Aktienanzahl = 100) OR Runde = 0)," +
                 "CONSTRAINT check_Aktienkurs CHECK (Aktienkurs >= 10)," +
-                "CONSTRAINT check_Kassenbestand CHECK (Kassenbestand >= 0 AND Kassenbestand <= 100000)" +
+                "CONSTRAINT check_Kassenbestand CHECK ((Runde > 0 AND Kassenbestand >= 0 AND Kassenbestand <= 100000) OR Runde = 0)" +
                 ")");
     }
 
@@ -112,7 +112,7 @@ public class Tabellen {
                 "DROP TABLE Aktienverlauf;" +
                 "DROP TABLE Aktien;" +
                 "DROP TABLE Personen;" +
-                "DROP TABLE Einstellungen");
+                "DROP TABLE Einstellungen;");
     }
 
     public static void main(String[] args) {

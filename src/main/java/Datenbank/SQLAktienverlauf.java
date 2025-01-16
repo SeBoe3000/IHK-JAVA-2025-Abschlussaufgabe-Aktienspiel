@@ -13,8 +13,8 @@ public class SQLAktienverlauf {
     // Tabelle Transaktion füllen - mit Rückgabe mind. ein Datensatz bereits in Datenbank vorhanden
     public static boolean selectInsertTableAktienverlauf(List<ElementAktienverlauf> aktienverlauf){
         Boolean insert = false;
-        String sqlSelect = "SELECT count(*) FROM Aktienverlauf WHERE Runde = ? AND Aktie = ?";
-        String sqlInsert = "INSERT INTO Aktienverlauf (Runde, AktienISIN, Aktienanzahl, Aktienkurs, Dividende) VALUES (?,?,?,?,?)";
+        String sqlSelect = "SELECT count(*) FROM Aktienverlauf WHERE Runde = ? AND AktieISIN = ?";
+        String sqlInsert = "INSERT INTO Aktienverlauf (Runde, AktieISIN, Aktienanzahl, Aktienkurs, Kassenbestand) VALUES (?,?,?,?,?)";
         final int batchSize = 5;
         int count = 0;
         try(
@@ -24,8 +24,10 @@ public class SQLAktienverlauf {
         ){
             for(ElementAktienverlauf Aktienverlauf: aktienverlauf){
                 // SELECT
-                pstmtInsert.setInt(1, Aktienverlauf.getRunde());
-                pstmtInsert.setString(2, Aktienverlauf.getAktie());
+                System.out.println("Runde:" + Aktienverlauf.getRunde());
+                System.out.println("Aktie:" + Aktienverlauf.getAktie());
+                pstmtSelect.setInt(1, Aktienverlauf.getRunde());
+                pstmtSelect.setString(2, Aktienverlauf.getAktie());
                 ResultSet resultSelect = pstmtSelect.executeQuery();
                 int result = 1;
                 while(resultSelect.next()){
@@ -49,10 +51,10 @@ public class SQLAktienverlauf {
             pstmtInsert.executeBatch();
         } catch (SQLException e){
             Interaction.noDatabase();
-            // e.printStackTrace();
+            e.printStackTrace();
         } catch (Exception e){
             Interaction.noDatabase();
-            // e.printStackTrace();
+            e.printStackTrace();
         }
         return insert;
     }
