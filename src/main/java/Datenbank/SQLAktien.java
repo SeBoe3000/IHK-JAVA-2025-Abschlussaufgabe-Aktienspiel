@@ -1,6 +1,7 @@
 package Datenbank;
 
 import Backend.ElementAktie;
+import Frontend.Komponenten.Interaction;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -44,9 +45,11 @@ public class SQLAktien {
             }
             pstmtInsert.executeBatch();
         } catch (SQLException e){
-            e.printStackTrace();
+            Interaction.noDatabase();
+            // e.printStackTrace();
         } catch (Exception e){
-            e.printStackTrace();
+            Interaction.noDatabase();
+            // e.printStackTrace();
         }
         return insert;
     }
@@ -74,9 +77,11 @@ public class SQLAktien {
             }
             pstmtInsert.executeBatch();
         } catch (SQLException e){
-            e.printStackTrace();
+            Interaction.noDatabase();
+            // e.printStackTrace();
         } catch (Exception e){
-            e.printStackTrace();
+            Interaction.noDatabase();
+            // e.printStackTrace();
         }
     }
 }

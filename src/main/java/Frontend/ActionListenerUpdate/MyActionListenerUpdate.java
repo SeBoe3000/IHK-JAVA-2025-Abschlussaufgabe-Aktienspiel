@@ -1,6 +1,8 @@
 package Frontend.ActionListenerUpdate;
 
 import Frontend.Cards;
+import Frontend.Checks.Checks;
+import Frontend.Komponenten.Interaction;
 
 import javax.swing.*;
 import java.awt.event.ActionEvent;
@@ -31,12 +33,47 @@ public abstract class MyActionListenerUpdate implements ActionListener{
         }
     }
 
-    public void ok(){
-        // TODO: Inserts durchführen
+    private void ok(){
+        checkfields(); // Felder prüfen
+        if(errorMessages.isEmpty()) { // Sofern keine Fehler vorliegen
+            fillFields(); // Felder füllen
+            insertUpdateEinstellungen(); // insert durchführen
+            Interaction.einstellungChanged(); // Meldung über erfolgreiches ändern
+            backToStart();
+        } else {
+            Checks.showError(errorMessages); // Ausgabe Fehlermeldung(en)
+        }
     }
 
-    public void abbrechen(){
-        // TODO: Prüfung Änderung vorgenommen und wenn ja, dann fragen, ob abspeichern.
+    private void abbrechen(){
+        try{
+            fillFields();
+            System.out.println("checkChanged: " + checkChanged());
+        } catch (Exception e) {
+            checkfields(); // Fehlermeldungen zu geprüften Feldern hochbringen
+        }
+
+        if (checkChanged()) {
+            Boolean action = Interaction.abbrechen();
+            if(action == true) {
+                // Bei Ja die Daten updaten
+                insertUpdateEinstellungen();
+                Interaction.einstellungChanged(); // Meldung über erfolgreiches ändern
+            }
+            // Unabhängig von Ja, Nein oder X das Fenster schließen
+            backToStart();
+        } else {
+            backToStart();
+        }
+    }
+
+    private void backToStart(){
         Cards.changeCard(Cards.nameEinstellungen);
     }
+
+    // Zu implementierende Funktionen
+    protected abstract void checkfields();
+    protected abstract void fillFields();
+    protected abstract Boolean checkChanged();
+    protected abstract void insertUpdateEinstellungen();
 }

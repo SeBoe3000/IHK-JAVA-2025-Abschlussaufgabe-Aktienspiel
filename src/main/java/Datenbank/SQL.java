@@ -1,5 +1,7 @@
 package Datenbank;
 
+import Frontend.Komponenten.Interaction;
+
 import java.sql.*;
 
 public class SQL {
@@ -12,7 +14,8 @@ public class SQL {
             Statement stmt = conn.createStatement();
             stmt.executeUpdate(query);
         } catch(SQLException e){
-            e.printStackTrace();
+            Interaction.noDatabase();
+            // e.printStackTrace();
         }
     }
 
@@ -36,9 +39,11 @@ public class SQL {
                 }
             }
         } catch (SQLException e){
-            e.printStackTrace();
+            Interaction.noDatabase();
+            // e.printStackTrace();
         } catch (Exception e){
-            e.printStackTrace();
+            Interaction.noDatabase();
+            // e.printStackTrace();
         }
         return inDatenbank;
     }
@@ -62,9 +67,11 @@ public class SQL {
                 }
             }
         } catch (SQLException e){
-            e.printStackTrace();
+            Interaction.noDatabase();
+            // e.printStackTrace();
         } catch (Exception e){
-            e.printStackTrace();
+            Interaction.noDatabase();
+            // e.printStackTrace();
         }
         return inDatenbank;
     }
@@ -94,9 +101,11 @@ public class SQL {
                 }
             }
         } catch (SQLException e){
-            e.printStackTrace();
+            Interaction.noDatabase();
+            // e.printStackTrace();
         } catch (Exception e){
-            e.printStackTrace();
+            Interaction.noDatabase();
+            // e.printStackTrace();
         }
         return inDatenbank;
     }
@@ -126,9 +135,11 @@ public class SQL {
                 }
             }
         } catch (SQLException e){
-            e.printStackTrace();
+            Interaction.noDatabase();
+            // e.printStackTrace();
         } catch (Exception e){
-            e.printStackTrace();
+            Interaction.noDatabase();
+            // e.printStackTrace();
         }
         return inDatenbank;
     }
@@ -156,14 +167,12 @@ public class SQL {
                 }
             }
         } catch (SQLException e){
-            e.printStackTrace();
+            Interaction.noDatabase();
+            // e.printStackTrace();
         } catch (Exception e){
-            e.printStackTrace();
+            Interaction.noDatabase();
+            // e.printStackTrace();
         }
         return inDatenbank;
     }
-
-
-
-
 }

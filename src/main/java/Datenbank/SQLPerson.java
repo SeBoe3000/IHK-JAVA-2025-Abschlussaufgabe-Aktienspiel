@@ -1,6 +1,7 @@
 package Datenbank;
 
 import Backend.ElementPerson;
+import Frontend.Komponenten.Interaction;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -46,9 +47,11 @@ public class SQLPerson {
             }
             pstmtInsert.executeBatch();
         } catch (SQLException e){
-            e.printStackTrace();
+            Interaction.noDatabase();
+            // e.printStackTrace();
         } catch (Exception e){
-            e.printStackTrace();
+            Interaction.noDatabase();
+            // e.printStackTrace();
         }
         return insert;
     }

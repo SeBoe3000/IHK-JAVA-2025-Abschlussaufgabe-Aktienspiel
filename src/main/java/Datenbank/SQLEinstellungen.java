@@ -1,5 +1,7 @@
 package Datenbank;
 
+import Frontend.Komponenten.Interaction;
+
 import java.sql.*;
 
 public class SQLEinstellungen {
@@ -17,9 +19,11 @@ public class SQLEinstellungen {
                 ergebnis = rs.getString(1);
             }
         } catch (SQLException e){
-            e.printStackTrace();
+            Interaction.noDatabase();
+            // e.printStackTrace();
         } catch (Exception e){
-            e.printStackTrace();
+            Interaction.noDatabase();
+            // e.printStackTrace();
         }
         return ergebnis;
     }
@@ -38,9 +42,11 @@ public class SQLEinstellungen {
                 ergebnis = true;
             }
         } catch (SQLException e){
-            e.printStackTrace();
+            Interaction.noDatabase();
+            // e.printStackTrace();
         } catch (Exception e){
-            e.printStackTrace();
+            Interaction.noDatabase();
+            // e.printStackTrace();
         }
         return true;
     }

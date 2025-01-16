@@ -1,6 +1,7 @@
 package Frontend.ActionListenerInsert;
 
 import Frontend.Cards;
+import Frontend.Checks.Checks;
 import Frontend.Komponenten.Interaction;
 
 import javax.swing.*;
@@ -42,7 +43,7 @@ public abstract class MyActionListenerInsert implements ActionListener {
         // Bei keiner Angabe und keinem Element - Fehlermeldungen hochbringen
         if(notInWork == true && noElement == true) {
             checkFields();
-            showError(errorMessages);
+            Checks.showError(errorMessages); // Ausgabe Fehlermeldung(en)
         } else {
             doCheckInsertBack(notInWork, noElement);
         }
@@ -89,7 +90,7 @@ public abstract class MyActionListenerInsert implements ActionListener {
             elementInList(); // Element der Liste hinzufügen
             inWork = false;
         }
-        showError(errorMessages); // Ausgabe Fehlermeldung(en)
+        Checks.showError(errorMessages); // Ausgabe Fehlermeldung(en)
         return inWork;
     }
 
@@ -113,22 +114,6 @@ public abstract class MyActionListenerInsert implements ActionListener {
 
         if(next){
             backToStart();
-        }
-    }
-
-    // Fehlermeldungen ausgeben
-    public static void showError (ArrayList<String> errorMessages){
-        if (!errorMessages.isEmpty()) {
-            StringBuilder message = new StringBuilder();
-            if(errorMessages.size() > 1) {
-                message.append("Folgende Fehler sind aufgetreten:\n");
-            }
-            for (String errorMessage : errorMessages) {
-                message.append(errorMessage).append("\n");
-            }
-            JOptionPane.showMessageDialog(null, message.toString(), "Fehler", JOptionPane.ERROR_MESSAGE);
-            // Nach der Ausgabe die Liste leeren
-            errorMessages.clear();
         }
     }
 

@@ -1,6 +1,7 @@
 package Datenbank;
 
 import Backend.ElementTransaktionen;
+import Frontend.Komponenten.Interaction;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -48,9 +49,11 @@ public class SQLTransaktionen {
             }
             pstmtInsert.executeBatch();
         } catch (SQLException e){
-            e.printStackTrace();
+            Interaction.noDatabase();
+            // e.printStackTrace();
         } catch (Exception e){
-            e.printStackTrace();
+            Interaction.noDatabase();
+            // e.printStackTrace();
         }
         return insert;
     }

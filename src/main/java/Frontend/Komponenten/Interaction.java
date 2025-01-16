@@ -20,6 +20,22 @@ public class Interaction {
         return action;
     }
 
+    // Fehlermeldung, wenn keine Datenbankverbindung vorhanden
+    public static void noDatabase(){
+        String title = "Allgemeiner Fehler";
+        String text = "Es ist ein allgemeiner Fehler bei der Verarbeitung der Daten aufgetreten.\n" +
+                "Bitte die Datenbankverbindung prüfen.\n" +
+                "Wenden Sie sich an einen IT-Administrator.";
+        JOptionPane.showMessageDialog(null, text, title, JOptionPane.ERROR_MESSAGE);
+    }
+
+    // Hinweismeldung, wenn Einstellung geändert wurde
+    public static void einstellungChanged(){
+        String title = "Erfolg";
+        String text = "Die Einstellung wurde erfolgreich geändert.";
+        JOptionPane.showMessageDialog(null, text, title, JOptionPane.INFORMATION_MESSAGE);
+    }
+
     // Fehlermeldung, wenn keine Checkbox markiert
     public static void nothingMarked(){
         String title = "Keine Auswahl getroffen";

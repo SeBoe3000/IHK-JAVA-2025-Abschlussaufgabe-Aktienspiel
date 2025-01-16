@@ -7,8 +7,6 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
-import static Frontend.Cards.cardLayout;
-
 public class Start extends JPanel {
     // Zum Zählen der Runden
     public static Integer runde = 1;

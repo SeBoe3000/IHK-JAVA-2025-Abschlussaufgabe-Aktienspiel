@@ -25,6 +25,11 @@ public class EingabePanelVonBis extends JPanel {
         textFieldBis.setPreferredSize(new Dimension(90,50));
         this.add(panel);
     }
+
+    public String getTextlabel(){
+        return label.getText();
+    }
+
     public String getTextfieldVon(){
         return textFieldVon.getText();
     }
@@ -34,7 +39,7 @@ public class EingabePanelVonBis extends JPanel {
     }
 
     public String getTextfieldBis(){
-        return textFieldVon.getText();
+        return textFieldBis.getText();
     }
 
     public void setTextFieldBis(String text) {
