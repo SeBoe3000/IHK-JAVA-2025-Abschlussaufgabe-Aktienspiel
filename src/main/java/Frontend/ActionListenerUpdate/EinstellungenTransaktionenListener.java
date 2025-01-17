@@ -12,23 +12,35 @@ public class EinstellungenTransaktionenListener extends MyActionListenerUpdate {
         super(Btn);
     }
 
-    public static Integer maxAktienPersonRunde;
-    public static Integer minPersonRunde;
-    public static Integer maxPersonRunde;
-    public static Integer minAktieRunde;
-    public static Integer maxAktieRunde;
-    public static Float firstDividende;
-    public static Float secondDividende;
+    public static String maxAktienPersonRunde;
+    public static String minPersonRunde;
+    public static String maxPersonRunde;
+    public static String minAktieRunde;
+    public static String maxAktieRunde;
+    public static String firstDividende;
+    public static String secondDividende;
 
-    Integer eingabeMaxAktienPersonRunde;
-    Integer eingabeMinPersonRunde;
-    Integer eingabeMaxPersonRunde;
-    Integer eingabeMinAktieRunde;
-    Integer eingabeMaxAktieRunde;
-    Float eingabeFirstDividende;
-    Float eingabeSecondDividende;
+    String eingabeMaxAktienPersonRunde;
+    String eingabeMinPersonRunde;
+    String eingabeMaxPersonRunde;
+    String eingabeMinAktieRunde;
+    String eingabeMaxAktieRunde;
+    String eingabeFirstDividende;
+    String eingabeSecondDividende;
 
     public static void setDefaults() {
+        getDefaults();
+
+        EinstellungenTransaktionen.maxAktienPersonRunde.setTextField(maxAktienPersonRunde);
+        EinstellungenTransaktionen.personRunde.setTextFieldVon(minPersonRunde);
+        EinstellungenTransaktionen.personRunde.setTextFieldBis(maxPersonRunde);
+        EinstellungenTransaktionen.aktieRunde.setTextFieldVon(minAktieRunde);
+        EinstellungenTransaktionen.aktieRunde.setTextFieldBis(maxAktieRunde);
+        EinstellungenTransaktionen.firstDividende.setTextField(firstDividende);
+        EinstellungenTransaktionen.secondDividende.setTextField(secondDividende);
+    }
+
+    protected static void getDefaults(){
         String einstellung = SQLEinstellungen.getEinstellung("TRN");
 
         int trenner1 = einstellung.indexOf(",");
@@ -39,24 +51,46 @@ public class EinstellungenTransaktionenListener extends MyActionListenerUpdate {
         int trenner6 = einstellung.indexOf(",", trenner5 + 1);
 
         try {
-            maxAktienPersonRunde = Integer.valueOf(einstellung.substring(0, trenner1));
-            minPersonRunde = Integer.valueOf(einstellung.substring(trenner1 + 1, trenner2));
-            maxPersonRunde = Integer.valueOf(einstellung.substring(trenner2 + 1, trenner3));
-            minAktieRunde = Integer.valueOf(einstellung.substring(trenner3 + 1, trenner4));
-            maxAktieRunde = Integer.valueOf(einstellung.substring(trenner4 + 1, trenner5));
-            firstDividende = Float.valueOf(einstellung.substring(trenner5 + 1, trenner6));
-            secondDividende = Float.valueOf(einstellung.substring(trenner6 + 1, einstellung.length()));
-            EinstellungenTransaktionen.maxAktienPersonRunde.setTextField(String.valueOf(maxAktienPersonRunde));
-            EinstellungenTransaktionen.personRunde.setTextFieldVon(String.valueOf(minPersonRunde));
-            EinstellungenTransaktionen.personRunde.setTextFieldBis(String.valueOf(maxPersonRunde));
-            EinstellungenTransaktionen.aktieRunde.setTextFieldVon(String.valueOf(minAktieRunde));
-            EinstellungenTransaktionen.aktieRunde.setTextFieldBis(String.valueOf(maxAktieRunde));
-            EinstellungenTransaktionen.firstDividende.setTextField(String.valueOf(firstDividende));
-            EinstellungenTransaktionen.secondDividende.setTextField(String.valueOf(secondDividende));
+            maxAktienPersonRunde = einstellung.substring(0, trenner1);
+            minPersonRunde = einstellung.substring(trenner1 + 1, trenner2);
+            maxPersonRunde = einstellung.substring(trenner2 + 1, trenner3);
+            minAktieRunde = einstellung.substring(trenner3 + 1, trenner4);
+            maxAktieRunde = einstellung.substring(trenner4 + 1, trenner5);
+            firstDividende = einstellung.substring(trenner5 + 1, trenner6);
+            secondDividende = einstellung.substring(trenner6 + 1, einstellung.length());
         } catch (Exception e) {
             Interaction.noDatabase();
             // e.printStackTrace();
         }
+    }
+
+    public static Integer getEinstellungInteger(String field){
+        Integer einstellung = 0;
+        getDefaults();
+
+        if(field == "maxAktienPersonRunde"){
+            einstellung = Integer.valueOf(maxAktienPersonRunde);
+        } else if (field == "minPersonRunde") {
+            einstellung = Integer.valueOf(minPersonRunde);
+        } else if (field == "maxPersonRunde") {
+            einstellung = Integer.valueOf(maxPersonRunde);
+        } else if (field == "minAktieRunde") {
+            einstellung = Integer.valueOf(minAktieRunde);
+        } else if (field == "maxAktieRunde") {
+            einstellung = Integer.valueOf(maxAktieRunde);
+        }
+        return einstellung;
+    }
+
+    public static Float getEinstellungFloat(String field){
+        Float einstellung = 0F;
+        getDefaults();
+        if(field == "firstDividende"){
+            einstellung = Float.valueOf(firstDividende);
+        } else if (field == "secondDividende") {
+            einstellung = Float.valueOf(secondDividende);
+        }
+        return einstellung;
     }
 
     @Override
@@ -70,13 +104,13 @@ public class EinstellungenTransaktionenListener extends MyActionListenerUpdate {
 
     @Override
     protected void fillFields(){
-        eingabeMaxAktienPersonRunde = Integer.valueOf(EinstellungenTransaktionen.maxAktienPersonRunde.getTextfield());
-        eingabeMinPersonRunde = Integer.valueOf(EinstellungenTransaktionen.personRunde.getTextfieldVon());
-        eingabeMaxPersonRunde = Integer.valueOf(EinstellungenTransaktionen.personRunde.getTextfieldBis());
-        eingabeMinAktieRunde = Integer.valueOf(EinstellungenTransaktionen.aktieRunde.getTextfieldVon());
-        eingabeMaxAktieRunde = Integer.valueOf(EinstellungenTransaktionen.aktieRunde.getTextfieldBis());
-        eingabeFirstDividende = Float.valueOf(EinstellungenTransaktionen.firstDividende.getTextfield());
-        eingabeSecondDividende = Float.valueOf(EinstellungenTransaktionen.secondDividende.getTextfield());
+        eingabeMaxAktienPersonRunde = EinstellungenTransaktionen.maxAktienPersonRunde.getTextfield();
+        eingabeMinPersonRunde = EinstellungenTransaktionen.personRunde.getTextfieldVon();
+        eingabeMaxPersonRunde = EinstellungenTransaktionen.personRunde.getTextfieldBis();
+        eingabeMinAktieRunde = EinstellungenTransaktionen.aktieRunde.getTextfieldVon();
+        eingabeMaxAktieRunde = EinstellungenTransaktionen.aktieRunde.getTextfieldBis();
+        eingabeFirstDividende = EinstellungenTransaktionen.firstDividende.getTextfield();
+        eingabeSecondDividende = EinstellungenTransaktionen.secondDividende.getTextfield();
     }
 
     @Override
@@ -84,13 +118,13 @@ public class EinstellungenTransaktionenListener extends MyActionListenerUpdate {
         Boolean check = false;
         // Aufgrund einer möglichen anderen Interpretation werden beide Felder in einen String und zurück in Integer/Float geparsed.
         // Feld 1 wird aus Datenbank und Feld 2 aus Textfeld als String ermittelt und in einen Integer/Float geparsed.
-        if(Integer.parseInt(String.valueOf(eingabeMaxAktienPersonRunde)) != Integer.parseInt(String.valueOf(maxAktienPersonRunde)) ||
-                Integer.parseInt(String.valueOf(eingabeMinPersonRunde)) != Integer.parseInt(String.valueOf(minPersonRunde)) ||
-                Integer.parseInt(String.valueOf(eingabeMaxPersonRunde)) != Integer.parseInt(String.valueOf(maxPersonRunde)) ||
-                Integer.parseInt(String.valueOf(eingabeMinAktieRunde)) != Integer.parseInt(String.valueOf(minAktieRunde)) ||
-                Integer.parseInt(String.valueOf(eingabeMaxAktieRunde)) != Integer.parseInt(String.valueOf(maxAktieRunde)) ||
-                Float.parseFloat(String.valueOf(eingabeFirstDividende)) != Float.parseFloat(String.valueOf(firstDividende)) ||
-                Float.parseFloat(String.valueOf(eingabeSecondDividende)) != Float.parseFloat(String.valueOf(secondDividende))){
+        if(eingabeMaxAktienPersonRunde != maxAktienPersonRunde ||
+                eingabeMinPersonRunde != minPersonRunde ||
+                eingabeMaxPersonRunde != maxPersonRunde ||
+                eingabeMinAktieRunde != minAktieRunde ||
+                eingabeMaxAktieRunde != maxAktieRunde ||
+                eingabeFirstDividende != firstDividende ||
+                eingabeSecondDividende != secondDividende){
             check = true;
         }
         return check;

@@ -71,7 +71,7 @@ public class Tabellen {
                 "Aktienanzahl integer NOT NULL," +
                 // Aktienwert kann über Aktienverlauf ermittelt werden
                 // Dividende wird nach Abschluss der Runde ermittelt
-                "Dividende integer NULL," +
+                "Dividende real NULL," +
                 "PRIMARY KEY(Runde, PersonID, AktieISIN)," +
                 "CONSTRAINT fk_Person FOREIGN KEY (PersonID) REFERENCES Personen (ID)," +
                 "CONSTRAINT fk_Aktie FOREIGN KEY (AktieISIN) REFERENCES Aktien (ISIN)" +
