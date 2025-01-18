@@ -1,6 +1,7 @@
 package Frontend.Programme.Stammdaten;
 
 import Frontend.Cards;
+import Frontend.Komponenten.Buttons;
 import Frontend.Komponenten.Interaction;
 
 import javax.swing.*;
@@ -8,16 +9,15 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
-import static Frontend.Cards.cardLayout;
-
 public class BeispieldatenImportieren extends JPanel{
     static JCheckBox person_chb = new JCheckBox("Personen importieren");
     static JCheckBox aktie_chb = new JCheckBox("Aktien importieren");
     static JCheckBox startkapital_chb = new JCheckBox("Startkapital importieren");
     static JCheckBox startkurs_chb = new JCheckBox("Startkurse importieren");
+    static JCheckBox kauf_chb = new JCheckBox("Käufe importieren");
+    static JCheckBox wert_chb = new JCheckBox("Unternehmenswerte importieren");
 
-    JButton create = new JButton("Daten Importieren");
-    JButton back = new JButton("Zurück zum Start");
+    static Buttons buttons = new Buttons();
 
     public BeispieldatenImportieren(CardLayout cardLayout, JPanel cardPanel) {
         // GridBagLayout direkt auf Panel verwenden
@@ -31,24 +31,34 @@ public class BeispieldatenImportieren extends JPanel{
         gbc.weighty = 0.1;
         gbc.fill = GridBagConstraints.CENTER;
 
+        // Personen importieren hinzufügen
         add(person_chb, gbc);
 
+        // Aktien importieren hinzufügen
         gbc.gridy = 1; // Zeile
         add(aktie_chb, gbc);
 
+        // Startkapital importieren hinzufügen
         gbc.gridy = 2; // Zeile
         add(startkapital_chb, gbc);
 
+        // Startkurse importieren hinzufügen
         gbc.gridy = 3; // Zeile
         add(startkurs_chb, gbc);
 
-        // Import hinzufügen
+        // Käufe importieren hinzufügen
         gbc.gridy = 4; // Zeile
-        add(create, gbc);
+        add(kauf_chb, gbc);
 
-        // Zurück hinzufügen
+        // Werte importieren hinzufügen
         gbc.gridy = 5; // Zeile
-        add(back, gbc);
+        add(wert_chb, gbc);
+
+        // Buttons hinzufügen
+        gbc.gridy = 6; // Zeile
+        buttons.setVisibleErfassenFalse();
+        buttons.setVisibleStartFalse();
+        add(buttons, gbc);
 
         // ActionListener hinzufügen
         buttonListener();
@@ -68,7 +78,7 @@ public class BeispieldatenImportieren extends JPanel{
                 backToStart();
             }
         };
-        back.addActionListener(zurueck);
+        buttons.cancel_btn.addActionListener(zurueck);
 
         ActionListener importieren = new ActionListener() {
             @Override
@@ -82,13 +92,14 @@ public class BeispieldatenImportieren extends JPanel{
                 }
             }
         };
-        create.addActionListener(importieren);
+        buttons.ok_btn.addActionListener(importieren);
     }
 
     // Prüfung, ob eine Checkbox markiert ist
     private static boolean checkSelected(){
         Boolean checked = false;
-        if(person_chb.isSelected() || aktie_chb.isSelected() || startkapital_chb.isSelected() || startkurs_chb.isSelected()){
+        if(person_chb.isSelected() || aktie_chb.isSelected() || startkapital_chb.isSelected() ||
+                startkurs_chb.isSelected() || kauf_chb.isSelected() || wert_chb.isSelected()){
             checked = true;
         }
         return checked;
@@ -124,6 +135,16 @@ public class BeispieldatenImportieren extends JPanel{
             // TODO: Daten importieren
             // TODO: Meldung ausgeben (Daten vorhanden oder erfolgreich verarbeitet)
         }
+
+        if(kauf_chb.isSelected()){
+
+        }
+
+        if(wert_chb.isSelected()){
+
+        }
+
+        // TODO: Meldung bringen wenn erfolgreich
     }
 
     // Checkboxen demarkieren
@@ -132,6 +153,8 @@ public class BeispieldatenImportieren extends JPanel{
         aktie_chb.setSelected(false);
         startkapital_chb.setSelected(false);
         startkurs_chb.setSelected(false);
+        kauf_chb.setSelected(false);
+        wert_chb.setSelected(false);
     }
 
     // Zu Start zurückkehren
