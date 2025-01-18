@@ -2,6 +2,7 @@ package Frontend.Programme;
 
 import Backend.ElementKapitalverlauf;
 import Datenbank.SQL;
+import Datenbank.SQLKapitalverlauf;
 import Datenbank.SQLSpiel;
 import Frontend.ActionListenerUpdate.EinstellungenTransaktionenListener;
 import Frontend.Cards;
@@ -327,15 +328,19 @@ public class Start extends JPanel {
                             }
                         }
 
+                        // Anlegen Datensatz in Tabelle Kapitalverlauf mit dem aktuellen Spielstand
+                        updateKapital();
+
+                        // TODO: Runde in Datenbank speichern, ansonsten wird beim erneuten Aufruf wieder von vorne begonnen.
+                        // TODO: dann aber auch eine Funktion zum erneuten Spielen einbinden und die alten Daten löschen.
                         // TODO: prüfen, ob Runde in Datenbank gespeichert werden muss, oder ob diese aus Transaktionen / Aktienverlauf ermittelt werden sollte. Dafür Programm zwischenzeitlich schließen.
                         Start.runde++;
                         System.out.println("Runde: " + Start.runde);
+                        JOptionPane.showMessageDialog(null, "Runde wurde erfolgreich gespielt.", "Erfolg", JOptionPane.INFORMATION_MESSAGE);
 
-                        // TODO: Meldung über erfolgreich gespielte Runde bringen
                         // TODO: Abfragen für Spielstand ggf. aktualisieren
 
-                        // Anlegen Datensatz in Tabelle Kapitalverlauf mit dem aktuellen Spielstand
-                        updateKapital();
+
                     }
                 }
                 Checks.showError(errorMessages); // Ausgabe Fehlermeldung(en)
@@ -359,7 +364,8 @@ public class Start extends JPanel {
         // Abspeichern der Personen aus der aktuellen Runde
         ArrayList<Integer> PersonenRunde = SQLSpiel.getArrayListeInteger("SELECT personid " +
                 "FROM Transaktionen " +
-                "WHERE Runde = (SELECT MAX(Runde) FROM Transaktionen)");
+                "WHERE Runde = (SELECT MAX(Runde) FROM Transaktionen) " +
+                "GROUP BY personid");
         // Für jede Person wird das gesamte Vermögen berechnet aus der Summe der Dividenden und Aktienwerte (Kurs * Anzahl)
         for (Integer personid: PersonenRunde) {
             Float dividende = SQLSpiel.getOneFloat("SELECT SUM(Dividende) " +
@@ -386,7 +392,8 @@ public class Start extends JPanel {
             KapitalverlaufList.add(kapitalverlauf);
         }
 
-        // TODO: Insert durchführen
+        // Insert durchführen
+        SQLKapitalverlauf.selectInsertTableKapitalverlauf(KapitalverlaufList);
         PersonenRunde.clear();
     }
 }

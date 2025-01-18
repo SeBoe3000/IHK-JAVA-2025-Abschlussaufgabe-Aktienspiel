@@ -15,7 +15,7 @@ public class SQL {
             stmt.executeUpdate(query);
         } catch(SQLException e){
             Interaction.noDatabase();
-            e.printStackTrace();
+            // e.printStackTrace();
         }
     }
 

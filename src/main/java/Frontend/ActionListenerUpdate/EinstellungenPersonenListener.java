@@ -12,47 +12,59 @@ public class EinstellungenPersonenListener extends MyActionListenerUpdate {
         super(Btn);
     }
 
-    public static Integer defaultStrartkapital;
+    public static String defaultStrartkapital;
 
-    static Integer eingabeDefaultStrartkapital;
+    static String eingabeDefaultStrartkapital;
 
     public static void setDefaults() {
+        getDefaults();
+
+        EinstellungenPersonen.defaultStrartkapital.setTextField(defaultStrartkapital);
+    }
+
+    protected static void getDefaults(){
         String einstellung = SQLEinstellungen.getEinstellung("PER");
         try {
-            defaultStrartkapital = Integer.valueOf(einstellung);
-            EinstellungenPersonen.defaultStrartkapital.setTextField(String.valueOf(defaultStrartkapital));
+            defaultStrartkapital = einstellung;
         } catch (Exception e) {
             Interaction.noDatabase();
             // e.printStackTrace();
         }
     }
 
+    public static Float getEinstellungFloat(String field){
+        Float einstellung = 0F;
+        getDefaults();
+
+        if(field == "defaultStrartkapital"){
+            einstellung = Float.valueOf(defaultStrartkapital);
+        }
+        return einstellung;
+    }
+
     @Override
     protected void checkfields() {
-        Checks.checkField(EinstellungenPersonen.defaultStrartkapital, "isValidInteger", "Bitte einen gültiges Startkapital angeben.", errorMessages);
+        Checks.checkField(EinstellungenPersonen.defaultStrartkapital, "isValidFloat", "Bitte einen gültiges Startkapital angeben.", errorMessages);
     }
 
     @Override
     protected void fillFields(){
-        eingabeDefaultStrartkapital = Integer.valueOf(EinstellungenPersonen.defaultStrartkapital.getTextfield());
+        eingabeDefaultStrartkapital = EinstellungenPersonen.defaultStrartkapital.getTextfield();
     }
 
     @Override
     protected Boolean checkChanged() {
-        System.out.println("defaultStrartkapital: " + defaultStrartkapital + " eingabeDefaultStrartkapital: " + eingabeDefaultStrartkapital);
         Boolean check = false;
-        // Aufgrund einer möglichen anderen Interpretation werden beide Felder in einen String und zurück in Integer/Float geparsed.
-        // Feld 1 wird aus Datenbank und Feld 2 aus Textfeld als String ermittelt und in einen Integer/Float geparsed.
-        if(Integer.parseInt(String.valueOf(defaultStrartkapital)) != Integer.parseInt(String.valueOf(eingabeDefaultStrartkapital))){
+        // Aufgrund einer möglichen anderen Interpretation (Datenbank und Textfeld), werden Srings verglichen
+        if(defaultStrartkapital != eingabeDefaultStrartkapital){
             check = true;
         }
-        System.out.println("Ergebnis Person: " + check);
         return check;
     }
 
     @Override
     protected void insertUpdateEinstellungen() {
-        String update = String.valueOf(eingabeDefaultStrartkapital);
+        String update = eingabeDefaultStrartkapital;
         SQLEinstellungen.setEinstellung("PER", update);
     }
 }

@@ -47,7 +47,7 @@ public class Tabellen {
             "Runde integer NULL," +
             "PersonID integer NOT NULL," +
             // wird nach jeder Runde über die Transaktionen ermittelt.
-            "Kapital integer NOT NULL," +
+            "Kapital real NOT NULL," +
             "PRIMARY KEY(ID)," +
             "UNIQUE(PersonID, Runde, Kapital)," +
             "CONSTRAINT fk_Person FOREIGN KEY (PersonID) REFERENCES Personen (ID)" +

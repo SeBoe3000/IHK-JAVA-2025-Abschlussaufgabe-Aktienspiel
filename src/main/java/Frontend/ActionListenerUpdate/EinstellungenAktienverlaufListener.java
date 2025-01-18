@@ -12,32 +12,49 @@ public class EinstellungenAktienverlaufListener extends MyActionListenerUpdate {
         super(Btn);
     }
 
-    public static Float minDividendeRunde;
-    public static Float maxDividendeRunde;
-    public static Float minAktienkurs;
+    public static String minDividendeRunde;
+    public static String maxDividendeRunde;
+    public static String minAktienkurs;
 
-    Float eingabeMinDividendeRunde;
-    Float eingabeMaxDividendeRunde;
-    Float eingabeMinAktienkurs;
+    String eingabeMinDividendeRunde;
+    String eingabeMaxDividendeRunde;
+    String eingabeMinAktienkurs;
 
     public static void setDefaults() {
+        getDefaults();
+
+        EinstellungenAktienverlauf.DividendeRunde.setTextFieldVon(minDividendeRunde);
+        EinstellungenAktienverlauf.DividendeRunde.setTextFieldBis(maxDividendeRunde);
+        EinstellungenAktienverlauf.minAktienkurs.setTextField(minAktienkurs);
+    }
+
+    protected static void getDefaults(){
         String einstellung = SQLEinstellungen.getEinstellung("ORD");
 
         int trenner1 = einstellung.indexOf(",");
         int trenner2 = einstellung.indexOf(",", trenner1 + 1);
 
         try {
-            minDividendeRunde = Float.valueOf(einstellung.substring(0, trenner1));
-            maxDividendeRunde = Float.valueOf(einstellung.substring(trenner1 + 1, trenner2));
-            minAktienkurs = Float.valueOf(einstellung.substring(trenner2 + 1, einstellung.length()));
-            EinstellungenAktienverlauf.DividendeRunde.setTextFieldVon(String.valueOf(minDividendeRunde));
-            EinstellungenAktienverlauf.DividendeRunde.setTextFieldBis(String.valueOf(maxDividendeRunde));
-            EinstellungenAktienverlauf.minAktienkurs.setTextField(String.valueOf(minAktienkurs));
-
+            minDividendeRunde = einstellung.substring(0, trenner1);
+            maxDividendeRunde = einstellung.substring(trenner1 + 1, trenner2);
+            minAktienkurs = einstellung.substring(trenner2 + 1, einstellung.length());
         } catch (Exception e) {
             Interaction.noDatabase();
             // e.printStackTrace();
         }
+    }
+
+    public static Float getEinstellungFloat(String field){
+        Float einstellung = 0F;
+        getDefaults();
+        if(field == "minDividendeRunde"){
+            einstellung = Float.valueOf(minDividendeRunde);
+        } else if (field == "maxDividendeRunde") {
+            einstellung = Float.valueOf(maxDividendeRunde);
+        } else if (field == "minAktienkurs") {
+            einstellung = Float.valueOf(minAktienkurs);
+        }
+        return einstellung;
     }
 
     @Override
@@ -48,19 +65,18 @@ public class EinstellungenAktienverlaufListener extends MyActionListenerUpdate {
 
     @Override
     protected void fillFields(){
-        eingabeMinDividendeRunde = Float.valueOf(EinstellungenAktienverlauf.DividendeRunde.getTextfieldVon());
-        eingabeMaxDividendeRunde = Float.valueOf(EinstellungenAktienverlauf.DividendeRunde.getTextfieldBis());
-        eingabeMinAktienkurs = Float.valueOf(EinstellungenAktienverlauf.minAktienkurs.getTextfield());
+        eingabeMinDividendeRunde = EinstellungenAktienverlauf.DividendeRunde.getTextfieldVon();
+        eingabeMaxDividendeRunde = EinstellungenAktienverlauf.DividendeRunde.getTextfieldBis();
+        eingabeMinAktienkurs = EinstellungenAktienverlauf.minAktienkurs.getTextfield();
     }
 
     @Override
     protected Boolean checkChanged() {
         Boolean check = false;
-        // Aufgrund einer möglichen anderen Interpretation werden beide Felder in einen String und zurück in Integer/Float geparsed.
-        // Feld 1 wird aus Datenbank und Feld 2 aus Textfeld als String ermittelt und in einen Integer/Float geparsed.
-        if(Float.parseFloat(String.valueOf(minDividendeRunde)) != Float.parseFloat(String.valueOf(eingabeMinDividendeRunde)) ||
-                Float.parseFloat(String.valueOf(maxDividendeRunde)) != Float.parseFloat(String.valueOf(eingabeMaxDividendeRunde)) ||
-                Float.parseFloat(String.valueOf(minAktienkurs)) != Float.parseFloat(String.valueOf(eingabeMinAktienkurs))){
+        // Aufgrund einer möglichen anderen Interpretation (Datenbank und Textfeld), werden Srings verglichen
+        if(minDividendeRunde != eingabeMinDividendeRunde ||
+                maxDividendeRunde != eingabeMaxDividendeRunde ||
+                minAktienkurs != eingabeMinAktienkurs){
             check = true;
         }
         return check;

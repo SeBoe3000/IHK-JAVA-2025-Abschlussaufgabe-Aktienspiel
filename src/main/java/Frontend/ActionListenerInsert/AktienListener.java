@@ -54,7 +54,6 @@ public class AktienListener extends MyActionListenerInsert {
         }
     }
 
-    // TODO: prüfen, ob Auslagerung möglich ist.
     // Prüfung, ob der Wert bereits in der Liste vorhanden ist
     public static boolean checkElementAlreadyInList(String Isin){
         boolean inList = false;

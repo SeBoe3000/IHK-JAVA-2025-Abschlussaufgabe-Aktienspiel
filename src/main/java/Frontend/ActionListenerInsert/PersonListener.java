@@ -51,7 +51,6 @@ public class PersonListener extends MyActionListenerInsert {
         }
     }
 
-    // TODO: prüfen, ob Auslagerung möglich ist.
     // Prüfung, ob der Wert bereits in der Liste vorhanden ist
     public static boolean checkElementAlreadyInList(String vorname, String nachname, Integer alter){
         boolean inList = false;

@@ -116,8 +116,7 @@ public class EinstellungenTransaktionenListener extends MyActionListenerUpdate {
     @Override
     protected Boolean checkChanged() {
         Boolean check = false;
-        // Aufgrund einer möglichen anderen Interpretation werden beide Felder in einen String und zurück in Integer/Float geparsed.
-        // Feld 1 wird aus Datenbank und Feld 2 aus Textfeld als String ermittelt und in einen Integer/Float geparsed.
+        // Aufgrund einer möglichen anderen Interpretation (Datenbank und Textfeld), werden Srings verglichen
         if(eingabeMaxAktienPersonRunde != maxAktienPersonRunde ||
                 eingabeMinPersonRunde != minPersonRunde ||
                 eingabeMaxPersonRunde != maxPersonRunde ||

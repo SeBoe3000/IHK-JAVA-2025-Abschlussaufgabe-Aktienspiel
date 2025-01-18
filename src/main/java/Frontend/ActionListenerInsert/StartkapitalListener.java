@@ -50,7 +50,6 @@ public class StartkapitalListener extends MyActionListenerInsert {
         }
     }
 
-    // TODO: prüfen, ob Auslagerung möglich ist.
     // Prüfung, ob der Wert bereits in der Liste vorhanden ist
     public static boolean checkElementAlreadyInList(Integer personID){
         boolean inList = false;

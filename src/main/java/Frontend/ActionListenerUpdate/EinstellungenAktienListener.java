@@ -12,19 +12,33 @@ public class EinstellungenAktienListener extends MyActionListenerUpdate {
         super(Btn);
     }
 
-    public static Integer maxAnzahlAktien;
+    public static String maxAnzahlAktien;
 
-    Integer eingabeMaxAnzahlAktien;
+    String eingabeMaxAnzahlAktien;
 
     public static void setDefaults() {
+        getDefaults();
+        EinstellungenAktien.maxAnzahlAktien.setTextField(maxAnzahlAktien);
+    }
+
+    protected static void getDefaults(){
         String einstellung = SQLEinstellungen.getEinstellung("AKT");
         try {
-            maxAnzahlAktien = Integer.valueOf(einstellung);
-            EinstellungenAktien.maxAnzahlAktien.setTextField(String.valueOf(maxAnzahlAktien));
+            maxAnzahlAktien = einstellung;
         } catch (Exception e) {
             Interaction.noDatabase();
             // e.printStackTrace();
         }
+    }
+
+    public static Integer getEinstellungInteger(String field){
+        Integer einstellung = 0;
+        getDefaults();
+
+        if(field == "maxAnzahlAktien"){
+            einstellung = Integer.valueOf(maxAnzahlAktien);
+        }
+        return einstellung;
     }
 
     @Override
@@ -34,15 +48,14 @@ public class EinstellungenAktienListener extends MyActionListenerUpdate {
 
     @Override
     protected void fillFields(){
-        eingabeMaxAnzahlAktien = Integer.valueOf(EinstellungenAktien.maxAnzahlAktien.getTextfield());
+        eingabeMaxAnzahlAktien = EinstellungenAktien.maxAnzahlAktien.getTextfield();
     }
 
     @Override
     protected Boolean checkChanged() {
         Boolean check = false;
-        // Aufgrund einer möglichen anderen Interpretation werden beide Felder in einen String und zurück in Integer/Float geparsed.
-        // Feld 1 wird aus Datenbank und Feld 2 aus Textfeld als String ermittelt und in einen Integer/Float geparsed.
-        if(Integer.parseInt(String.valueOf(maxAnzahlAktien)) != Integer.parseInt(String.valueOf(eingabeMaxAnzahlAktien))){
+        // Aufgrund einer möglichen anderen Interpretation, werden Srings verglichen
+        if(maxAnzahlAktien != eingabeMaxAnzahlAktien){
             check = true;
         }
         return check;
@@ -50,7 +63,7 @@ public class EinstellungenAktienListener extends MyActionListenerUpdate {
 
     @Override
     protected void insertUpdateEinstellungen() {
-        String update = String.valueOf(eingabeMaxAnzahlAktien);
+        String update = eingabeMaxAnzahlAktien;
         SQLEinstellungen.setEinstellung("AKT", update);
     }
 }
