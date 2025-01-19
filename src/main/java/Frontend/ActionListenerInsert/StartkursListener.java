@@ -32,8 +32,6 @@ public class StartkursListener extends MyActionListenerInsert {
         Checks.checkFieldLenghtFloat(Startkurs.kurs, EinstellungenAktienverlaufListener.getEinstellungFloat("minAktienkurs"), Float.MAX_VALUE,
                 "isValidFloatVonBis", "Der Kurs muss mindestens " +
                         EinstellungenAktienverlaufListener.getEinstellungFloat("minAktienkurs") +  " sein.", errorMessages);
-
-        // TODO: Prüfung nicht kleiner als Einstellung
     }
 
     @Override
@@ -74,8 +72,7 @@ public class StartkursListener extends MyActionListenerInsert {
     @Override
     protected void elementInList() {
         // Element der Liste hinzufügen
-        ElementAktienverlauf aktienverlauf = new ElementAktienverlauf(0, eingabeAktieIsin, 0, eingabeStartkurs, 0F);
-        // TODO:Anzahl prüfen.
+        ElementAktienverlauf aktienverlauf = new ElementAktienverlauf(0, eingabeAktieIsin, EinstellungenAktienListener.getEinstellungInteger("maxAnzahlAktien"), eingabeStartkurs, 0F);
         AktienverlaufList.add(aktienverlauf);
         // Nach Hinzufügen die Felder leeren
         felderLeeren();

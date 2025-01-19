@@ -3,9 +3,13 @@ package Frontend.ActionListenerInsert;
 import Backend.ElementAktienverlauf;
 import Datenbank.SQL;
 import Datenbank.SQLAktienverlauf;
+import Frontend.ActionListenerUpdate.EinstellungenAktienListener;
+import Frontend.ActionListenerUpdate.EinstellungenAktienverlaufListener;
+import Frontend.ActionListenerUpdate.EinstellungenPersonenListener;
 import Frontend.Cards;
 import Frontend.Checks.Checks;
 import Frontend.Programme.Bewegungsdaten.Wert;
+import Frontend.Programme.Stammdaten.Startkurs;
 import Frontend.Programme.Start;
 
 import javax.swing.*;
@@ -30,7 +34,12 @@ public class WertListener extends MyActionListenerInsert {
         Checks.checkFieldLenght(Wert.aktie, 12,12,"isValidStringLaenge", "Die ISIN muss 12 Stellen lang sein.", errorMessages);
         Checks.checkField(Wert.kurs, "isValidFloat", "Bitte einen gültigen Kurs angeben.", errorMessages);
         Checks.checkField(Wert.kassenbestand, "isValidFloat", "Bitte einen gültigen Kassenbestand angeben.", errorMessages);
-        // TODO: Prüfen nur im bestimmten Rahmen möglich.
+        Checks.checkFieldLenghtFloat(Wert.kassenbestand, EinstellungenAktienverlaufListener.getEinstellungFloat("minDividendeRunde"),
+                EinstellungenAktienverlaufListener.getEinstellungFloat("maxDividendeRunde"),
+                "isValidFloatVonBis", "Der Kurs muss mindestens " +
+                        EinstellungenAktienverlaufListener.getEinstellungFloat("minDividendeRunde") +
+                        " und maximal " + EinstellungenAktienverlaufListener.getEinstellungFloat("maxDividendeRunde") +
+                        " sein.", errorMessages);
     }
 
     @Override
@@ -68,8 +77,7 @@ public class WertListener extends MyActionListenerInsert {
     @Override
     protected void elementInList() {
         // Element der Liste hinzufügen
-        ElementAktienverlauf wert = new ElementAktienverlauf(Start.runde, eingabeAktieIsin, 100, eingabeKurs, eingabeKassenbestand);
-        // TODO: Eingabe Anzahl prüfen.
+        ElementAktienverlauf wert = new ElementAktienverlauf(Start.runde, eingabeAktieIsin, EinstellungenAktienListener.getEinstellungInteger("maxAnzahlAktien"), eingabeKurs, eingabeKassenbestand);
         WertList.add(wert);
         // Nach Hinzufügen die Felder leeren
         felderLeeren();
