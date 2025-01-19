@@ -28,7 +28,7 @@ public class AktienListener extends MyActionListenerInsert {
         Checks.checkField(Aktie.isin, "isValidString", "Bitte eine gültige ISIN angeben.", errorMessages);
         Checks.checkFieldLenght(Aktie.isin, 12,12,"isValidStringLaenge", "Die ISIN muss 12 Stellen lang sein.", errorMessages);
         Checks.checkField(Aktie.name, "isValidString", "Bitte einen gültigen Namen angeben.", errorMessages);
-        Checks.checkFieldLenght(Aktie.name, 0,30,"isValidStringLaenge", "Der Name kann bis zu 30 stellen lang sein.", errorMessages);
+        Checks.checkFieldLenght(Aktie.name, 0,50,"isValidStringLaenge", "Der Name kann bis zu 50 stellen lang sein.", errorMessages);
 
         /* Kann auch wie folgt definiert werden:
         if(!Checks.checkValues(Aktie.isin, "isValidString", 0,0)){

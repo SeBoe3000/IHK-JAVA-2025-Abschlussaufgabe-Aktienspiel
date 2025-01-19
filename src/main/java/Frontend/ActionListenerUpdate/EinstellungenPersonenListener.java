@@ -13,19 +13,30 @@ public class EinstellungenPersonenListener extends MyActionListenerUpdate {
     }
 
     public static String defaultStrartkapital;
+    public static String defaultStrartkapitalBearbeitbar;
 
     static String eingabeDefaultStrartkapital;
+    static String eingabeDefaultStrartkapitalBearbeitbar;
 
     public static void setDefaults() {
         getDefaults();
 
         EinstellungenPersonen.defaultStrartkapital.setTextField(defaultStrartkapital);
+        if (defaultStrartkapitalBearbeitbar != null && defaultStrartkapitalBearbeitbar.equals("J")) {
+            EinstellungenPersonen.defaultStartkapitalBearbeitbar.setSelected(true);
+        } else {
+            EinstellungenPersonen.defaultStartkapitalBearbeitbar.setSelected(false);
+        }
     }
 
     protected static void getDefaults(){
         String einstellung = SQLEinstellungen.getEinstellung("PER");
+
+        int trenner1 = einstellung.indexOf(",");
+
         try {
-            defaultStrartkapital = einstellung;
+            defaultStrartkapital = einstellung.substring(0, trenner1);
+            defaultStrartkapitalBearbeitbar = einstellung.substring(trenner1 + 1, einstellung.length());
         } catch (Exception e) {
             Interaction.noDatabase();
             // e.printStackTrace();
@@ -50,13 +61,14 @@ public class EinstellungenPersonenListener extends MyActionListenerUpdate {
     @Override
     protected void fillFields(){
         eingabeDefaultStrartkapital = EinstellungenPersonen.defaultStrartkapital.getTextfield();
+        eingabeDefaultStrartkapitalBearbeitbar = EinstellungenPersonen.defaultStartkapitalBearbeitbar.isSelected() ? "J" : "N"; // Checkbox Zustand speichern
     }
 
     @Override
     protected Boolean checkChanged() {
         Boolean check = false;
-        // Aufgrund einer möglichen anderen Interpretation (Datenbank und Textfeld), werden Srings verglichen
-        if(defaultStrartkapital != eingabeDefaultStrartkapital){
+        // Aufgrund einer möglichen anderen Interpretation (Datenbank und Textfeld), werden Strings verglichen
+        if(!defaultStrartkapital.equals(eingabeDefaultStrartkapital) || !defaultStrartkapitalBearbeitbar.equals(eingabeDefaultStrartkapitalBearbeitbar)){
             check = true;
         }
         return check;
@@ -64,7 +76,7 @@ public class EinstellungenPersonenListener extends MyActionListenerUpdate {
 
     @Override
     protected void insertUpdateEinstellungen() {
-        String update = eingabeDefaultStrartkapital;
+        String update = eingabeDefaultStrartkapital + "," + eingabeDefaultStrartkapitalBearbeitbar;
         SQLEinstellungen.setEinstellung("PER", update);
     }
 }

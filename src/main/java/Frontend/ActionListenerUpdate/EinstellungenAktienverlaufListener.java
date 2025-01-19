@@ -73,10 +73,10 @@ public class EinstellungenAktienverlaufListener extends MyActionListenerUpdate {
     @Override
     protected Boolean checkChanged() {
         Boolean check = false;
-        // Aufgrund einer möglichen anderen Interpretation (Datenbank und Textfeld), werden Srings verglichen
-        if(minDividendeRunde != eingabeMinDividendeRunde ||
-                maxDividendeRunde != eingabeMaxDividendeRunde ||
-                minAktienkurs != eingabeMinAktienkurs){
+        // Aufgrund einer möglichen anderen Interpretation (Datenbank und Textfeld), werden Strings verglichen
+        if(!minDividendeRunde.equals(eingabeMinDividendeRunde) ||
+                !maxDividendeRunde.equals(eingabeMaxDividendeRunde) ||
+                !minAktienkurs.equals(eingabeMinAktienkurs)){
             check = true;
         }
         return check;

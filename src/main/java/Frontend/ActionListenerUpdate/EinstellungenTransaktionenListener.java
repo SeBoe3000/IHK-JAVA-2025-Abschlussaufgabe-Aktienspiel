@@ -116,14 +116,14 @@ public class EinstellungenTransaktionenListener extends MyActionListenerUpdate {
     @Override
     protected Boolean checkChanged() {
         Boolean check = false;
-        // Aufgrund einer möglichen anderen Interpretation (Datenbank und Textfeld), werden Srings verglichen
-        if(eingabeMaxAktienPersonRunde != maxAktienPersonRunde ||
-                eingabeMinPersonRunde != minPersonRunde ||
-                eingabeMaxPersonRunde != maxPersonRunde ||
-                eingabeMinAktieRunde != minAktieRunde ||
-                eingabeMaxAktieRunde != maxAktieRunde ||
-                eingabeFirstDividende != firstDividende ||
-                eingabeSecondDividende != secondDividende){
+        // Aufgrund einer möglichen anderen Interpretation (Datenbank und Textfeld), werden Strings verglichen
+        if(!eingabeMaxAktienPersonRunde.equals(maxAktienPersonRunde) ||
+                !eingabeMinPersonRunde.equals( minPersonRunde) ||
+                !eingabeMaxPersonRunde.equals(maxPersonRunde) ||
+                !eingabeMinAktieRunde.equals(minAktieRunde) ||
+                !eingabeMaxAktieRunde.equals(maxAktieRunde) ||
+                !eingabeFirstDividende.equals(firstDividende) ||
+                !eingabeSecondDividende.equals(secondDividende)){
             check = true;
         }
         return check;

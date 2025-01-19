@@ -19,7 +19,7 @@ public class Tabellen {
     static String createTableAktien = "CREATE TABLE IF NOT EXISTS Aktien" +
             "(" +
             "ISIN char(12) NOT NULL," +
-            "Name Varchar(30) NOT NULL," +
+            "Name Varchar(50) NOT NULL," +
             "PRIMARY KEY(ISIN)" +
             ")";
 
@@ -79,7 +79,7 @@ public class Tabellen {
     // Einstellungen befüllen mit Defaults
     static String insertDefaultEinstellungen = "INSERT INTO Einstellungen VALUES" +
             "('AKT', '100')," +
-            "('PER', '5000')," +
+            "('PER', '5000,N')," +
             "('ORD', '0.0,100000.0,10.0')," +
             "('TRN', '30,3,14,3,14,30.0,10.0')," +
             "('RND', '1')" +
