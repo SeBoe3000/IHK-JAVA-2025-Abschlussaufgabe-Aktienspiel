@@ -3,6 +3,7 @@ package Frontend.ActionListenerInsert;
 import Backend.ElementKapitalverlauf;
 import Datenbank.SQL;
 import Datenbank.SQLKapitalverlauf;
+import Frontend.ActionListenerUpdate.EinstellungenPersonenListener;
 import Frontend.Cards;
 import Frontend.Checks.Checks;
 import Frontend.Programme.Stammdaten.Startkapital;
@@ -74,7 +75,12 @@ public class StartkapitalListener extends MyActionListenerInsert {
     @Override
     protected boolean checkFieldsfilled() {
         Boolean filled = true;
-        if (!Checks.checkOneFieldfilled(Startkapital.person) && !Checks.checkOneFieldfilled(Startkapital.betrag)) {
+        if (!Checks.checkOneFieldfilled(Startkapital.person)){
+            filled = false;
+        }
+        // Nur wenn Feld bearbeitbar ist und es gefüllt ist, zählt es als filled.
+        if(!Checks.checkOneFieldfilled(Startkapital.betrag) &&
+        EinstellungenPersonenListener.getEinstellungString("defaultStrartkapitalBearbeitbar").equals("J")){
             filled = false;
         }
         // System.out.println("filled: " +  filled);

@@ -1,5 +1,6 @@
 package Frontend.Programme.Stammdaten;
 
+import Frontend.ActionListenerUpdate.EinstellungenPersonenListener;
 import Frontend.Cards;
 
 import javax.swing.*;
@@ -83,6 +84,15 @@ public class Stammdaten extends JPanel{
             @Override
             public void actionPerformed(ActionEvent e) {
                 Cards.changeCard(Cards.nameStartkapital);
+
+                // Spartkapital befüllen und Sperren, wenn nicht bearbeitbar
+                System.out.println("Einstellung: " + EinstellungenPersonenListener.getEinstellungString("defaultStrartkapitalBearbeitbar"));
+                if (EinstellungenPersonenListener.getEinstellungString("defaultStrartkapitalBearbeitbar").equals("N")) {
+                    Startkapital.betrag.setTextField(String.valueOf(EinstellungenPersonenListener.getEinstellungFloat("defaultStrartkapital")));
+                    Startkapital.betrag.setEnabledFalse();
+                } else {
+                    Startkapital.betrag.setEnabledTrue();
+                }
             }
         };
         create_startkapital.addActionListener(startkapital);

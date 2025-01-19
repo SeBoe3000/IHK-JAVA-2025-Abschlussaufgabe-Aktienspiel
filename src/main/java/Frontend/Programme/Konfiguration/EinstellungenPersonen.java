@@ -37,11 +37,6 @@ public class EinstellungenPersonen extends JPanel{
         buttons.setVisibleErfassenFalse();
         add(buttons, gbc);
 
-        // Ausgrauen beim Aufruf vom Programm, wenn deaktiviert
-        if (!defaultStartkapitalBearbeitbar.isSelected()) {
-            defaultStrartkapital.setEnabledFalse();
-        }
-
         // ActionListener hinzufügen
         buttonListener();
     }
@@ -59,22 +54,22 @@ public class EinstellungenPersonen extends JPanel{
         ActionListener ausgrauenDefaultStartkapital = new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                if (defaultStartkapitalBearbeitbar.isSelected()) {
-                    defaultStrartkapital.setEnabledTrue();
-                } else {
-                    defaultStrartkapital.setEnabledFalse();
-                }
+                bearbeitenStartkapital();
             }
         };
         defaultStartkapitalBearbeitbar.addActionListener(ausgrauenDefaultStartkapital);
 
         /* Andere Schreibweise:
         defaultStartkapitalBearbeitbar.addActionListener(e -> {
-            if (defaultStartkapitalBearbeitbar.isSelected()) {
-                defaultStrartkapital.setEnabledFalse();
-            } else {
-                defaultStrartkapital.setEnabledTrue();
-            }
+            bearbeitenStartkapital();
         }); */
+    }
+
+    public static void bearbeitenStartkapital(){
+        if (defaultStartkapitalBearbeitbar.isSelected()) {
+            defaultStrartkapital.setEnabledTrue();
+        } else {
+            defaultStrartkapital.setEnabledFalse();
+        }
     }
 }

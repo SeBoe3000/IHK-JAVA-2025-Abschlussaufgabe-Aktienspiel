@@ -53,6 +53,17 @@ public class EinstellungenPersonenListener extends MyActionListenerUpdate {
         return einstellung;
     }
 
+    public static String getEinstellungString(String field){
+        String einstellung = "";
+        getDefaults();
+
+        if(field == "defaultStrartkapitalBearbeitbar"){
+            einstellung = defaultStrartkapitalBearbeitbar;
+        }
+        return einstellung;
+    }
+
+
     @Override
     protected void checkfields() {
         Checks.checkField(EinstellungenPersonen.defaultStrartkapital, "isValidFloat", "Bitte einen gültiges Startkapital angeben.", errorMessages);

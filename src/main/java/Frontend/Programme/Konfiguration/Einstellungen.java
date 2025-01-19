@@ -77,6 +77,7 @@ public class Einstellungen extends JPanel {
             public void actionPerformed(ActionEvent e) {
                 Cards.changeCard(Cards.nameEinstellungenPersonen);
                 EinstellungenPersonenListener.setDefaults();
+                EinstellungenPersonen.bearbeitenStartkapital();
             }
         };
         einstellung_person.addActionListener(person);
