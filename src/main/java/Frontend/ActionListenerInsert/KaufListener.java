@@ -57,7 +57,7 @@ public class KaufListener extends MyActionListenerInsert {
         // Prüfung, ob Element bereits in Datenbank vorhanden ist
         if(SQL.checkElementAlreadyInDatenbankIntegerIntegerString(Start.runde, eingabePersonID, eingabeAktie, "runde", "PersonID", "AktieISIN", "Transaktionen")){
             // TODO: ggf. den Kauf erhöhen
-            errorMessages.add("Die Element befindet sich bereits in der Datenbank. Bitte einen anderen Datensatz angeben.");
+            errorMessages.add("Das Element befindet sich bereits in der Datenbank. Bitte einen anderen Datensatz angeben.");
         }
 
         // TODO: Prüfung nicht mehr als 14 Aktien oder Personen in Runde verwendet.

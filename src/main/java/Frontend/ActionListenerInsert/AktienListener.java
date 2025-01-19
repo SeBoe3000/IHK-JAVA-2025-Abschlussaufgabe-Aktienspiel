@@ -50,7 +50,7 @@ public class AktienListener extends MyActionListenerInsert {
         }
         // Prüfung, ob Element bereits in Datenbank vorhanden ist
         if(SQL.checkElementAlreadyInDatenbankOneString(eingabeIsin, "isin","Aktien")){
-            errorMessages.add("Die Element befindet sich bereits in der Datenbank. Bitte einen anderen Datensatz angeben.");
+            errorMessages.add("Das Element befindet sich bereits in der Datenbank. Bitte einen anderen Datensatz angeben.");
         }
     }
 

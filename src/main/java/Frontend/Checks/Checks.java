@@ -30,26 +30,32 @@ public class Checks {
 
     // Prüfung auf gültige Eingaben verkürzt darstellen
     public static void checkField(EingabePanel input, String checkType, String errorMessage, ArrayList<String> errorMessages){
-        if (!Checks.checkValues(input, checkType, 0,0)) {
+        if (!Checks.checkValues(input, checkType, 0,0, 0F, 0F)) {
             errorMessages.add(errorMessage);
         }
     }
 
     public static void checkFieldLenght(EingabePanel input, Integer von, Integer bis, String checkType, String errorMessage, ArrayList<String> errorMessages){
-        if (!Checks.checkValues(input, checkType, von, bis)) {
+        if (!Checks.checkValues(input, checkType, von, bis,0F, 0F)) {
+            errorMessages.add(errorMessage);
+        }
+    }
+
+    public static void checkFieldLenghtFloat(EingabePanel input, Float von, Float bis, String checkType, String errorMessage, ArrayList<String> errorMessages){
+        if (!Checks.checkValues(input, checkType, 0,0, von, bis)) {
             errorMessages.add(errorMessage);
         }
     }
 
     // Prüfung auf gültige Eingaben
-    public static boolean checkValues(EingabePanel input, String checkArt, Integer von, Integer bis) {
+    public static boolean checkValues(EingabePanel input, String checkArt, Integer vonInt, Integer bisInt, Float vonFloat, Float bisFloat) {
         String check = input.getTextfield();
         boolean check1 = false;
 
         if (checkArt == "isValidString") {
             check1 = EingabenCheck.isValidString(check);
         }  else if (checkArt == "isValidStringLaenge") {
-            check1 = EingabenCheck.isValidStringLaenge(check, von, bis);
+            check1 = EingabenCheck.isValidStringLaenge(check, vonInt, bisInt);
         } else if (checkArt == "isValidInteger") {
             check1 = EingabenCheck.isValidInteger(check, "NOTNULL");
         } else if (checkArt == "isValidFloat") {
@@ -57,7 +63,9 @@ public class Checks {
         } else if (checkArt == "isValidFloatNull") {
             check1 = EingabenCheck.isValidFloat(check, "NULL");
         } else if (checkArt == "isValidIntegerVonBis") {
-            check1 = EingabenCheck.isValidIntegerVonBis(check, von, bis);
+            check1 = EingabenCheck.isValidIntegerVonBis(check, vonInt, bisInt);
+        } else if (checkArt == "isValidFloatVonBis") {
+            check1 = EingabenCheck.isValidFloatVonBis(check, vonFloat, bisFloat);
         }
 
         // Bei korrekter Eingabe (z.B. nach Fehler) Schriftfarbe zurückändern.

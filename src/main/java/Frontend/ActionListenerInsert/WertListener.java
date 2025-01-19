@@ -49,7 +49,7 @@ public class WertListener extends MyActionListenerInsert {
         // Prüfung, ob Element bereits in Datenbank vorhanden ist
         // Runde wird doppelt angegeben, damit keine neue Methode angelegt werden muss.
         if(SQL.checkElementAlreadyInDatenbankIntegerIntegerString(Start.runde, Start.runde, eingabeAktieIsin, "Runde", "Runde", "AktieIsin","Aktienverlauf")){
-            errorMessages.add("Die Element befindet sich bereits in der Datenbank. Bitte einen anderen Datensatz angeben.");
+            errorMessages.add("Das Element befindet sich bereits in der Datenbank. Bitte einen anderen Datensatz angeben.");
         }
     }
 

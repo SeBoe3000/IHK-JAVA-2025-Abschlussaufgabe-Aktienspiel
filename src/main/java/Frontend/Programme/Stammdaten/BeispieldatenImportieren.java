@@ -1,6 +1,12 @@
 package Frontend.Programme.Stammdaten;
 
+import Backend.*;
+import Datenbank.SQLAktien;
+import Datenbank.SQLAktienverlauf;
+import Datenbank.SQLKapitalverlauf;
+import Datenbank.SQLPerson;
 import Frontend.Cards;
+import Frontend.Checks.Checks;
 import Frontend.Komponenten.Buttons;
 import Frontend.Komponenten.Interaction;
 
@@ -8,6 +14,8 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.ArrayList;
+import java.util.List;
 
 public class BeispieldatenImportieren extends JPanel{
     static JCheckBox person_chb = new JCheckBox("Personen importieren");
@@ -18,6 +26,9 @@ public class BeispieldatenImportieren extends JPanel{
     static JCheckBox wert_chb = new JCheckBox("Unternehmenswerte importieren");
 
     static Buttons buttons = new Buttons();
+
+    // Zum Speichern der Fehlermeldungen
+    public static ArrayList<String> errorMessages = new ArrayList<>();
 
     public BeispieldatenImportieren(CardLayout cardLayout, JPanel cardPanel) {
         // GridBagLayout direkt auf Panel verwenden
@@ -110,41 +121,56 @@ public class BeispieldatenImportieren extends JPanel{
         System.out.println("Imports durchführen");
 
         // Imports durchführen
-        if(person_chb.isSelected()){
-            // TODO: Prüfung Daten korrekt und nicht vorhanden
-            // TODO: Daten importieren
-            // TODO: Meldung ausgeben (Daten vorhanden oder erfolgreich verarbeitet)
+        if(person_chb.isSelected()) {
+            List<ElementPerson> PersonList = DatenDateiLesen.readPerson();
+            if (!PersonList.isEmpty()){
+                if (SQLPerson.selectInsertTablePerson(PersonList) == false) {
+                    errorMessages.add("Beim Insert der Personen gab es einen Fehler.");
+                }
+            }
         }
 
         if(aktie_chb.isSelected()){
-            // TODO: Prüfung Daten korrekt und nicht vorhanden
-            // TODO: Daten importieren
-            // TODO: Meldung ausgeben (Daten vorhanden oder erfolgreich verarbeitet)
+            List<ElementAktie> AktieList = DatenDateiLesen.readAktie();
+            if(!AktieList.isEmpty()) {
+                if (SQLAktien.selectInsertTableAktie(AktieList) == false) {
+                    errorMessages.add("Beim Insert der Aktien gab es einen Fehler.");
+                }
+            }
         }
 
         if(startkapital_chb.isSelected()){
-            // TODO: Prüfung Daten korrekt und nicht vorhanden
-            // TODO: Prüfung Schlüssel vorhanden
-            // TODO: Daten importieren
-            // TODO: Meldung ausgeben (Daten vorhanden oder erfolgreich verarbeitet)
+            List<ElementKapitalverlauf> StartkapitalList = DatenDateiLesen.readStartkapital();
+            if(!StartkapitalList.isEmpty()){
+                if (SQLKapitalverlauf.selectInsertTableKapitalverlauf(StartkapitalList) == false) {
+                    errorMessages.add("Beim Insert vom Startkapital gab es einen Fehler.");
+                }
+            }
         }
 
         if(startkurs_chb.isSelected()){
-            // TODO: Prüfung Daten korrekt und nicht vorhanden
-            // TODO: Prüfung Schlüssel vorhanden
-            // TODO: Daten importieren
-            // TODO: Meldung ausgeben (Daten vorhanden oder erfolgreich verarbeitet)
+            List<ElementAktienverlauf> StartkursList = DatenDateiLesen.readStartkurs();
+            if(!StartkursList.isEmpty()){
+                if (SQLAktienverlauf.selectInsertTableAktienverlauf(StartkursList) == false) {
+                    errorMessages.add("Beim Insert vom Startkurs gab es einen Fehler.");
+                }
+            }
         }
 
         if(kauf_chb.isSelected()){
-
+            // TODO: Umsetzen mit Prüfungen
         }
 
         if(wert_chb.isSelected()){
-
+            // TODO: Umsetzen mit Prüfungen
         }
 
-        // TODO: Meldung bringen wenn erfolgreich
+        if(errorMessages.isEmpty()){
+            JOptionPane.showMessageDialog(null, "Die Datensätze wurden alle erfolgreich importiert.");
+            backToStart();
+        } else {
+            Checks.showError(errorMessages);
+        }
     }
 
     // Checkboxen demarkieren

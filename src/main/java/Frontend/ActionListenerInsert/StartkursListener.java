@@ -3,6 +3,8 @@ package Frontend.ActionListenerInsert;
 import Backend.ElementAktienverlauf;
 import Datenbank.SQL;
 import Datenbank.SQLAktienverlauf;
+import Frontend.ActionListenerUpdate.EinstellungenAktienListener;
+import Frontend.ActionListenerUpdate.EinstellungenAktienverlaufListener;
 import Frontend.Cards;
 import Frontend.Checks.Checks;
 import Frontend.Programme.Stammdaten.Startkurs;
@@ -27,6 +29,11 @@ public class StartkursListener extends MyActionListenerInsert {
         Checks.checkField(Startkurs.aktie, "isValidString", "Bitte eine gültige ISIN angeben.", errorMessages);
         Checks.checkFieldLenght(Startkurs.aktie, 12,12,"isValidStringLaenge", "Die ISIN muss 12 Stellen lang sein.", errorMessages);
         Checks.checkField(Startkurs.kurs, "isValidFloat", "Bitte einen gültigen Kurs angeben.", errorMessages);
+        Checks.checkFieldLenghtFloat(Startkurs.kurs, EinstellungenAktienverlaufListener.getEinstellungFloat("minAktienkurs"), Float.MAX_VALUE,
+                "isValidFloatVonBis", "Der Kurs muss mindestens " +
+                        EinstellungenAktienverlaufListener.getEinstellungFloat("minAktienkurs") +  " sein.", errorMessages);
+
+        // TODO: Prüfung nicht kleiner als Einstellung
     }
 
     @Override
@@ -48,7 +55,7 @@ public class StartkursListener extends MyActionListenerInsert {
         // Prüfung, ob Element bereits in Datenbank vorhanden ist
         // Runde wird doppelt angegeben, damit keine neue Methode angelegt werden muss.
         if(SQL.checkElementAlreadyInDatenbankIntegerIntegerString(0,0, eingabeAktieIsin, "Runde", "Runde", "AktieIsin", "Aktienverlauf")){
-            errorMessages.add("Die Element befindet sich bereits in der Datenbank. Bitte einen anderen Datensatz angeben.");
+            errorMessages.add("Das Element befindet sich bereits in der Datenbank. Bitte einen anderen Datensatz angeben.");
         }
     }
 

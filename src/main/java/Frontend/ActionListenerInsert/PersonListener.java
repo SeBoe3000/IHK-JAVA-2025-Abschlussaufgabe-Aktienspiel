@@ -47,7 +47,7 @@ public class PersonListener extends MyActionListenerInsert {
         }
         // Prüfung, ob Element bereits in Datenbank vorhanden ist
         if(SQL.checkElementAlreadyInDatenbankStringStringInteger(eingabeVorname, eingabeNachname, eingabeAlter, "Vorname", "Nachname", "Alter","Personen")){
-            errorMessages.add("Die Element befindet sich bereits in der Datenbank. Bitte einen anderen Datensatz angeben.");
+            errorMessages.add("Das Element befindet sich bereits in der Datenbank. Bitte einen anderen Datensatz angeben.");
         }
     }
 

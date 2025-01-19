@@ -24,8 +24,6 @@ public class SQLAktienverlauf {
         ){
             for(ElementAktienverlauf Aktienverlauf: aktienverlauf){
                 // SELECT
-                System.out.println("Runde:" + Aktienverlauf.getRunde());
-                System.out.println("Aktie:" + Aktienverlauf.getAktie());
                 pstmtSelect.setInt(1, Aktienverlauf.getRunde());
                 pstmtSelect.setString(2, Aktienverlauf.getAktie());
                 ResultSet resultSelect = pstmtSelect.executeQuery();
@@ -51,10 +49,10 @@ public class SQLAktienverlauf {
             pstmtInsert.executeBatch();
         } catch (SQLException e){
             Interaction.noDatabase();
-            e.printStackTrace();
+            // e.printStackTrace();
         } catch (Exception e){
             Interaction.noDatabase();
-            e.printStackTrace();
+            // e.printStackTrace();
         }
         return insert;
     }

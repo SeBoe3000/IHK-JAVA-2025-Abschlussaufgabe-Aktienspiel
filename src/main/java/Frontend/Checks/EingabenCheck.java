@@ -255,5 +255,19 @@ public class EingabenCheck {
         }
         return isValid;
     }
+
+    public static boolean isValidFloatVonBis(String eingabe, Float von, Float bis) {
+        boolean isValid = true;
+        Float zahl = 0F;
+        try {
+            zahl = Float.parseFloat(eingabe);
+        } catch (Exception e) {
+            isValid = false;
+        }
+        if(zahl < von || zahl > bis){
+            isValid = false;
+        }
+        return isValid;
+    }
 }
 
