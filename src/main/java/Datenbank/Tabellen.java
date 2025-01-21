@@ -1,6 +1,8 @@
 package Datenbank;
 
 public class Tabellen {
+    /* Hinweis: In den Check-Bedingungen der Datenbank können keine dynamischen Werte geprüft werden.
+     Daher werden diese in der Programmlogik geprüft, aber nicht zusätzlich auf Ebene der Datenbank. */
 
     // Stammdaten Personen
     static String createTablePersonen = "CREATE TABLE IF NOT EXISTS Personen" +
@@ -34,10 +36,7 @@ public class Tabellen {
             "Kassenbestand real NULL," +
             "PRIMARY KEY(ID)," +
             "UNIQUE(Runde, AktieISIN)," +
-            "CONSTRAINT fk_Aktie FOREIGN KEY (AktieISIN) REFERENCES Aktien (ISIN)," +
-            "CONSTRAINT check_Aktienanzahl CHECK ((Runde > 0 AND Aktienanzahl = 100) OR Runde = 0)," +
-            "CONSTRAINT check_Aktienkurs CHECK (Aktienkurs >= 10)," +
-            "CONSTRAINT check_Kassenbestand CHECK ((Runde > 0 AND Kassenbestand >= 0 AND Kassenbestand <= 100000) OR Runde = 0)" +
+            "CONSTRAINT fk_Aktie FOREIGN KEY (AktieISIN) REFERENCES Aktien (ISIN)" +
             ")";
 
     // Bewegungsdaten - Kapitel der Personen pro Runde

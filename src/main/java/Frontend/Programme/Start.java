@@ -137,6 +137,8 @@ public class Start extends JPanel {
             @Override
             public void actionPerformed(ActionEvent e) {
                 // Ermittlung der aktuellen Runden
+                Integer existsStartkapital = SQLSpiel.getOneInteger("SELECT COUNT(*) FROM Kapitalverlauf");
+                Integer existsStartkurs = SQLSpiel.getOneInteger("SELECT COUNT(*) FROM Aktienverlauf");
                 Integer rundeTransaktionen = SQLSpiel.getOneInteger("SELECT Runde FROM Transaktionen " +
                         "ORDER BY Runde DESC LIMIT 1");
                 Integer rundeAktienverlauf = SQLSpiel.getOneInteger("SELECT Runde FROM Aktienverlauf " +
@@ -144,18 +146,18 @@ public class Start extends JPanel {
 
                 System.out.println("Runde Transaktionen: " + rundeTransaktionen + " Aktienverlauf: " + rundeAktienverlauf);
 
-                if(rundeTransaktionen == 0 || rundeAktienverlauf == 0) {
-                    if(rundeTransaktionen == 0) {
+                if (existsStartkapital == 0 || existsStartkurs == 0){
+                    if(existsStartkapital == 0) {
                         errorMessages.add("Bitte Startkapital erfassen.");
                     }
-                    if(rundeAktienverlauf == 0) {
+                    if(existsStartkurs == 0) {
                         errorMessages.add("Bitte Startkurse erfassen.");
                     }
-                } else if (rundeTransaktionen != rundeAktienverlauf) {
-                    if (rundeTransaktionen < rundeAktienverlauf) {
+                } else if (rundeTransaktionen != rundeAktienverlauf || rundeTransaktionen == 0 || rundeAktienverlauf == 0) {
+                    if (rundeTransaktionen > rundeAktienverlauf || rundeAktienverlauf == 0) {
                         errorMessages.add("Bitte Unternehmenswerte (Aktienkurs und Kassenbestand) erfassen.");
                     }
-                    if (rundeTransaktionen > rundeAktienverlauf) {
+                    if (rundeTransaktionen < rundeAktienverlauf || rundeTransaktionen == 0) {
                         errorMessages.add("Bitte Käufe erfassen.");
                     }
                 } else if (rundeTransaktionen == rundeAktienverlauf){
@@ -184,6 +186,7 @@ public class Start extends JPanel {
 
                     if(errorMessages.isEmpty()){
                         // Prüfung, zu jeder gekauften Aktie liegt ein Aktienkurs und Kassenbestand vor
+                        // TODO: Prüfen, auch ein Kassenbestand von 0 ist gültig.
                         Integer anzahlAktienOhneWertRunde = SQLSpiel.getOneInteger("SELECT " +
                                 "COUNT(CASE WHEN aktienverlauf.kassenbestand IS NULL THEN 1 END) " +
                                 "FROM Transaktionen LEFT JOIN Aktienverlauf ON " +
@@ -200,12 +203,19 @@ public class Start extends JPanel {
                         }
                     }
 
+                    // Berechnung der Dividende
                     if(errorMessages.isEmpty()){
-                        // Berechnung der Dividende
+                        // Aktien abspeichern
                         ArrayList<String> AktienRunde =  SQLSpiel.getArrayListeString("SELECT Aktieisin " +
                                 "FROM Transaktionen " +
                                 "WHERE Runde = (SELECT MAX(Runde) FROM Transaktionen) " +
                                 "GROUP BY Aktieisin ORDER BY Aktieisin ASC");
+
+                        // Einstellungen holen
+                        Float firstDividende = EinstellungenTransaktionenListener.getEinstellungFloat("firstDividende");
+                        Float secondDividende = EinstellungenTransaktionenListener.getEinstellungFloat("secondDividende");
+
+                        // Für jede Aktie die Berechnung durchgehen
                         for (String aktieisin : AktienRunde) {
                             Integer anzahlPersonenErsterPlatz = SQLSpiel.getOneInteger("SELECT COUNT(*) " +
                                     "FROM Transaktionen " +
@@ -243,6 +253,12 @@ public class Start extends JPanel {
                                     "ORDER BY Aktienanzahl DESC " +
                                     "LIMIT 1");
 
+                            // Kassenbestand holen
+                            Float kassenbestandAktie = SQLSpiel.getOneFloat("SELECT Kassenbestand " +
+                                    "FROM Aktienverlauf " +
+                                    "WHERE Runde = (SELECT MAX(Runde) FROM Aktienverlauf) " +
+                                    "AND Aktieisin = " + "'" + aktieisin + "'");
+
                             // Abspeichern der Personen mit dem ersten Platz
                             ArrayList<Integer> PersonenAktieErsterPlatz = SQLSpiel.getArrayListeInteger("SELECT personid " +
                                     "FROM Transaktionen " +
@@ -250,82 +266,95 @@ public class Start extends JPanel {
                                     "AND Aktieisin = " + "'" + aktieisin + "'" + " " +
                                     "AND Runde = (SELECT MAX(Runde) FROM Transaktionen)");
 
-                            // Daten für die Berechnung abspeichern
-                            Float kassenbestandAktie = SQLSpiel.getOneFloat("SELECT Kassenbestand " +
-                                    "FROM Aktienverlauf " +
-                                    "WHERE Runde = (SELECT MAX(Runde) FROM Aktienverlauf) " +
-                                    "AND Aktieisin = " + "'" + aktieisin + "'");
+                            // Abspeichern der Personen mit dem zweiten Platz
+                            ArrayList<Integer> PersonenAktieZweiterPlatz = SQLSpiel.getArrayListeInteger("SELECT personid " +
+                                        "FROM Transaktionen " +
+                                        "WHERE Aktienanzahl = " + "'" + aktienkursZweiterPlatz + "'" + " " +
+                                        "AND Aktieisin = " + "'" + aktieisin + "'" + " " +
+                                        "AND Runde = (SELECT MAX(Runde) FROM Transaktionen)");
 
-                            // Einstellungen holen
-                            Float firstDividende = EinstellungenTransaktionenListener.getEinstellungFloat("firstDividende");
-                            Float secondDividende = EinstellungenTransaktionenListener.getEinstellungFloat("secondDividende");
+                            // Abspeichern der restlichen Personen
+                            ArrayList<Integer> PersonenAktieRestlicherPlatz = SQLSpiel.getArrayListeInteger("SELECT personid " +
+                                    "FROM Transaktionen " +
+                                    "WHERE Aktienanzahl <> " + "'" + aktienkursZweiterPlatz + "'" + " " +
+                                    "AND Aktienanzahl <> " + "'" + aktienkursErsterPlatz + "'" + " " +
+                                    "AND Aktieisin = " + "'" + aktieisin + "'" + " " +
+                                    "AND Runde = (SELECT MAX(Runde) FROM Transaktionen)");
 
                             System.out.println("Aktien aus Arrayliste: " + aktieisin + "   " +
-                                    " Erster Platz Personen: " + anzahlPersonenErsterPlatz + " Wert: " + aktienkursErsterPlatz +  "   " +
+                                    " Erster Platz Personen: " + anzahlPersonenErsterPlatz + " Wert: " + aktienkursErsterPlatz + "   " +
                                     " Zweiter Platz Personen: " + anzahlPersonenZweiterPlatz + " Wert: " + aktienkursZweiterPlatz + "   " +
                                     " Kassenbestand: " + kassenbestandAktie +
                                     " Dividende erste: " + firstDividende + " zweite: " + secondDividende);
 
-                            // Prüfung: wie oft kommt die Aktienanzahl vom ersten Platz vor?
-                            if(anzahlPersonenErsterPlatz > 1) {
-                                Float dividendeErster = Float.valueOf(kassenbestandAktie / 100 * (firstDividende + secondDividende) / anzahlPersonenErsterPlatz);
+                            Float dividendeGenerell = 0F; // 10% vom Aktienwert
+                            Float dividendeSonderErster = 0F;
+                            Float dividendeSonderZweiter = 0F;
 
-                                System.out.println("Kassenbestand: " + kassenbestandAktie +
-                                        " Prozentzahl: " + (firstDividende + secondDividende) +
-                                        " Anzahl: " + anzahlPersonenErsterPlatz + " Ergebnis: " + dividendeErster);
-
-                                // TODO: prüfen, ob Einfügen in eigener Methode möglich
-                                for (Integer personid : PersonenAktieErsterPlatz) {
-                                    SQL.table("UPDATE Transaktionen " +
-                                            "SET Dividende = 0" + dividendeErster + " " +
-                                            "WHERE Personid = " + personid + " " +
-                                            "AND Aktieisin = " + "'" + aktieisin + "'" + " " +
-                                            "AND Runde = (SELECT MAX(Runde) FROM Transaktionen) ");
-                                }
-
-                                PersonenAktieErsterPlatz.clear();
-                            } else if (anzahlPersonenErsterPlatz == 1){
-                                Float dividendeErster = Float.valueOf(kassenbestandAktie / 100 * firstDividende);
-
-                                System.out.println("Kassenbestand: " + kassenbestandAktie +
-                                        " Prozentzahl: " + firstDividende +
-                                        " Anzahl: " + anzahlPersonenErsterPlatz + " Ergebnis: " + dividendeErster);
-
-                                // TODO: prüfen, ob Einfügen in eigener Methode möglich
-                                for (Integer personid : PersonenAktieErsterPlatz) {
-                                    SQL.table("UPDATE Transaktionen " +
-                                            "SET Dividende = 0" + dividendeErster + " " +
-                                            "WHERE Personid = " + personid + " " +
-                                            "AND Aktieisin = " + "'" + aktieisin + "'" + " " +
-                                            "AND Runde = (SELECT MAX(Runde) FROM Transaktionen) ");
-                                }
-
-                                PersonenAktieErsterPlatz.clear();
-
-                                if (anzahlPersonenZweiterPlatz != 0) {
-                                    // Abspeichern der Personen mit dem zeiten Platz
-                                    ArrayList<Integer> PersonenAktieZweiterPlatz = SQLSpiel.getArrayListeInteger("SELECT personid " +
-                                            "FROM Transaktionen " +
-                                            "WHERE Aktienanzahl = " + "'" + aktienkursZweiterPlatz + "'" + " " +
-                                            "AND Aktieisin = " + "'" + aktieisin + "'" + " " +
-                                            "AND Runde = (SELECT MAX(Runde) FROM Transaktionen)");
-
-                                    Float dividendeZweiter = Float.valueOf(kassenbestandAktie / 100 * (secondDividende) / anzahlPersonenZweiterPlatz);
-
-                                    System.out.println("Kassenbestand: " + kassenbestandAktie +
-                                            " Prozentzahl: " + secondDividende +
-                                            " Anzahl: " + anzahlPersonenZweiterPlatz + " Ergebnis: " + dividendeZweiter);
-
-                                    // TODO: prüfen, ob Einfügen in eigener Methode möglich
-                                    for (Integer personid : PersonenAktieZweiterPlatz) {
-                                        SQL.table("UPDATE Transaktionen " +
-                                                "SET Dividende = 0" + dividendeZweiter + " " +
-                                                "WHERE Personid = " + personid + " " +
-                                                "AND Aktieisin = " + "'" + aktieisin + "'" + " " +
-                                                "AND Runde = (SELECT MAX(Runde) FROM Transaktionen) ");
+                            // Berechnung der Sonderdividende, aber nur wenn der Kassenbestand größer 0 ist
+                            if(kassenbestandAktie > 0) {
+                                // Prüfung: wie oft kommt die Aktienanzahl vom ersten und zweiten Platz vor?
+                                if (anzahlPersonenErsterPlatz > 1) {
+                                    dividendeSonderErster = Float.valueOf(kassenbestandAktie / 100 * (firstDividende + secondDividende) / anzahlPersonenErsterPlatz);
+                                } else if (anzahlPersonenErsterPlatz == 1) {
+                                    // Gibt es keinen zweiten Platz, bekommt der Erste alles (Dividende erster und zweiter)
+                                    if (anzahlPersonenZweiterPlatz == 0) {
+                                        dividendeSonderErster = Float.valueOf(kassenbestandAktie / 100 * (firstDividende + secondDividende));
+                                        // Meldung ausgeben, dass es nur einen ersten Platz gab.
+                                        errorMessages.add("Achtung: zu der Aktie " + aktieisin + " gab es nur einen ersten Platz.");
+                                    } else {
+                                        dividendeSonderErster = Float.valueOf(kassenbestandAktie / 100 * firstDividende);
+                                        dividendeSonderZweiter = Float.valueOf(kassenbestandAktie / 100 * (secondDividende) / anzahlPersonenZweiterPlatz);
                                     }
                                 }
+                                System.out.println("Kassenbestand: " + kassenbestandAktie +
+                                        " Prozentzahl 1: " + firstDividende + " Prozentzahl 2: " + secondDividende +
+                                        " Anzahl Personen 1: " + anzahlPersonenErsterPlatz +
+                                        " Anzahl Personen 2: " + anzahlPersonenZweiterPlatz +
+                                        " Sonderdividende 1: " + dividendeSonderErster +
+                                        " Sonderdividende 2: " + dividendeSonderZweiter);
                             }
+
+                            // Dividenden updaten
+                            for (Integer personid : PersonenAktieErsterPlatz) {
+                                // TODO: generelle Dividende variabel machen
+                                dividendeGenerell = aktienwertBerechnen(personid) / 100 * 10; // generelle Dividende berechnen
+                                updateDividende(personid, aktieisin, dividendeSonderErster + dividendeGenerell);
+                                /*
+                                SQL.table("UPDATE Transaktionen " +
+                                        "SET Dividende = " + (dividendeSonderErster + dividendeGenerell) + " " +
+                                        "WHERE Personid = " + personid + " " +
+                                        "AND Aktieisin = " + "'" + aktieisin + "'" + " " +
+                                        "AND Runde = (SELECT MAX(Runde) FROM Transaktionen) ");
+
+                                 */
+                            }
+                            PersonenAktieErsterPlatz.clear();
+
+                            for (Integer personid : PersonenAktieZweiterPlatz) {
+                                dividendeGenerell = aktienwertBerechnen(personid) / 100 * 10; // generelle Dividende berechnen
+                                updateDividende(personid, aktieisin, dividendeSonderZweiter + dividendeGenerell);
+                                /*SQL.table("UPDATE Transaktionen " +
+                                        "SET Dividende = " + (dividendeSonderZweiter + dividendeGenerell) + " " +
+                                        "WHERE Personid = " + personid + " " +
+                                        "AND Aktieisin = " + "'" + aktieisin + "'" + " " +
+                                        "AND Runde = (SELECT MAX(Runde) FROM Transaktionen) ");
+
+                                 */
+                            }
+                            PersonenAktieZweiterPlatz.clear();
+
+                            for (Integer personid : PersonenAktieRestlicherPlatz) {
+                                dividendeGenerell = aktienwertBerechnen(personid) / 100 * 10; // generelle Dividende berechnen
+                                updateDividende(personid, aktieisin, dividendeGenerell);
+                                /*SQL.table("UPDATE Transaktionen " +
+                                        "SET Dividende = " + (dividendeGenerell) + " " +
+                                        "WHERE Personid = " + personid + " " +
+                                        "AND Aktieisin = " + "'" + aktieisin + "'" + " " +
+                                        "AND Runde = (SELECT MAX(Runde) FROM Transaktionen) ");
+                                 */
+                            }
+                            PersonenAktieRestlicherPlatz.clear();
                         }
 
                         // Anlegen Datensatz in Tabelle Kapitalverlauf mit dem aktuellen Spielstand
@@ -357,6 +386,14 @@ public class Start extends JPanel {
         show_spielstand.addActionListener(spielstand);
     }
 
+    private static void updateDividende(Integer personid, String aktieisin, Float dividende) {
+        SQL.table("UPDATE Transaktionen " +
+                "SET Dividende = " + dividende + " " +
+                "WHERE Personid = " + personid + " " +
+                "AND Aktieisin = " + "'" + aktieisin + "'" + " " +
+                "AND Runde = (SELECT MAX(Runde) FROM Transaktionen) ");
+    }
+
     private static void updateKapital(){
         // Abspeichern vom Kapitalverlauf
         ArrayList<ElementKapitalverlauf> KapitalverlaufList = new ArrayList<>();
@@ -373,20 +410,13 @@ public class Start extends JPanel {
                     "WHERE Runde = (SELECT MAX(Runde) FROM Transaktionen) " +
                     "AND Personid = " + "'" + personid + "'" + " " +
                     "GROUP BY Personid");
-            Float aktienwert = SQLSpiel.getOneFloat("SELECT " +
-                    "SUM((Transaktionen.Aktienanzahl * Aktienverlauf.Aktienkurs)) " +
-                    "FROM Transaktionen JOIN Aktienverlauf " +
-                    "ON Transaktionen.Aktieisin = Aktienverlauf.Aktieisin " +
-                    "AND Transaktionen.Runde = Aktienverlauf.Runde " +
-                    "WHERE Transaktionen.Runde = (SELECT MAX(Transaktionen.Runde) FROM Transaktionen) " +
-                    "AND Transaktionen.Personid = " + "'" + personid + "'");
+            Float aktienwert = aktienwertBerechnen(personid);
 
             // Um Exceptions zu verhindern
             if (dividende == null) dividende = 0f;
             if (aktienwert == null) aktienwert = 0f;
 
-            // Aktienwert wird um 10% erhöht
-            Float summe = dividende + (aktienwert / 100 * 110);
+            Float summe = dividende + aktienwert;
 
             // Elemente der Liste hinzufügen
             ElementKapitalverlauf kapitalverlauf = new ElementKapitalverlauf(runde, personid, summe);
@@ -396,5 +426,16 @@ public class Start extends JPanel {
         // Insert durchführen
         SQLKapitalverlauf.selectInsertTableKapitalverlauf(KapitalverlaufList);
         PersonenRunde.clear();
+    }
+
+    public static Float aktienwertBerechnen(Integer personid){
+        Float aktienwert = SQLSpiel.getOneFloat("SELECT " +
+                "SUM((Transaktionen.Aktienanzahl * Aktienverlauf.Aktienkurs)) " +
+                "FROM Transaktionen JOIN Aktienverlauf " +
+                "ON Transaktionen.Aktieisin = Aktienverlauf.Aktieisin " +
+                "AND Transaktionen.Runde = Aktienverlauf.Runde " +
+                "WHERE Transaktionen.Runde = (SELECT MAX(Transaktionen.Runde) FROM Transaktionen) " +
+                "AND Transaktionen.Personid = " + "'" + personid + "'");
+        return aktienwert;
     }
 }
