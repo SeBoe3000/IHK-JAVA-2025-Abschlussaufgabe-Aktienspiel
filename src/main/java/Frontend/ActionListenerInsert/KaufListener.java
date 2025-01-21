@@ -60,11 +60,13 @@ public class KaufListener extends MyActionListenerInsert {
             errorMessages.add("Das Element befindet sich bereits in der Datenbank. Bitte einen anderen Datensatz angeben.");
         }
 
-        // TODO: Prüfung nicht mehr als 14 Aktien oder Personen in Runde verwendet.
+        // TODO: Prüfung nicht mehr als 14 Aktien oder Personen in Runde verwendet. (Liste + Datenbank)
 
-        // TODO: Prüfung eine Person hat maximal 30 Anteile erworben (Liste und Datenbank miteinbeziehen in Rechnung)
+        // TODO: Prüfung eine Person hat maximal 30 Anteile erworben (Liste + Datenbank)
 
-        // TODO: Prüfung eine Person hat nicht mehr investiert, die das Kapital aus der Runde davor hergegeben hat
+        // TODO: Prüfung eine Person hat nicht mehr investiert, die das Kapital aus der Runde davor hergegeben hat (Liste + Datenbank)
+
+        // TODO: Prüfung, noch Aktien vom Unternehmen vorhanden (Liste + Datenbank) - Maximale Anzahl Aktien pro Unternehmen
 
     }
 

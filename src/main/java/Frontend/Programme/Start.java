@@ -385,7 +385,8 @@ public class Start extends JPanel {
             if (dividende == null) dividende = 0f;
             if (aktienwert == null) aktienwert = 0f;
 
-            Float summe = dividende + aktienwert;
+            // Aktienwert wird um 10% erhöht
+            Float summe = dividende + (aktienwert / 100 * 110);
 
             // Elemente der Liste hinzufügen
             ElementKapitalverlauf kapitalverlauf = new ElementKapitalverlauf(runde, personid, summe);

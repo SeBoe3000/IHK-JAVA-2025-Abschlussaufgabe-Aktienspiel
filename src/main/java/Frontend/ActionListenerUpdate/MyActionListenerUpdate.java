@@ -52,20 +52,29 @@ public abstract class MyActionListenerUpdate implements ActionListener{
     private void abbrechen(){
         try{
             fillFields();
-            System.out.println("checkChanged: " + checkChanged());
+            // System.out.println("checkChanged: " + checkChanged());
         } catch (Exception e) {
             checkfields(); // Fehlermeldungen zu geprüften Feldern hochbringen
         }
 
         if (checkChanged()) {
             Boolean action = Interaction.abbrechen();
+            Boolean stop = true;
             if(action == true) {
-                // Bei Ja die Daten updaten
-                insertUpdateEinstellungen();
-                Interaction.einstellungChanged(); // Meldung über erfolgreiches ändern
+                checkfields();
+                if(errorMessages.isEmpty()){
+                    // Bei Ja die Daten updaten, sofern kein Fehler
+                    insertUpdateEinstellungen();
+                    Interaction.einstellungChanged(); // Meldung über erfolgreiches ändern
+                } else {
+                    Checks.showError(errorMessages); // Ausgabe Fehlermeldung(en)
+                    stop = false;
+                }
             }
-            // Unabhängig von Ja, Nein oder X das Fenster schließen
-            backToStart();
+            // Unabhängig von Ja, Nein oder X das Fenster schließen (sofern kein Fehler vorhanden)
+            if(stop) {
+                backToStart();
+            }
         } else {
             backToStart();
         }

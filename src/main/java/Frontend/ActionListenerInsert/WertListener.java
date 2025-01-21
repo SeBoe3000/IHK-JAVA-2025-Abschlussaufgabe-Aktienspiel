@@ -5,11 +5,9 @@ import Datenbank.SQL;
 import Datenbank.SQLAktienverlauf;
 import Frontend.ActionListenerUpdate.EinstellungenAktienListener;
 import Frontend.ActionListenerUpdate.EinstellungenAktienverlaufListener;
-import Frontend.ActionListenerUpdate.EinstellungenPersonenListener;
 import Frontend.Cards;
 import Frontend.Checks.Checks;
 import Frontend.Programme.Bewegungsdaten.Wert;
-import Frontend.Programme.Stammdaten.Startkurs;
 import Frontend.Programme.Start;
 
 import javax.swing.*;
@@ -33,10 +31,13 @@ public class WertListener extends MyActionListenerInsert {
         Checks.checkField(Wert.aktie, "isValidString", "Bitte eine gültige ISIN angeben.", errorMessages);
         Checks.checkFieldLenght(Wert.aktie, 12,12,"isValidStringLaenge", "Die ISIN muss 12 Stellen lang sein.", errorMessages);
         Checks.checkField(Wert.kurs, "isValidFloat", "Bitte einen gültigen Kurs angeben.", errorMessages);
+        Checks.checkFieldLenghtFloat(Wert.kurs, EinstellungenAktienverlaufListener.getEinstellungFloat("minAktienkurs"), Float.MAX_VALUE,
+                "isValidFloatVonBis", "Der Kurs muss mindestens " +
+                        EinstellungenAktienverlaufListener.getEinstellungFloat("minAktienkurs") +  " sein.", errorMessages);
         Checks.checkField(Wert.kassenbestand, "isValidFloat", "Bitte einen gültigen Kassenbestand angeben.", errorMessages);
         Checks.checkFieldLenghtFloat(Wert.kassenbestand, EinstellungenAktienverlaufListener.getEinstellungFloat("minDividendeRunde"),
                 EinstellungenAktienverlaufListener.getEinstellungFloat("maxDividendeRunde"),
-                "isValidFloatVonBis", "Der Kurs muss mindestens " +
+                "isValidFloatVonBis", "Der Kassenbestand muss mindestens " +
                         EinstellungenAktienverlaufListener.getEinstellungFloat("minDividendeRunde") +
                         " und maximal " + EinstellungenAktienverlaufListener.getEinstellungFloat("maxDividendeRunde") +
                         " sein.", errorMessages);

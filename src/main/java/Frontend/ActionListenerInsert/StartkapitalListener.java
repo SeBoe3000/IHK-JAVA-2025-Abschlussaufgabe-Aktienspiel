@@ -25,7 +25,7 @@ public class StartkapitalListener extends MyActionListenerInsert {
 
     @Override
     protected void checkFields() {
-        Checks.checkField(Startkapital.person, "isValidInteger", "Bitte eine gültige Zahl im Fled Person (ID) angeben.", errorMessages);
+        Checks.checkField(Startkapital.person, "isValidInteger", "Bitte eine gültige Zahl im Feld Person (ID) angeben.", errorMessages);
         Checks.checkField(Startkapital.betrag, "isValidFloat", "Bitte einen gültigen Betrag angeben.", errorMessages);
     }
 

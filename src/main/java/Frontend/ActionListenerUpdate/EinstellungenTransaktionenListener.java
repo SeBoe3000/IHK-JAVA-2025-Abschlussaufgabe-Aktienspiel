@@ -100,6 +100,9 @@ public class EinstellungenTransaktionenListener extends MyActionListenerUpdate {
         Checks.checkFieldVonBis(EinstellungenTransaktionen.aktieRunde, "isValidIntegerNull", "Bitte eine gültige Anzahl an Aktien pro Runde angeben.", errorMessages);
         Checks.checkField(EinstellungenTransaktionen.firstDividende, "isValidFloatNull", "Bitte einen gültigen Prozentsatz für den ersten Platz angeben.", errorMessages);
         Checks.checkField(EinstellungenTransaktionen.secondDividende, "isValidFloatNull", "Bitte einen gültigen Prozentsatz für den zweiten Platz angeben.", errorMessages);
+        if((Float.valueOf(EinstellungenTransaktionen.firstDividende.getTextfield()) + Float.valueOf(EinstellungenTransaktionen.secondDividende.getTextfield())) > 100){
+            errorMessages.add("Die Dividende für den ersten und zweiten Platz zusammen dürfen nicht mehr als 100% ergeben.");
+        }
     }
 
     @Override
