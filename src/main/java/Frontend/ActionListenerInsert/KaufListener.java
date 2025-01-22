@@ -4,6 +4,7 @@ import Backend.ElementTransaktionen;
 import Datenbank.SQL;
 import Datenbank.SQLSpiel;
 import Datenbank.SQLTransaktionen;
+import Frontend.ActionListenerUpdate.EinstellungenAktienListener;
 import Frontend.ActionListenerUpdate.EinstellungenTransaktionenListener;
 import Frontend.Cards;
 import Frontend.Checks.Checks;
@@ -75,27 +76,26 @@ public class KaufListener extends MyActionListenerInsert {
                     EinstellungenTransaktionenListener.getEinstellungInteger("maxPersonRunde") +
                     " Aktien an der Runde teilnehmen.");
         }
-
-
-        Integer anzahlAktienDB = 0;
-        Integer anzahlAktienListe = 0;
-
-        Integer startkapital = 0;
-        Integer kaufDB = 0;
-        Integer kaufListe = 0;
-
-
-
-        Integer anzahlAktienUnternehmenDB = 0;
-        Integer anzahlAktienUnternehmenListe = 0;
-
-        // TODO: Prüfung eine Person hat maximal 30 Anteile erworben (Liste + Datenbank)
-
-        // TODO: Prüfung eine Person hat nicht mehr investiert, die das Kapital aus der Runde davor hergegeben hat (Liste + Datenbank)
-        // TODO: hier auch Prüfung Startkapital ist vorhanden.
-
-        // TODO: Prüfung, noch Aktien vom Unternehmen vorhanden (Liste + Datenbank) - Maximale Anzahl Aktien pro Unternehmen
-
+        // Prüfung eine Person darf nur eine gewisse Anzahl an Aktien kaufen
+        if(anzahlAktienanzahlPerson() > EinstellungenTransaktionenListener.getEinstellungInteger("maxAktienPersonRunde")){
+            errorMessages.add("Eine Person darf maximal " +
+                    EinstellungenTransaktionenListener.getEinstellungInteger("maxAktienPersonRunde") +
+                    " pro Runde gekauft werden. Mit dem aktuellen Kauf sind es aber " +
+                    anzahlAktienanzahlPerson() + " Aktien. Bitte die Anzahl korrigieren.");
+        }
+        // Prüfung es kann nur eine gewisse Anzahl an Unternehmensaktien gekauft werden
+        if(anzahlAktienanzahlUnternehmen() > EinstellungenAktienListener.getEinstellungInteger("maxAnzahlAktien")){
+            errorMessages.add("Von einem Unternehmen dürfen maximal " +
+                    EinstellungenAktienListener.getEinstellungInteger("maxAnzahlAktien") +
+                    " Aktien gekauft werden. Mit dem aktuellen Kauf sind es aber " +
+                    anzahlAktienanzahlPerson() + " Aktien. Bitte die Anzahl korrigieren.");
+        }
+        // Prüfung eine Person kann nur so viel Kaufen, bis das Startkapital aufgebraucht ist.
+        if(aktienkauf() > startkapital()) {
+            errorMessages.add("Die Person hat ein Startkapital von " + startkapital() +
+                    " und mit dem aktuellen Kauf wären es " + aktienkauf() +
+                    " . Bitte weniger kaufen.");
+        }
     }
 
     // Prüfung, ob der Wert bereits in der Liste vorhanden ist
@@ -112,19 +112,20 @@ public class KaufListener extends MyActionListenerInsert {
 
     protected Integer anzahlAktien() {
         Set<String> aktien = new HashSet<>();
+        Integer runde = Start.getAktuelleRunde();
         // Summe Aktien aus Datenbank ermitteln
-        int aktienDB = SQLSpiel.getOneInteger("SELECT COUNT(DISTINCT AktienISIN) FROM Transaktionen");
-
+        int aktienDB = SQLSpiel.getOneInteger("SELECT COUNT(DISTINCT AktienISIN) FROM Transaktionen " +
+                "WHERE Runde = " + runde);
         // Aktien, die nicht in Datenbank aber in bisherigen Liste sind dem Set dazuzählen
         for (ElementTransaktionen transaktion : TransaktionenList) {
             String aktieListe = transaktion.getAktie();
             int aktienListe = SQLSpiel.getOneInteger("SELECT COUNT(*) FROM Transaktionen " +
-                    "WHERE AktieISIN = " + "'" + aktieListe + "'");
+                    "WHERE AktieISIN = " + "'" + aktieListe + "'" + " " +
+                    "AND Runde = " + runde);
             if (aktienListe == 0) {
                 aktien.add(aktieListe);
             }
         }
-
         // Eingabe aus aktuellen Programm dazuzählen, wenn nicht in Datenbank oder Liste vorhanden
         boolean aktieNotInListe = true;
         for (ElementTransaktionen transaktion : TransaktionenList) {
@@ -135,35 +136,35 @@ public class KaufListener extends MyActionListenerInsert {
         }
         if (aktieNotInListe) {
             int aktieEingabeDB = SQLSpiel.getOneInteger("SELECT COUNT(*) FROM Transaktionen " +
-                    "WHERE AktieISIN = " + "'" + eingabeAktie + "'");
+                    "WHERE AktieISIN = " + "'" + eingabeAktie + "'" + " " +
+                    "AND Runde = " + runde);
             if (aktieEingabeDB == 0) {
                 aktien.add(eingabeAktie); // Eingabeaktie hinzufügen
             }
         }
-
         // Summe Personen berechnen
         int anzahlAktien = aktienDB + aktien.size();
         System.out.println("Anzahl Aktien: " + anzahlAktien);
         aktien.clear();
-
         return anzahlAktien;
     }
 
     protected Integer anzahlPersonen() {
         Set<String> personen = new HashSet<>();
+        Integer runde = Start.getAktuelleRunde();
         // Summe Personen aus Datenbank ermitteln
-        int personenDB = SQLSpiel.getOneInteger("SELECT COUNT(DISTINCT PersonID) FROM Transaktionen");
-
+        int personenDB = SQLSpiel.getOneInteger("SELECT COUNT(DISTINCT PersonID) FROM Transaktionen " +
+                "WHERE Runde = " + runde);
         // Personen, die nicht in Datenbank aber in bisherigen Liste sind dem Set dazuzählen
         for (ElementTransaktionen transaktion : TransaktionenList) {
             int personListe = transaktion.getPerson();
             int personenListe = SQLSpiel.getOneInteger("SELECT COUNT(*) FROM Transaktionen " +
-                    "WHERE PersonID = " + "'" + personListe + "'");
+                    "WHERE PersonID = " + personListe + " " +
+                    "AND Runde = " + runde);
             if (personenListe == 0) {
                 personen.add(String.valueOf(personListe));
             }
         }
-
         // Eingabe aus aktuellen Programm dazuzählen, wenn nicht in Datenbank oder Liste vorhanden
         boolean personNotInListe = true;
         for (ElementTransaktionen transaktion : TransaktionenList) {
@@ -174,18 +175,89 @@ public class KaufListener extends MyActionListenerInsert {
         }
         if (personNotInListe) {
             int personEingabeDB = SQLSpiel.getOneInteger("SELECT COUNT(*) FROM Transaktionen " +
-                    "WHERE PersonID = " + "'" + eingabePersonID + "'");
+                    "WHERE PersonID = " + eingabePersonID + " " +
+                    "AND Runde = " + runde );
             if (personEingabeDB == 0) {
                 personen.add(String.valueOf(eingabePersonID)); // Eingabeperson hinzufügen
             }
         }
-
         // Summe Personen berechnen
         int anzahlPersonen = personenDB + personen.size();
         System.out.println("Anzahl Personen: " + anzahlPersonen);
         personen.clear();
-
         return anzahlPersonen;
+    }
+
+    protected Integer anzahlAktienanzahlPerson() {
+        Integer runde = Start.getAktuelleRunde();
+        // Summe Aktienanzahl aus Datenbank ermitteln
+        int aktienanzahlDB = SQLSpiel.getOneInteger("SELECT COUNT(DISTINCT Aktienanzahl) FROM Transaktionen " +
+                "WHERE Runde = " + runde + " " +
+                "AND PersonID = " + eingabePersonID);
+        // Aktienanzahl aus Liste dazuzählen
+        int aktienanzahlListe = 0;
+        for (ElementTransaktionen transaktion : TransaktionenList) {
+            if (transaktion.getPerson() == eingabePersonID) {
+                aktienanzahlListe += transaktion.getAnzahl();
+            }
+        }
+        // Summe Aktienanzahl berechnen (mit Eingabe)
+        int aktienanzahl = aktienanzahlDB + aktienanzahlListe + eingabeAnzahl;
+        System.out.println("Anzahl Aktienanzahl Person: " + aktienanzahl);
+        return aktienanzahl;
+    }
+
+    protected Integer anzahlAktienanzahlUnternehmen() {
+        Integer runde = Start.getAktuelleRunde();
+        // Summe Aktienanzahl aus Datenbank ermitteln
+        int aktienanzahlDB = SQLSpiel.getOneInteger("SELECT COUNT(DISTINCT Aktienanzahl) FROM Transaktionen " +
+                "WHERE Runde = " + runde + " " +
+                "AND AktieISIN = " + "'" + eingabeAktie + "'");
+        // Aktienanzahl aus Liste dazuzählen
+        int aktienanzahlListe = 0;
+        for (ElementTransaktionen transaktion : TransaktionenList) {
+            if (transaktion.getAktie() == eingabeAktie) {
+                aktienanzahlListe += transaktion.getAnzahl();
+            }
+        }
+        // Summe Aktienanzahl berechnen (mit Eingabe)
+        int aktienanzahl = aktienanzahlDB + aktienanzahlListe + eingabeAnzahl;
+        System.out.println("Anzahl Aktienanzahl Unternehmen: " + aktienanzahl);
+        return aktienanzahl;
+    }
+
+    protected Float aktienkauf(){
+        Integer runde = Start.getAktuelleRunde();
+        // Wert Datenbank
+        float aktienkaufDatenbank = Start.aktienwertBerechnen(eingabePersonID, 1);
+        // Wert Liste
+        float aktienkaufListe = 0F;
+        for (ElementTransaktionen transaktion : TransaktionenList) {
+            if (transaktion.getPerson() == eingabePersonID) {
+                Integer aktienanzahlListe = transaktion.getAnzahl();
+                String aktie = transaktion.getAktie();
+                Float aktienwertListe = SQLSpiel.getOneFloat("SELECT Aktienkurs " +
+                                "FROM Aktienverlauf " +
+                                "WHERE Runde = " + (runde - 1) + " " +
+                                "AND AktieISIN = " + "'" + eingabeAktie + "'");
+                aktienkaufListe += (aktienanzahlListe * aktienwertListe);
+            }
+        }
+        // Wert Eingabe
+        float aktienkaufEingabe = eingabeAnzahl * SQLSpiel.getOneFloat("SELECT Aktienkurs " +
+                "FROM Aktienverlauf " +
+                "WHERE Runde = " + (runde - 1) + " " +
+                "AND AktieISIN = " + "'" + eingabeAktie + "'");
+        // Summe
+        float aktienkaufSumme = aktienkaufDatenbank + aktienkaufListe + aktienkaufEingabe;
+        return aktienkaufSumme;
+    }
+
+    protected Float startkapital(){
+        float startkapital = SQLSpiel.getOneInteger("SELECT Kapital FROM Kapitalverlauf " +
+                "WHERE Runde = " + (Start.getAktuelleRunde() - 1) + " " +
+                "AND PersonID = " + eingabePersonID);
+        return startkapital;
     }
 
     @Override
