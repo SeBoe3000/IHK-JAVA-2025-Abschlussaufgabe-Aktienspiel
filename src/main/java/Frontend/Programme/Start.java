@@ -2,11 +2,13 @@ package Frontend.Programme;
 
 import Backend.ElementKapitalverlauf;
 import Datenbank.SQL;
+import Datenbank.SQLEinstellungen;
 import Datenbank.SQLKapitalverlauf;
 import Datenbank.SQLSpiel;
 import Frontend.ActionListenerUpdate.EinstellungenTransaktionenListener;
 import Frontend.Cards;
 import Frontend.Checks.Checks;
+import Frontend.Komponenten.Interaction;
 
 import javax.swing.*;
 import java.awt.*;
@@ -15,9 +17,6 @@ import java.awt.event.ActionListener;
 import java.util.ArrayList;
 
 public class Start extends JPanel {
-    // Zum Zählen der Runden
-    public static Integer runde = 1;
-
     // Zum Speichern der Fehlermeldungen
     ArrayList<String> errorMessages = new ArrayList<>();
 
@@ -317,8 +316,8 @@ public class Start extends JPanel {
 
                             // Dividenden updaten
                             for (Integer personid : PersonenAktieErsterPlatz) {
-                                // TODO: generelle Dividende variabel machen
-                                dividendeGenerell = aktienwertBerechnen(personid) / 100 * 10; // generelle Dividende berechnen
+                                // TODO: generelle Dividende variabel machen (Einstellungen)
+                                dividendeGenerell = aktienwertBerechnen(personid, 0) / 100 * 10; // generelle Dividende berechnen
                                 updateDividende(personid, aktieisin, dividendeSonderErster + dividendeGenerell);
                                 /*
                                 SQL.table("UPDATE Transaktionen " +
@@ -332,7 +331,7 @@ public class Start extends JPanel {
                             PersonenAktieErsterPlatz.clear();
 
                             for (Integer personid : PersonenAktieZweiterPlatz) {
-                                dividendeGenerell = aktienwertBerechnen(personid) / 100 * 10; // generelle Dividende berechnen
+                                dividendeGenerell = aktienwertBerechnen(personid, 0) / 100 * 10; // generelle Dividende berechnen
                                 updateDividende(personid, aktieisin, dividendeSonderZweiter + dividendeGenerell);
                                 /*SQL.table("UPDATE Transaktionen " +
                                         "SET Dividende = " + (dividendeSonderZweiter + dividendeGenerell) + " " +
@@ -345,7 +344,7 @@ public class Start extends JPanel {
                             PersonenAktieZweiterPlatz.clear();
 
                             for (Integer personid : PersonenAktieRestlicherPlatz) {
-                                dividendeGenerell = aktienwertBerechnen(personid) / 100 * 10; // generelle Dividende berechnen
+                                dividendeGenerell = aktienwertBerechnen(personid, 0) / 100 * 10; // generelle Dividende berechnen
                                 updateDividende(personid, aktieisin, dividendeGenerell);
                                 /*SQL.table("UPDATE Transaktionen " +
                                         "SET Dividende = " + (dividendeGenerell) + " " +
@@ -360,11 +359,9 @@ public class Start extends JPanel {
                         // Anlegen Datensatz in Tabelle Kapitalverlauf mit dem aktuellen Spielstand
                         updateKapital();
 
-                        // TODO: Runde in Datenbank speichern, ansonsten wird beim erneuten Aufruf wieder von vorne begonnen.
-                        // TODO: dann aber auch eine Funktion zum erneuten Spielen einbinden und die alten Daten löschen.
-                        // TODO: prüfen, ob Runde in Datenbank gespeichert werden muss, oder ob diese aus Transaktionen / Aktienverlauf ermittelt werden sollte. Dafür Programm zwischenzeitlich schließen.
-                        Start.runde++;
-                        System.out.println("Runde: " + Start.runde);
+                        // TODO: Funktion zum erneuten Spielen einbinden und die alten Daten löschen.
+                        // Runde erhöhen
+                        aktuelleRundePlusOne();
                         JOptionPane.showMessageDialog(null, "Runde wurde erfolgreich gespielt.", "Erfolg", JOptionPane.INFORMATION_MESSAGE);
 
                         // TODO: Abfragen für Spielstand ggf. aktualisieren
@@ -403,23 +400,27 @@ public class Start extends JPanel {
                 "FROM Transaktionen " +
                 "WHERE Runde = (SELECT MAX(Runde) FROM Transaktionen) " +
                 "GROUP BY personid");
-        // Für jede Person wird das gesamte Vermögen berechnet aus der Summe der Dividenden und Aktienwerte (Kurs * Anzahl)
+        // Für jede Person wird das gesamte Vermögen berechnet aus:
+        // Startkapital - Kauf Aktien + Verkauf Aktien + Summe Dividende
         for (Integer personid: PersonenRunde) {
+            Float startkapital = SQLSpiel.getOneFloat("SELECT * FROM Kapitalverlauf " +
+                    "WHERE Runde = (SELECT MAX(Runde) FROM Kapitalverlauf) " +
+                   " AND Personid = " + "'" + personid + "'" + " ");
             Float dividende = SQLSpiel.getOneFloat("SELECT SUM(Dividende) " +
                     "FROM Transaktionen " +
                     "WHERE Runde = (SELECT MAX(Runde) FROM Transaktionen) " +
                     "AND Personid = " + "'" + personid + "'" + " " +
                     "GROUP BY Personid");
-            Float aktienwert = aktienwertBerechnen(personid);
+            Float aktienwertKauf = aktienwertBerechnen(personid, 1);
+            Float aktienwertVerkauf = aktienwertBerechnen(personid, 0);
 
             // Um Exceptions zu verhindern
             if (dividende == null) dividende = 0f;
-            if (aktienwert == null) aktienwert = 0f;
 
-            Float summe = dividende + aktienwert;
+            Float summe = startkapital - aktienwertKauf + aktienwertVerkauf + dividende;
 
             // Elemente der Liste hinzufügen
-            ElementKapitalverlauf kapitalverlauf = new ElementKapitalverlauf(runde, personid, summe);
+            ElementKapitalverlauf kapitalverlauf = new ElementKapitalverlauf(getAktuelleRunde(), personid, summe);
             KapitalverlaufList.add(kapitalverlauf);
         }
 
@@ -428,14 +429,33 @@ public class Start extends JPanel {
         PersonenRunde.clear();
     }
 
-    public static Float aktienwertBerechnen(Integer personid){
+    public static Float aktienwertBerechnen(Integer personid, Integer runde){
         Float aktienwert = SQLSpiel.getOneFloat("SELECT " +
                 "SUM((Transaktionen.Aktienanzahl * Aktienverlauf.Aktienkurs)) " +
                 "FROM Transaktionen JOIN Aktienverlauf " +
                 "ON Transaktionen.Aktieisin = Aktienverlauf.Aktieisin " +
                 "AND Transaktionen.Runde = Aktienverlauf.Runde " +
-                "WHERE Transaktionen.Runde = (SELECT MAX(Transaktionen.Runde) FROM Transaktionen) " +
+                "WHERE Transaktionen.Runde = (SELECT MAX(Transaktionen.Runde - " + runde + ") FROM Transaktionen) " +
                 "AND Transaktionen.Personid = " + "'" + personid + "'");
         return aktienwert;
+    }
+
+    public static Integer getAktuelleRunde(){
+        Integer runde = 0;
+        String einstellung = SQLEinstellungen.getEinstellung("RND");
+
+        try {
+            runde = Integer.valueOf(einstellung);
+        } catch (Exception e) {
+            Interaction.noDatabase();
+            // e.printStackTrace();
+        }
+        return runde;
+    }
+
+    public static void aktuelleRundePlusOne(){
+        Integer runde = getAktuelleRunde() + 1;
+        String update = String.valueOf(runde);
+        SQLEinstellungen.setEinstellung("AKT", update);
     }
 }

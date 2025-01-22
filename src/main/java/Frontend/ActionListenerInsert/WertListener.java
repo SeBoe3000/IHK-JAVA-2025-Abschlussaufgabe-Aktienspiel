@@ -58,9 +58,12 @@ public class WertListener extends MyActionListenerInsert {
         }
         // Prüfung, ob Element bereits in Datenbank vorhanden ist
         // Runde wird doppelt angegeben, damit keine neue Methode angelegt werden muss.
-        if(SQL.checkElementAlreadyInDatenbankIntegerIntegerString(Start.runde, Start.runde, eingabeAktieIsin, "Runde", "Runde", "AktieIsin","Aktienverlauf")){
+        if(SQL.checkElementAlreadyInDatenbankIntegerIntegerString(Start.getAktuelleRunde(), Start.getAktuelleRunde(), eingabeAktieIsin, "Runde", "Runde", "AktieIsin","Aktienverlauf")){
             errorMessages.add("Das Element befindet sich bereits in der Datenbank. Bitte einen anderen Datensatz angeben.");
         }
+
+        // TODO: Prüfung Startkurs muss vorhanden sein
+
     }
 
     // Prüfung, ob der Wert bereits in der Liste vorhanden ist
@@ -78,7 +81,7 @@ public class WertListener extends MyActionListenerInsert {
     @Override
     protected void elementInList() {
         // Element der Liste hinzufügen
-        ElementAktienverlauf wert = new ElementAktienverlauf(Start.runde, eingabeAktieIsin, EinstellungenAktienListener.getEinstellungInteger("maxAnzahlAktien"), eingabeKurs, eingabeKassenbestand);
+        ElementAktienverlauf wert = new ElementAktienverlauf(Start.getAktuelleRunde(), eingabeAktieIsin, EinstellungenAktienListener.getEinstellungInteger("maxAnzahlAktien"), eingabeKurs, eingabeKassenbestand);
         WertList.add(wert);
         // Nach Hinzufügen die Felder leeren
         felderLeeren();
