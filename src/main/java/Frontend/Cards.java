@@ -9,8 +9,13 @@ import Frontend.Programme.Start;
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
+import java.io.IOException;
+import java.net.URI;
+import java.net.URISyntaxException;
 
-public class Cards {
+public class Cards implements KeyListener {
     public static final JFrame start = new JFrame("Aktienspiel");
     // CardLayout
     public static final CardLayout cardLayout = new CardLayout();
@@ -32,6 +37,9 @@ public class Cards {
     public static String nameKauf = "Kauf";
     public static String nameWert = "Wert";
     public static String nameSpielstand = "Spielstand";
+
+    // Für die Anzeige der Hilfe
+    public static String currentCard = nameStart;
 
     // Fensterüberschrift
     private static JLabel headline = new JLabel("Aktienspiel", SwingConstants.LEFT);
@@ -76,6 +84,10 @@ public class Cards {
         start.add(headline, BorderLayout.NORTH);  // Header hinzufügen
         start.add(cardPanel, BorderLayout.CENTER);  // Cards Panel hinzufügen
 
+        // KeyListener
+        start.addKeyListener(this);
+        start.setFocusable(true);
+
         // Größe vom Fenster auf Hälte der Bildschirmgröße in die Mitte setzen
         Dimension dim = new Dimension(1920, 1080);
         dim = Toolkit.getDefaultToolkit().getScreenSize();
@@ -91,14 +103,69 @@ public class Cards {
     public static void changeCard(String card) {
         cardLayout.show(cardPanel, card);
         headline.setText(card);
+        currentCard = card; // Speichern der aktuellen Karte für das Öffnen der Hilfe
     }
 
     public void main() {
-        javax.swing.SwingUtilities.invokeLater(new Runnable() {
+        SwingUtilities.invokeLater(new Runnable() {
             @Override
             public void run() {
                 start();
             }
         });
+    }
+
+    @Override
+    public void keyTyped(KeyEvent e) {
+    }
+
+    @Override
+    public void keyPressed(KeyEvent e) {
+    }
+
+    @Override
+    public void keyReleased(KeyEvent e) {
+        // Bei F1 die jeweilige Hilfe aufrufen
+        if (e.getKeyCode() == KeyEvent.VK_F1) {
+            try {
+                URI uri = null;
+                if (nameStart.equals(currentCard)) {
+                    uri = new URI("https://docush.atlassian.net/l/cp/tcuWsoAC");
+                } else if (nameBeispieldatenImportieren.equals(currentCard)) {
+                    uri = new URI("https://docush.atlassian.net/wiki/x/l4AG");
+                } else if (nameStammdaten .equals(currentCard)) {
+                    uri = new URI("https://docush.atlassian.net/wiki/x/tAEB");
+                } else if (nameAktie.equals(currentCard)) {
+                    uri = new URI("https://docush.atlassian.net/wiki/x/FwAL");
+                } else if (namePerson.equals(currentCard)) {
+                    uri = new URI("https://docush.atlassian.net/wiki/x/AQAL");
+                } else if (nameStartkapital.equals(currentCard)) {
+                    uri = new URI("https://docush.atlassian.net/wiki/x/WYAF");
+                } else if (nameStartkurs.equals(currentCard)) {
+                    uri = new URI("https://docush.atlassian.net/wiki/x/CgEC");
+                } else if (nameEinstellungen.equals(currentCard)) {
+                    uri = new URI("https://docush.atlassian.net/wiki/x/_wAC");
+                } else if (nameEinstellungenAktien.equals(currentCard)) {
+                    uri = new URI("https://docush.atlassian.net/wiki/x/UAAH");
+                } else if (nameEinstellungenPersonen.equals(currentCard)) {
+                    uri = new URI("https://docush.atlassian.net/wiki/x/SQIB");
+                } else if (nameEinstellungenAktienverlauf.equals(currentCard)) {
+                    uri = new URI("https://docush.atlassian.net/wiki/x/mgAH");
+                } else if (nameEinstellungenTransaktionen.equals(currentCard)) {
+                    uri = new URI("https://docush.atlassian.net/wiki/x/ZgAL");
+                } else if (nameKauf.equals(currentCard)) {
+                    uri = new URI("https://docush.atlassian.net/wiki/x/kAIB");
+                } else if (nameWert.equals(currentCard)) {
+                    uri = new URI("https://docush.atlassian.net/wiki/x/cwAL");
+                } else if (nameSpielstand.equals(currentCard)) {
+                    uri = new URI("https://docush.atlassian.net/wiki/x/iQEC");
+                }
+                Desktop.getDesktop().browse(uri);
+            } catch (IOException e1){
+                e1.printStackTrace();
+            } catch (URISyntaxException e2) {
+                e2.printStackTrace();
+            }
+        }
     }
 }
