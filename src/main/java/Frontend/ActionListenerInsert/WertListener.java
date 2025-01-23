@@ -3,6 +3,7 @@ package Frontend.ActionListenerInsert;
 import Backend.ElementAktienverlauf;
 import Datenbank.SQL;
 import Datenbank.SQLAktienverlauf;
+import Datenbank.SQLSpiel;
 import Frontend.ActionListenerUpdate.EinstellungenAktienListener;
 import Frontend.ActionListenerUpdate.EinstellungenAktienverlaufListener;
 import Frontend.Cards;
@@ -61,9 +62,10 @@ public class WertListener extends MyActionListenerInsert {
         if(SQL.checkElementAlreadyInDatenbankIntegerIntegerString(Start.getAktuelleRunde(), Start.getAktuelleRunde(), eingabeAktieIsin, "Runde", "Runde", "AktieIsin","Aktienverlauf")){
             errorMessages.add("Das Element befindet sich bereits in der Datenbank. Bitte einen anderen Datensatz angeben.");
         }
-
-        // TODO: Prüfung Startkurs muss vorhanden sein
-
+        if(SQLSpiel.getOneFloat("SELECT Kapital FROM Kapitalverlauf " +
+                "WHERE Runde = 0 AND AktieISIN = " + "'" + eingabeAktieIsin + "'") == 0){
+            errorMessages.add("Zu der Aktie " + eingabeAktieIsin + " ist kein Startkurs vorhanden. Bitte zuerst einen erfassen.");
+        }
     }
 
     // Prüfung, ob der Wert bereits in der Liste vorhanden ist

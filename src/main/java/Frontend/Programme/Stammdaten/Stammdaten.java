@@ -8,8 +8,6 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
-import static Frontend.Cards.cardLayout;
-
 public class Stammdaten extends JPanel{
     JButton create_person = new JButton("Personen erfassen");
     JButton create_aktie = new JButton("Aktien erfassen");

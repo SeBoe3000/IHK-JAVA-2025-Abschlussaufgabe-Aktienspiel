@@ -254,7 +254,7 @@ public class KaufListener extends MyActionListenerInsert {
     }
 
     protected Float startkapital(){
-        float startkapital = SQLSpiel.getOneInteger("SELECT Kapital FROM Kapitalverlauf " +
+        float startkapital = SQLSpiel.getOneFloat("SELECT Kapital FROM Kapitalverlauf " +
                 "WHERE Runde = " + (Start.getAktuelleRunde() - 1) + " " +
                 "AND PersonID = " + eingabePersonID);
         return startkapital;

@@ -1,6 +1,7 @@
 package Frontend;
 
-import Frontend.Programme.Anzeige.Spielstand;
+import Frontend.Programme.Sonstiges.DatenReset;
+import Frontend.Programme.Sonstiges.Spielstand;
 import Frontend.Programme.Bewegungsdaten.Kauf;
 import Frontend.Programme.Bewegungsdaten.Wert;
 import Frontend.Programme.Konfiguration.*;
@@ -37,6 +38,7 @@ public class Cards implements KeyListener {
     public static String nameKauf = "Kauf";
     public static String nameWert = "Wert";
     public static String nameSpielstand = "Spielstand";
+    public static String nameDatenReset = "Daten zurücksetzen";
 
     // Für die Anzeige der Hilfe
     public static String currentCard = nameStart;
@@ -61,6 +63,7 @@ public class Cards implements KeyListener {
         JPanel panelKauf = new Kauf(cardLayout, cardPanel);
         JPanel panelWert = new Wert(cardLayout, cardPanel);
         JPanel panelSpielstand = new Spielstand(cardLayout, cardPanel);
+        JPanel panelDatenReset = new DatenReset(cardLayout, cardPanel);
 
         // Panels CardLayout hinzufügen
         cardPanel.add(panelStart, nameStart);
@@ -78,6 +81,7 @@ public class Cards implements KeyListener {
         cardPanel.add(panelKauf, nameKauf);
         cardPanel.add(panelWert, nameWert);
         cardPanel.add(panelSpielstand, nameSpielstand);
+        cardPanel.add(panelDatenReset, nameDatenReset);
 
         // Panel dem Frame hinzufügen
         start.add(cardPanel);
@@ -159,6 +163,8 @@ public class Cards implements KeyListener {
                     uri = new URI("https://docush.atlassian.net/wiki/x/cwAL");
                 } else if (nameSpielstand.equals(currentCard)) {
                     uri = new URI("https://docush.atlassian.net/wiki/x/iQEC");
+                } else if (nameDatenReset.equals(currentCard)) {
+                    uri = new URI("https://docush.atlassian.net/wiki/x/AYAq");
                 }
                 Desktop.getDesktop().browse(uri);
             } catch (IOException e1){

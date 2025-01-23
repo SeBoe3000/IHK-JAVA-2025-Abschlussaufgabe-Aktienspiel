@@ -43,4 +43,9 @@ public class EingabePanel extends JPanel {
     public void setEnabledFalse(){
         textField.setEnabled(false);
     }
+
+    // Möglichkeit die Feldgröße nachträglich zu ändern
+    public void setPreferredSize(int width, int height) {
+        textField.setPreferredSize(new Dimension(width,height));
+    }
 }

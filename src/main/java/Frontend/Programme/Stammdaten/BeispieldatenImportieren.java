@@ -118,9 +118,6 @@ public class BeispieldatenImportieren extends JPanel{
 
     // Import durchführen
     private static void importieren(){
-        System.out.println("Imports durchführen");
-
-        // Imports durchführen
         if(person_chb.isSelected()) {
             List<ElementPerson> PersonList = DatenDateiLesen.readPerson();
             if (!PersonList.isEmpty()){

@@ -8,6 +8,7 @@ import Datenbank.SQLSpiel;
 import Frontend.ActionListenerUpdate.EinstellungenTransaktionenListener;
 import Frontend.Cards;
 import Frontend.Checks.Checks;
+import Frontend.Komponenten.EingabePanel;
 import Frontend.Komponenten.Interaction;
 
 import javax.swing.*;
@@ -25,15 +26,18 @@ public class Start extends JPanel {
     JButton open_einstellung = new JButton("Einstellungen");
     ButtonGroup group_stammdaten = new ButtonGroup();
 
-    JLabel bewegungsdaten = new JLabel("Bewegungsdaten");
+    JLabel bewegungsdaten = new JLabel("Runden spielen");
     JButton create_kauf = new JButton("Käufe erfassen");
     JButton create_wert = new JButton("Unternehmenswerte erfassen");
-
     ButtonGroup group_bewegungsdaten = new ButtonGroup();
+
+    public static EingabePanel runde = new EingabePanel("Aktuelle Runde: ");
     JButton create_runde = new JButton("Nächste Runde");
 
-    JLabel anzeige = new JLabel("Anzeige");
+    JLabel sonstiges = new JLabel("Sonstiges");
     JButton show_spielstand = new JButton("Spielstand anzeigen");
+    JButton reset_data = new JButton("Daten zurücksetzen");
+    ButtonGroup group_sonstiges = new ButtonGroup();
 
     public Start(CardLayout cardLayout, JPanel cardPanel) {
         // GridBagLayout direkt auf Panel verwenden
@@ -74,17 +78,34 @@ public class Start extends JPanel {
         group_bewegungsdaten.add(create_wert);
         add(group_bewegungsdaten, gbc);
 
-        // Nächste Runde hinzufügen
+        // Runde und Nächste Runde hinzufügen
         gbc.gridy = 3; // Zeile
-        add(create_runde, gbc);
 
-        // Label Anzeige hinzufügen
+        JPanel group_runde = new JPanel();
+        group_runde.setLayout(new BoxLayout(group_runde, BoxLayout.X_AXIS));
+        group_runde.add(runde);
+        group_runde.add(create_runde);
+        runde.setTextField(String.valueOf(getAktuelleRunde()));
+        runde.setEnabledFalse();
+        runde.setPreferredSize(30,30);
+
+        add(group_runde, gbc);
+
+        // Label Sonstiges hinzufügen
         gbc.gridy = 4; // Zeile
-        add(anzeige, gbc);
+        add(sonstiges, gbc);
 
-        // Spielstand anzeigen hinzufügen
+        // Spielstand anzeigen und Zurücksetzen hinzufügen
         gbc.gridy = 5; // Zeile
-        add(show_spielstand, gbc);
+
+        group_sonstiges.add(show_spielstand);
+        group_sonstiges.add(reset_data);
+
+        JPanel group_sonstiges = new JPanel();
+        group_sonstiges.setLayout(new BoxLayout(group_sonstiges, BoxLayout.X_AXIS));
+        group_sonstiges.add(show_spielstand);
+        group_sonstiges.add(reset_data);
+        add(group_sonstiges, gbc);
 
         // ActionListener hinzufügen
         buttonListener();
@@ -359,7 +380,6 @@ public class Start extends JPanel {
                         // Anlegen Datensatz in Tabelle Kapitalverlauf mit dem aktuellen Spielstand
                         updateKapital();
 
-                        // TODO: Funktion zum erneuten Spielen einbinden und die alten Daten löschen.
                         // Runde erhöhen
                         aktuelleRundePlusOne();
                         JOptionPane.showMessageDialog(null, "Runde wurde erfolgreich gespielt.", "Erfolg", JOptionPane.INFORMATION_MESSAGE);
@@ -381,6 +401,14 @@ public class Start extends JPanel {
             }
         };
         show_spielstand.addActionListener(spielstand);
+
+        ActionListener datenReset = new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                Cards.changeCard(Cards.nameDatenReset);
+            }
+        };
+        reset_data.addActionListener(datenReset);
     }
 
     private static void updateDividende(Integer personid, String aktieisin, Float dividende) {
@@ -456,6 +484,6 @@ public class Start extends JPanel {
     public static void aktuelleRundePlusOne(){
         Integer runde = getAktuelleRunde() + 1;
         String update = String.valueOf(runde);
-        SQLEinstellungen.setEinstellung("AKT", update);
+        SQLEinstellungen.setEinstellung("RND", update);
     }
 }

@@ -86,13 +86,14 @@ public class Checks {
             errorMessages.add(errorMessage);
         } else{
             // Bei keinem Fehler in Abhängigkeit von der Prüfart den Input parsen und Fehler hinzufügen wenn von größer bis
-            if(checkType == "isValidInteger") {
+            if(checkType == "isValidInteger" || checkType == "isValidIntegerNull") {
                 Integer von = Integer.valueOf(input.getTextfieldVon());
                 Integer bis = Integer.valueOf(input.getTextfieldBis());
+                System.out.println("Test von bis: " + von  + " " + bis);
                 if(von > bis){
                     errorMessages.add("Von ("+ input.getTextfieldVon() + ") darf nicht größer als Bis (" + input.getTextfieldBis() + ") sein, im Feld: " + input.getTextlabel());
                 }
-            } else if (checkType == "isValidFloat") {
+            } else if (checkType == "isValidFloat" || checkType == "isValidFloatNull") {
                 Float von = Float.valueOf(input.getTextfieldVon());
                 Float bis = Float.valueOf(input.getTextfieldBis());
                 if(von > bis){
