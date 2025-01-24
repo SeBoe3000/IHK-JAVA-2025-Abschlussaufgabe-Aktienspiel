@@ -35,7 +35,7 @@ public class WertListener extends MyActionListenerInsert {
         Checks.checkFieldLenghtFloat(Wert.kurs, EinstellungenAktienverlaufListener.getEinstellungFloat("minAktienkurs"), Float.MAX_VALUE,
                 "isValidFloatVonBis", "Der Kurs muss mindestens " +
                         EinstellungenAktienverlaufListener.getEinstellungFloat("minAktienkurs") +  " sein.", errorMessages);
-        Checks.checkField(Wert.kassenbestand, "isValidFloat", "Bitte einen gültigen Kassenbestand angeben.", errorMessages);
+        Checks.checkField(Wert.kassenbestand, "isValidFloatNull", "Bitte einen gültigen Kassenbestand angeben.", errorMessages);
         Checks.checkFieldLenghtFloat(Wert.kassenbestand, EinstellungenAktienverlaufListener.getEinstellungFloat("minDividendeRunde"),
                 EinstellungenAktienverlaufListener.getEinstellungFloat("maxDividendeRunde"),
                 "isValidFloatVonBis", "Der Kassenbestand muss mindestens " +

@@ -330,11 +330,11 @@ public class DatenReset extends JPanel {
     private static void delete(){
         if(rundeAll_chb.isSelected()) {
             // Kapitalverlauf mit der Runde größer 0 löschen
-            SQL.table("DELETE Kapitalverlauf WHERE Runde > 0");
+            SQL.table("DELETE FROM Kapitalverlauf WHERE Runde > 0");
             // Aktienverlauf mit der Runde größer 0 löschen
-            SQL.table("DELETE Aktienverlauf WHERE Runde > 0");
+            SQL.table("DELETE FROM Aktienverlauf WHERE Runde > 0");
             // Transaktionen löschen
-            SQL.table("DELETE Transaktionen WHERE Runde > 0");
+            SQL.table("DELETE FROM Transaktionen WHERE Runde > 0");
             // Einstellung Runde auf 1 zurücksetzen
             SQLEinstellungen.setEinstellung("RND", "1");
         }
@@ -350,7 +350,7 @@ public class DatenReset extends JPanel {
             } else if (rundeEinstellung == rundeTransaktionen) {
                errorMessages.add("Die Runde ist offen. Käufe liegen in der aktuellen Runde vor.");
             } else if (rundeEinstellung == rundeAktienverlauf) {
-                errorMessages.add("Die Runde ist offen. Käufe liegen in der aktuellen Runde vor.");
+                errorMessages.add("Die Runde ist offen. Unternehmenswerte liegen in der aktuellen Runde vor.");
             }
 
             if (errorMessages.isEmpty()){
@@ -378,25 +378,25 @@ public class DatenReset extends JPanel {
             if(openRunde) {
                 // Kauf löschen, wenn Runden identisch
                 if(kauf_chb.isSelected() && rundeEinstellung == rundeTransaktionen){
-                    SQL.table("DELETE Transaktionen WHERE Runde = (SELECT MAX(Runde) FROM Transaktionen)");
+                    SQL.table("DELETE FROM Transaktionen WHERE Runde = (SELECT MAX(Runde) FROM Transaktionen)");
                 }
                 // Wert löschen, wenn Runden identisch
                 if(wert_chb.isSelected() && rundeEinstellung == rundeAktienverlauf){
-                    SQL.table("DELETE Aktienverlauf WHERE Runde = (SELECT MAX(Runde) FROM Aktienverlauf)");
+                    SQL.table("DELETE FROM Aktienverlauf WHERE Runde = (SELECT MAX(Runde) FROM Aktienverlauf)");
                 }
             // Runde geschlossen
             } else {
                 // Kauf löschen
                 if(kauf_chb.isSelected()){
-                    SQL.table("DELETE Kapitalverlauf WHERE Runde = " + (rundeEinstellung - 1));
+                    SQL.table("DELETE FROM Kapitalverlauf WHERE Runde = " + (rundeEinstellung - 1));
                 }
                 // Werte und Dividenden löschen
                 if(wert_chb.isSelected()){
-                    SQL.table("DELETE Aktienverlauf WHERE Runde = " + (rundeEinstellung - 1));
+                    SQL.table("DELETE FROM Aktienverlauf WHERE Runde = " + (rundeEinstellung - 1));
                     SQL.table("UPDATE Kapitalverlauf SET Dividende = 0 WHERE Runde = " + (rundeEinstellung - 1));
                 }
                 // Kapitalverlauf löschen
-                SQL.table("DELETE Kapitalverlauf WHERE Runde = " + (rundeEinstellung - 1));
+                SQL.table("DELETE FROM Kapitalverlauf WHERE Runde = " + (rundeEinstellung - 1));
                 // Runde verringern
                 SQLEinstellungen.setEinstellung("RND", String.valueOf((rundeEinstellung - 1)));
             }
@@ -413,11 +413,11 @@ public class DatenReset extends JPanel {
             if(errorMessages.isEmpty()){
                 if (startkurs_chb.isSelected()) {
                     // Startkurs löschen
-                    SQL.table("DELETE Aktienverlauf WHERE Runde = 0");
+                    SQL.table("DELETE FROM Aktienverlauf WHERE Runde = 0");
                 }
                 if(startkapital_chb.isSelected()) {
                     // Startkapital löschen
-                    SQL.table("DELETE Kapitalverlauf WHERE Runde = 0");
+                    SQL.table("DELETE FROM Kapitalverlauf WHERE Runde = 0");
                 }
             }
         }
@@ -426,11 +426,11 @@ public class DatenReset extends JPanel {
         if(errorMessages.isEmpty()) {
             if (person_chb.isSelected()) {
                 // Personen löschen
-                SQL.table("DELETE Personen");
+                SQL.table("DELETE FROM Personen");
             }
             if (aktie_chb.isSelected()) {
                 // Aktien löschen
-                SQL.table("DELETE Aktien");
+                SQL.table("DELETE FROM Aktien");
             }
         }
 
@@ -439,6 +439,18 @@ public class DatenReset extends JPanel {
             backToStart();
         } else {
             Checks.showError(errorMessages);
+        }
+
+        // Serials zurücksetzen, wenn alle Daten gelöscht wurden
+        if(SQLSpiel.getOneInteger("SELECT COUNT(*) FROM Personen") == 0){
+            // Der SQL liefert einen Wert, der entgegengenommen werden muss.
+            SQLSpiel.getOneInteger("SELECT setval('personen_id_seq', 1, false)");
+        }
+        if(SQLSpiel.getOneInteger("SELECT COUNT(*) FROM Aktienverlauf") == 0){
+            SQLSpiel.getOneInteger("SELECT setval('aktienverlauf_id_seq', 1, false)");
+        }
+        if(SQLSpiel.getOneInteger("SELECT COUNT(*) FROM Kapitalverlauf") == 0){
+            SQLSpiel.getOneInteger("SELECT setval('kapitalverlauf_id_seq', 1, false)");
         }
     }
 

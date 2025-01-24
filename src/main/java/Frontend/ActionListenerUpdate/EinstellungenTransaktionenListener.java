@@ -103,6 +103,9 @@ public class EinstellungenTransaktionenListener extends MyActionListenerUpdate {
         if((Float.valueOf(EinstellungenTransaktionen.firstDividende.getTextfield()) + Float.valueOf(EinstellungenTransaktionen.secondDividende.getTextfield())) > 100){
             errorMessages.add("Die Dividende für den ersten und zweiten Platz zusammen dürfen nicht mehr als 100% ergeben.");
         }
+        if(Float.valueOf(EinstellungenTransaktionen.firstDividende.getTextfield()) < Float.valueOf(EinstellungenTransaktionen.secondDividende.getTextfield())){
+            errorMessages.add("Die Dividende für den zweiten Platz darf nicht größer als die des ersten sein.");
+        }
     }
 
     @Override
