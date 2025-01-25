@@ -59,8 +59,8 @@ public class EinstellungenAktienverlaufListener extends MyActionListenerUpdate {
 
     @Override
     protected void checkfields() {
-        Checks.checkFieldVonBis(EinstellungenAktienverlauf.DividendeRunde, "isValidFloatNull", "Bitte eine gültige Anzahl an Runden angeben.", errorMessages);
-        Checks.checkField(EinstellungenAktienverlauf.minAktienkurs, "isValidFloatNull", "Bitte einen gültigen minimalen Aktienkurs angeben.", errorMessages);
+        Checks.checkFieldVonBis(EinstellungenAktienverlauf.DividendeRunde, "isValidFloatNull", "Bitte eine gültige Anzahl an Runden angeben.", errorMessages, errorFlagsVonBis);
+        Checks.checkField(EinstellungenAktienverlauf.minAktienkurs, "isValidFloatNull", "Bitte einen gültigen minimalen Aktienkurs angeben.", errorMessages, errorFlags);
     }
 
     @Override
@@ -88,5 +88,11 @@ public class EinstellungenAktienverlaufListener extends MyActionListenerUpdate {
                 eingabeMaxDividendeRunde + "," +
                 eingabeMinAktienkurs;
         SQLEinstellungen.setEinstellung("ORD", update);
+    }
+
+    @Override
+    protected void felderLeeren() {
+        Checks.clearOneFieldVonBis(EinstellungenAktienverlauf.DividendeRunde);
+        Checks.clearOneField(EinstellungenAktienverlauf.minAktienkurs);
     }
 }

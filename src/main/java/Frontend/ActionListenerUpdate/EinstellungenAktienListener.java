@@ -43,7 +43,7 @@ public class EinstellungenAktienListener extends MyActionListenerUpdate {
 
     @Override
     protected void checkfields() {
-        Checks.checkField(EinstellungenAktien.maxAnzahlAktien, "isValidInteger", "Bitte eine gültige Anzahl maximaler Aktien angeben.", errorMessages);
+        Checks.checkField(EinstellungenAktien.maxAnzahlAktien, "isValidInteger", "Bitte eine gültige Anzahl maximaler Aktien angeben.", errorMessages, errorFlags);
     }
 
     @Override
@@ -65,5 +65,10 @@ public class EinstellungenAktienListener extends MyActionListenerUpdate {
     protected void insertUpdateEinstellungen() {
         String update = eingabeMaxAnzahlAktien;
         SQLEinstellungen.setEinstellung("AKT", update);
+    }
+
+    @Override
+    protected void felderLeeren() {
+        Checks.clearOneField(EinstellungenAktien.maxAnzahlAktien);
     }
 }

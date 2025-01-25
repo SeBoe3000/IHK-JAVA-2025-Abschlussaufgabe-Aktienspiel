@@ -26,12 +26,12 @@ public class StartkursListener extends MyActionListenerInsert {
 
     @Override
     protected void checkFields() {
-        Checks.checkField(Startkurs.aktie, "isValidString", "Bitte eine gültige ISIN angeben.", errorMessages);
-        Checks.checkFieldLenght(Startkurs.aktie, 12,12,"isValidStringLaenge", "Die ISIN muss 12 Stellen lang sein.", errorMessages);
-        Checks.checkField(Startkurs.kurs, "isValidFloat", "Bitte einen gültigen Kurs angeben.", errorMessages);
+        Checks.checkField(Startkurs.aktie, "isValidString", "Bitte eine gültige ISIN angeben.", errorMessages, errorFlags);
+        Checks.checkFieldLenght(Startkurs.aktie, 12,12,"isValidStringLaenge", "Die ISIN muss 12 Stellen lang sein.", errorMessages, errorFlags);
+        Checks.checkField(Startkurs.kurs, "isValidFloat", "Bitte einen gültigen Kurs angeben.", errorMessages, errorFlags);
         Checks.checkFieldLenghtFloat(Startkurs.kurs, EinstellungenAktienverlaufListener.getEinstellungFloat("minAktienkurs"), Float.MAX_VALUE,
                 "isValidFloatVonBis", "Der Kurs muss mindestens " +
-                        EinstellungenAktienverlaufListener.getEinstellungFloat("minAktienkurs") +  " sein.", errorMessages);
+                        EinstellungenAktienverlaufListener.getEinstellungFloat("minAktienkurs") +  " sein.", errorMessages, errorFlags);
     }
 
     @Override

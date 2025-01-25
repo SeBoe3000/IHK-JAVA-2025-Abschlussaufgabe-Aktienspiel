@@ -1,5 +1,6 @@
 package Frontend.ActionListenerUpdate;
 
+import Backend.Fehler;
 import Frontend.Cards;
 import Frontend.Checks.Checks;
 import Frontend.Komponenten.Interaction;
@@ -8,10 +9,13 @@ import javax.swing.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
+import java.util.List;
 
 public abstract class MyActionListenerUpdate implements ActionListener{
-    // Zum Speichern der Fehlermeldungen
+    // Zum Speichern der Fehlermeldungen und Feldfarbe
     ArrayList<String> errorMessages = new ArrayList<>();
+    List<Fehler> errorFlags = new ArrayList<>();
+    List<Fehler> errorFlagsVonBis = new ArrayList<>();
 
     // Von der aufrufenden Methode wird Btn übergeben und über den Konstruktor in der Variable gespeichert.
     private JButton Btn;
@@ -46,6 +50,7 @@ public abstract class MyActionListenerUpdate implements ActionListener{
             backToStart();
         } else {
             Checks.showError(errorMessages); // Ausgabe Fehlermeldung(en)
+            changeFieldFarbe(); // Feldfarbe ändern
         }
     }
 
@@ -68,6 +73,7 @@ public abstract class MyActionListenerUpdate implements ActionListener{
                     Interaction.einstellungChanged(); // Meldung über erfolgreiches ändern
                 } else {
                     Checks.showError(errorMessages); // Ausgabe Fehlermeldung(en)
+                    changeFieldFarbe(); // Feldfarbe ändern
                     stop = false;
                 }
             }
@@ -82,6 +88,15 @@ public abstract class MyActionListenerUpdate implements ActionListener{
 
     private void backToStart(){
         Cards.changeCard(Cards.nameEinstellungen);
+        // Werte und Fehler in Feldern leeren, sonst sind diese beim nächsten Mal gefüllt
+        felderLeeren();
+    }
+
+    protected void changeFieldFarbe(){
+        Checks.setFarbeFelder(errorFlags);
+        Checks.setFarbeFelderVonBis(errorFlagsVonBis);
+        errorFlags.clear();
+        errorFlagsVonBis.clear();
     }
 
     // Zu implementierende Funktionen
@@ -89,4 +104,6 @@ public abstract class MyActionListenerUpdate implements ActionListener{
     protected abstract void fillFields();
     protected abstract Boolean checkChanged();
     protected abstract void insertUpdateEinstellungen();
+    // Feld leeren und Fehler entfernen
+    protected abstract void felderLeeren();
 }

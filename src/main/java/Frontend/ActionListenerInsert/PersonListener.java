@@ -25,11 +25,11 @@ public class PersonListener extends MyActionListenerInsert {
 
     @Override
     protected void checkFields() {
-        Checks.checkField(Person.vorname, "isValidString", "Bitte einen gültigen Vorname angeben.", errorMessages);
-        Checks.checkFieldLenght(Person.vorname, 0,20,"isValidStringLaenge", "Der Vorname darf maximal 20 Stellen lang sein.", errorMessages);
-        Checks.checkField(Person.nachname, "isValidString", "Bitte einen gültigen Nachname angeben.", errorMessages);
-        Checks.checkFieldLenght(Person.nachname, 0,20,"isValidStringLaenge", "Der Nachname darf maximal 20 Stellen lang sein.", errorMessages);
-        Checks.checkFieldLenght(Person.alter, 18,130,"isValidIntegerVonBis", "Bitte ein Alter zwischen 18 und 130 angeben.", errorMessages);
+        Checks.checkField(Person.vorname, "isValidString", "Bitte einen gültigen Vorname angeben.", errorMessages, errorFlags);
+        Checks.checkFieldLenght(Person.vorname, 0,20,"isValidStringLaenge", "Der Vorname darf maximal 20 Stellen lang sein.", errorMessages, errorFlags);
+        Checks.checkField(Person.nachname, "isValidString", "Bitte einen gültigen Nachname angeben.", errorMessages, errorFlags);
+        Checks.checkFieldLenght(Person.nachname, 0,20,"isValidStringLaenge", "Der Nachname darf maximal 20 Stellen lang sein.", errorMessages, errorFlags);
+        Checks.checkFieldLenght(Person.alter, 18,130,"isValidIntegerVonBis", "Bitte ein Alter zwischen 18 und 130 angeben.", errorMessages, errorFlags);
     }
 
     @Override

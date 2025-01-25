@@ -66,7 +66,7 @@ public class EinstellungenPersonenListener extends MyActionListenerUpdate {
 
     @Override
     protected void checkfields() {
-        Checks.checkField(EinstellungenPersonen.defaultStrartkapital, "isValidFloat", "Bitte einen gültiges Startkapital angeben.", errorMessages);
+        Checks.checkField(EinstellungenPersonen.defaultStrartkapital, "isValidFloat", "Bitte einen gültiges Startkapital angeben.", errorMessages, errorFlags);
     }
 
     @Override
@@ -89,5 +89,10 @@ public class EinstellungenPersonenListener extends MyActionListenerUpdate {
     protected void insertUpdateEinstellungen() {
         String update = eingabeDefaultStrartkapital + "," + eingabeDefaultStrartkapitalBearbeitbar;
         SQLEinstellungen.setEinstellung("PER", update);
+    }
+
+    @Override
+    protected void felderLeeren() {
+        Checks.clearOneField(EinstellungenPersonen.defaultStrartkapital);
     }
 }

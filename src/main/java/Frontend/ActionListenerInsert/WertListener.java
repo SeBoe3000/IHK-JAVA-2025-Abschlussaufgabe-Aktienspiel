@@ -29,19 +29,19 @@ public class WertListener extends MyActionListenerInsert {
 
     @Override
     protected void checkFields() {
-        Checks.checkField(Wert.aktie, "isValidString", "Bitte eine gültige ISIN angeben.", errorMessages);
-        Checks.checkFieldLenght(Wert.aktie, 12,12,"isValidStringLaenge", "Die ISIN muss 12 Stellen lang sein.", errorMessages);
-        Checks.checkField(Wert.kurs, "isValidFloat", "Bitte einen gültigen Kurs angeben.", errorMessages);
+        Checks.checkField(Wert.aktie, "isValidString", "Bitte eine gültige ISIN angeben.", errorMessages, errorFlags);
+        Checks.checkFieldLenght(Wert.aktie, 12,12,"isValidStringLaenge", "Die ISIN muss 12 Stellen lang sein.", errorMessages, errorFlags);
+        Checks.checkField(Wert.kurs, "isValidFloat", "Bitte einen gültigen Kurs angeben.", errorMessages, errorFlags);
         Checks.checkFieldLenghtFloat(Wert.kurs, EinstellungenAktienverlaufListener.getEinstellungFloat("minAktienkurs"), Float.MAX_VALUE,
                 "isValidFloatVonBis", "Der Kurs muss mindestens " +
-                        EinstellungenAktienverlaufListener.getEinstellungFloat("minAktienkurs") +  " sein.", errorMessages);
-        Checks.checkField(Wert.kassenbestand, "isValidFloatNull", "Bitte einen gültigen Kassenbestand angeben.", errorMessages);
+                        EinstellungenAktienverlaufListener.getEinstellungFloat("minAktienkurs") +  " sein.", errorMessages, errorFlags);
+        Checks.checkField(Wert.kassenbestand, "isValidFloatNull", "Bitte einen gültigen Kassenbestand angeben.", errorMessages, errorFlags);
         Checks.checkFieldLenghtFloat(Wert.kassenbestand, EinstellungenAktienverlaufListener.getEinstellungFloat("minDividendeRunde"),
                 EinstellungenAktienverlaufListener.getEinstellungFloat("maxDividendeRunde"),
                 "isValidFloatVonBis", "Der Kassenbestand muss mindestens " +
                         EinstellungenAktienverlaufListener.getEinstellungFloat("minDividendeRunde") +
                         " und maximal " + EinstellungenAktienverlaufListener.getEinstellungFloat("maxDividendeRunde") +
-                        " sein.", errorMessages);
+                        " sein.", errorMessages, errorFlags);
     }
 
     @Override

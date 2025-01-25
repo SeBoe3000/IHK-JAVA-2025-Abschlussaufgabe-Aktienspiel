@@ -1,5 +1,6 @@
 package Frontend.ActionListenerInsert;
 
+import Backend.Fehler;
 import Frontend.Cards;
 import Frontend.Checks.Checks;
 import Frontend.Komponenten.Interaction;
@@ -8,10 +9,12 @@ import javax.swing.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
+import java.util.List;
 
 public abstract class MyActionListenerInsert implements ActionListener {
-    // Zum Speichern der Fehlermeldungen
+    // Zum Speichern der Fehlermeldungen und Feldfarbe
     ArrayList<String> errorMessages = new ArrayList<>();
+    List<Fehler> errorFlags = new ArrayList<>();
 
     // Von der aufrufenden Methode wird Btn übergeben und über den Konstruktor in der Variable gespeichert.
     private JButton Btn;
@@ -44,6 +47,7 @@ public abstract class MyActionListenerInsert implements ActionListener {
         if(notInWork == true && noElement == true) {
             checkFields();
             Checks.showError(errorMessages); // Ausgabe Fehlermeldung(en)
+            changeFieldFarbe(); // Feldfarbe ändern
         } else {
             doCheckInsertBack(notInWork, noElement);
         }
@@ -76,7 +80,6 @@ public abstract class MyActionListenerInsert implements ActionListener {
         if(notInWork == true && noElement == true) {
             backToStart();
         }
-        //
     }
 
     protected boolean elementHinzu() {
@@ -91,6 +94,7 @@ public abstract class MyActionListenerInsert implements ActionListener {
             inWork = false;
         }
         Checks.showError(errorMessages); // Ausgabe Fehlermeldung(en)
+        changeFieldFarbe(); // Feldfarbe ändern
         return inWork;
     }
 
@@ -124,6 +128,11 @@ public abstract class MyActionListenerInsert implements ActionListener {
         felderLeeren();
         // Panel wechseln
         changePanel();
+    }
+
+    protected void changeFieldFarbe(){
+        Checks.setFarbeFelder(errorFlags);
+        errorFlags.clear();
     }
 
     // Zu implementierende Funktionen
