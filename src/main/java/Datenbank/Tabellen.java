@@ -84,6 +84,17 @@ public class Tabellen {
             "('RND', '1')" +
             " ON CONFLICT DO NOTHING";
 
+    // Spielstand speichern
+    static String createTableSpielstand = "CREATE TABLE IF NOT EXISTS Spielstand" +
+            "(" +
+            "Runde integer NOT NULL," +
+            "GewinnerSpieler text," +
+            "MaxAktienSpieler text," +
+            "MaxAktienUnternehmen text," +
+            "GewinnUnternehmen text," +
+            "PRIMARY KEY(Runde)" +
+            ")";
+
     // Stammdaten Personen
     public static void createTablePersonen(){
         SQL.table(createTablePersonen);
@@ -119,11 +130,17 @@ public class Tabellen {
         SQL.table(insertDefaultEinstellungen);
     }
 
+    // Spielstand speichern
+    public static void createTableSpielstand(){
+        SQL.table(createTableSpielstand);
+    }
+
     public static void createTableall(){
         // Gemeinsam aufrufen
         SQL.table(createTablePersonen + ";" + createTableAktien + ";" + createTableAktienverlauf + ";" +
                 createTableKapitalverlauf + ";" + createTableTransaktionen + ";" +
-                createTableEinstellungen + ";" + insertDefaultEinstellungen);
+                createTableEinstellungen + ";" + insertDefaultEinstellungen + ";" +
+                createTableSpielstand);
 
         // Nacheinander aufrufen
         /*createTablePersonen();
@@ -133,6 +150,7 @@ public class Tabellen {
         createTableTransaktionen();
         createTableEinstellungen();
         insertDefaultEinstellungen();
+        createTableSpielstand();
          */
     }
 
@@ -142,7 +160,8 @@ public class Tabellen {
                 "DROP TABLE Aktienverlauf;" +
                 "DROP TABLE Aktien;" +
                 "DROP TABLE Personen;" +
-                "DROP TABLE Einstellungen;");
+                "DROP TABLE Einstellungen;" +
+                "DROP TABLE Spielstand");
     }
 
     public static void main(String[] args) {

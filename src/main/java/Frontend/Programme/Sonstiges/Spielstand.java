@@ -1,5 +1,7 @@
 package Frontend.Programme.Sonstiges;
 
+import Datenbank.SQLSpiel;
+import Datenbank.SQLSpielstand;
 import Frontend.Cards;
 
 import javax.swing.*;
@@ -10,48 +12,44 @@ import java.awt.event.ActionListener;
 public class Spielstand extends JPanel{
     JButton back = new JButton("Zurück zum Start");
 
+    // Ergebnisse von Abfragen
+    static JLabel abfrage1 = new JLabel();
+    static JLabel abfrage2 = new JLabel();
+    static JLabel abfrage3 = new JLabel();
+    static JLabel abfrage4 = new JLabel();
+
     public Spielstand(CardLayout cardLayout, JPanel cardPanel) {
         // GridBagLayout direkt auf Panel verwenden
         setLayout(new GridBagLayout());
         GridBagConstraints gbc = new GridBagConstraints();
 
-        // TODO: Abfragen hinzufügen
-        /*
-        Nachfrage offen wegen welcher Runde herangezogen werden soll.
-        Zu jeder Auswertung einbinden, ob es weitere mit dem Ergebnis gibt.
-
-        Reichster Spieler
-        SELECT Personid, Kapital
-        FROM Kapitalverlauf
-        WHERE Runde = (SELECT MAX(Runde) FROM Kapitalverlauf)
-        ORDER BY Kapital DESC;
-
-        Spieler mit den meisten Aktien (mit Ausgabe Aktien)
-        SELECT PersonID, SUM (Aktienanzahl)
-        FROM Transaktionen
-        WHERE Runde = (SELECT MAX(Runde) FROM Transaktionen)
-        GROUP BY PersonID ORDER BY SUM(Aktienanzahl) DESC LIMIT(1)
-
-        Unternehmen mit den meisten verkauften Aktien
-        beim obigen SQL PersonID und AktieISIN tauschen:
-        SELECT AktieISIN, SUM (Aktienanzahl)
-        FROM Transaktionen
-        WHERE Runde = (SELECT MAX(Runde) FROM Transaktionen)
-        GROUP BY AktieISIN ORDER BY SUM(Aktienanzahl) DESC LIMIT(1)
-
-        Unternehmen mit dem höchsten Gewinn
-        SELECT Aktieisin, Kassenbestand
-        FROM Aktienverlauf
-        WHERE Runde = (SELECT MAX(Runde) FROM Aktienverlauf)
-        ORDER BY Kassenbestand DESC LIMIT(1);
-         */
-
-        // Zurück hinzufügen
+        // Abfragen hinzufügen
         gbc.gridx = 0; // Spalte
         gbc.gridy = 0; // Zeile
         gbc.weightx = 0.1;
         gbc.weighty = 0.1;
         gbc.fill = GridBagConstraints.CENTER;
+        abfrage1.setText(SQLSpielstand.getOneString("SELECT GewinnerSpieler FROM Spielstand " +
+                "WHERE Runde = (SELECT MAX(Runde) FROM Spielstand)"));
+        add(abfrage1, gbc);
+
+        gbc.gridy = 1; // Zeile
+        abfrage2.setText(SQLSpielstand.getOneString("SELECT MaxAktienSpieler FROM Spielstand " +
+                "WHERE Runde = (SELECT MAX(Runde) FROM Spielstand)"));
+        add(abfrage2, gbc);
+
+        gbc.gridy = 2; // Zeile
+        abfrage3.setText(SQLSpielstand.getOneString("SELECT MaxAktienUnternehmen FROM Spielstand " +
+                "WHERE Runde = (SELECT MAX(Runde) FROM Spielstand)"));
+        add(abfrage3, gbc);
+
+        gbc.gridy = 3; // Zeile
+        abfrage4.setText(SQLSpielstand.getOneString("SELECT GewinnUnternehmen FROM Spielstand " +
+                "WHERE Runde = (SELECT MAX(Runde) FROM Spielstand)"));
+        add(abfrage4, gbc);
+
+        // Zurück hinzufügen
+        gbc.gridy = 4; // Zeile
         add(back, gbc);
 
         // ActionListener hinzufügen

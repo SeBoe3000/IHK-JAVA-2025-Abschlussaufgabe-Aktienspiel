@@ -335,6 +335,8 @@ public class DatenReset extends JPanel {
             SQL.table("DELETE FROM Aktienverlauf WHERE Runde > 0");
             // Transaktionen löschen
             SQL.table("DELETE FROM Transaktionen WHERE Runde > 0");
+            // Spielstand löschen
+            SQL.table("DELETE FROM Spielstand");
             // Einstellung Runde auf 1 zurücksetzen
             SQLEinstellungen.setEinstellung("RND", "1");
         }
@@ -358,6 +360,8 @@ public class DatenReset extends JPanel {
                 SQL.table("UPDATE Transaktionen SET Dividende = 0 WHERE Runde = " + (rundeEinstellung - 1));
                 // Kapitalverlauf löschen
                 SQL.table("DELETE FROM Kapitalverlauf WHERE Runde = " + (rundeEinstellung - 1));
+                // Spielstand löschen
+                SQL.table("DELETE FROM Spielstand WHERE Runde = " + (rundeEinstellung - 1));
                 // Runde verringern
                 SQLEinstellungen.setEinstellung("RND", String.valueOf((rundeEinstellung - 1)));
             }
@@ -397,6 +401,8 @@ public class DatenReset extends JPanel {
                 }
                 // Kapitalverlauf löschen
                 SQL.table("DELETE FROM Kapitalverlauf WHERE Runde = " + (rundeEinstellung - 1));
+                // Spielstand löschen
+                SQL.table("DELETE FROM Spielstand WHERE Runde = " + (rundeEinstellung - 1));
                 // Runde verringern
                 SQLEinstellungen.setEinstellung("RND", String.valueOf((rundeEinstellung - 1)));
             }
