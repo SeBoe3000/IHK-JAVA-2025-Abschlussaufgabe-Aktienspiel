@@ -49,8 +49,8 @@ public abstract class MyActionListenerUpdate implements ActionListener{
             }
             backToStart();
         } else {
-            Checks.showError(errorMessages); // Ausgabe Fehlermeldung(en)
             changeFieldFarbe(); // Feldfarbe ändern
+            Checks.showError(errorMessages); // Ausgabe Fehlermeldung(en)
         }
     }
 
@@ -72,8 +72,8 @@ public abstract class MyActionListenerUpdate implements ActionListener{
                     insertUpdateEinstellungen();
                     Interaction.einstellungChanged(); // Meldung über erfolgreiches ändern
                 } else {
-                    Checks.showError(errorMessages); // Ausgabe Fehlermeldung(en)
                     changeFieldFarbe(); // Feldfarbe ändern
+                    Checks.showError(errorMessages); // Ausgabe Fehlermeldung(en)
                     stop = false;
                 }
             }

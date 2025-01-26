@@ -46,8 +46,8 @@ public abstract class MyActionListenerInsert implements ActionListener {
         // Bei keiner Angabe und keinem Element - Fehlermeldungen hochbringen
         if(notInWork == true && noElement == true) {
             checkFields();
-            Checks.showError(errorMessages); // Ausgabe Fehlermeldung(en)
             changeFieldFarbe(); // Feldfarbe ändern
+            Checks.showError(errorMessages); // Ausgabe Fehlermeldung(en)
         } else {
             doCheckInsertBack(notInWork, noElement);
         }
@@ -93,8 +93,8 @@ public abstract class MyActionListenerInsert implements ActionListener {
             elementInList(); // Element der Liste hinzufügen
             inWork = false;
         }
-        Checks.showError(errorMessages); // Ausgabe Fehlermeldung(en)
         changeFieldFarbe(); // Feldfarbe ändern
+        Checks.showError(errorMessages); // Ausgabe Fehlermeldung(en)
         return inWork;
     }
 
