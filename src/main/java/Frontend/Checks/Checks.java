@@ -61,6 +61,8 @@ public class Checks {
             check1 = EingabenCheck.isValidFloat(check, "NOTNULL");
         } else if (checkArt == "isValidFloatNull") {
             check1 = EingabenCheck.isValidFloat(check, "NULL");
+        } else if (checkArt == "isValidFloatEmpty") {
+            check1 = EingabenCheck.isValidFloat(check, "EMPTY");
         } else if (checkArt == "isValidIntegerVonBis") {
             check1 = EingabenCheck.isValidIntegerVonBis(check, vonInt, bisInt);
         } else if (checkArt == "isValidFloatVonBis") {

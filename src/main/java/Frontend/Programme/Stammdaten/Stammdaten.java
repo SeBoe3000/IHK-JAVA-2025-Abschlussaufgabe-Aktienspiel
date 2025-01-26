@@ -84,12 +84,14 @@ public class Stammdaten extends JPanel{
                 Cards.changeCard(Cards.nameStartkapital);
 
                 // Spartkapital befüllen und Sperren, wenn nicht bearbeitbar
-                System.out.println("Einstellung: " + EinstellungenPersonenListener.getEinstellungString("defaultStrartkapitalBearbeitbar"));
+                // System.out.println("Einstellung: " + EinstellungenPersonenListener.getEinstellungString("defaultStrartkapitalBearbeitbar"));
                 if (EinstellungenPersonenListener.getEinstellungString("defaultStrartkapitalBearbeitbar").equals("N")) {
-                    Startkapital.betrag.setTextField(String.valueOf(EinstellungenPersonenListener.getEinstellungFloat("defaultStrartkapital")));
                     Startkapital.betrag.setEnabledFalse();
                 } else {
                     Startkapital.betrag.setEnabledTrue();
+                }
+                if(EinstellungenPersonenListener.getEinstellungFloat("defaultStrartkapital") != null) {
+                    Startkapital.betrag.setTextField(String.valueOf(EinstellungenPersonenListener.getEinstellungFloat("defaultStrartkapital")));
                 }
             }
         };

@@ -44,10 +44,10 @@ public class EinstellungenPersonenListener extends MyActionListenerUpdate {
     }
 
     public static Float getEinstellungFloat(String field){
-        Float einstellung = 0F;
+        Float einstellung = null;
         getDefaults();
 
-        if(field == "defaultStrartkapital"){
+        if(field == "defaultStrartkapital" && !defaultStrartkapital.isEmpty()){
             einstellung = Float.valueOf(defaultStrartkapital);
         }
         return einstellung;
@@ -66,7 +66,15 @@ public class EinstellungenPersonenListener extends MyActionListenerUpdate {
 
     @Override
     protected void checkfields() {
-        Checks.checkField(EinstellungenPersonen.defaultStrartkapital, "isValidFloat", "Bitte einen gültiges Startkapital angeben.", errorMessages, errorFlags);
+        Checks.checkField(EinstellungenPersonen.defaultStrartkapital, "isValidFloatEmpty", "Bitte einen gültiges Startkapital angeben.", errorMessages, errorFlags);
+        System.out.println("Startkapital: " +EinstellungenPersonen.defaultStrartkapital.getTextfield() );
+
+        // Sofern die Checkbox markiert ist, darf nicht 0 oder nichts angegeben sein.
+        // Zuerst auf leere Eingabe prüfen und dann über parsen alle möglichen Variationen von 0 abdecken.
+        if ((EinstellungenPersonen.defaultStrartkapital.getTextfield().isEmpty() || Double.parseDouble(EinstellungenPersonen.defaultStrartkapital.getTextfield()) == 0) &&
+                !EinstellungenPersonen.defaultStartkapitalBearbeitbar.isSelected()) {
+            errorMessages.add("Default bearbeitbar kann nur demarkiert werden, wenn ein Startkapital größer 0 angegeben wurde.");
+        }
     }
 
     @Override
