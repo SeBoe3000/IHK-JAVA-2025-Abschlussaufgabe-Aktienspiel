@@ -27,7 +27,7 @@ public class KaufListener extends MyActionListenerInsert {
     // Zu füllende Felder
     static Integer eingabePersonID = 0;
     static String eingabeAktie = "";
-    Integer eingabeAnzahl = 0;
+    static Integer eingabeAnzahl = 0;
 
     @Override
     protected void checkFields() {
@@ -91,9 +91,9 @@ public class KaufListener extends MyActionListenerInsert {
                     anzahlAktienanzahlPerson() + " Aktien. Bitte die Anzahl korrigieren.");
         }
         // Prüfung eine Person kann nur so viel Kaufen, bis das Startkapital aufgebraucht ist.
-        if(aktienkauf() > startkapital()) {
-            errorMessages.add("Die Person hat ein Startkapital von " + startkapital() +
-                    " und mit dem aktuellen Kauf wären es " + aktienkauf() +
+        if(aktienkauf(eingabePersonID) > startkapital(eingabePersonID)) {
+            errorMessages.add("Die Person hat ein Startkapital von " + startkapital(eingabePersonID) +
+                    " und mit dem aktuellen Kauf wären es " + aktienkauf(eingabePersonID) +
                     " . Bitte weniger kaufen.");
         }
     }
@@ -226,7 +226,7 @@ public class KaufListener extends MyActionListenerInsert {
         return aktienanzahl;
     }
 
-    protected Float aktienkauf(){
+    public static Float aktienkauf(Integer eingabePersonID){
         Integer runde = Start.getAktuelleRunde();
         // Wert Datenbank
         float aktienkaufDatenbank = Start.aktienwertBerechnen(eingabePersonID, 1);
@@ -253,7 +253,7 @@ public class KaufListener extends MyActionListenerInsert {
         return aktienkaufSumme;
     }
 
-    protected Float startkapital(){
+    public static Float startkapital(Integer eingabePersonID){
         float startkapital = SQLSpiel.getOneFloat("SELECT Kapital FROM Kapitalverlauf " +
                 "WHERE Runde = " + (Start.getAktuelleRunde() - 1) + " " +
                 "AND PersonID = " + eingabePersonID);
@@ -307,6 +307,7 @@ public class KaufListener extends MyActionListenerInsert {
         Checks.clearOneField(Kauf.person);
         Checks.clearOneField(Kauf.aktie);
         Checks.clearOneField(Kauf.anzahl);
+        Checks.clearOneField(Kauf.restwert);
     }
 
     @Override

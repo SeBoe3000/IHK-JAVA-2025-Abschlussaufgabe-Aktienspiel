@@ -3,14 +3,18 @@ package Frontend.Programme.Bewegungsdaten;
 import Frontend.ActionListenerInsert.KaufListener;
 import Frontend.Komponenten.Buttons;
 import Frontend.Komponenten.EingabePanel;
+import Frontend.Komponenten.Interaction;
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 
 public class Kauf extends JPanel{
     public static EingabePanel person = new EingabePanel("Person (ID): ");
     public static EingabePanel aktie = new EingabePanel("Aktie: ");
     public static EingabePanel anzahl = new EingabePanel("Anzahl Aktien: ");
+    public static JButton calcRestwert = new JButton("Rest berechnen");
     public static EingabePanel restwert = new EingabePanel("Restwert: ");
 
     static Buttons buttons = new Buttons();
@@ -38,7 +42,12 @@ public class Kauf extends JPanel{
 
         // Restwert hinzufügen
         gbc.gridy = 3; // Zeile
-        add(restwert, gbc);
+
+        JPanel rest = new JPanel();
+        rest.setLayout(new BoxLayout(rest, BoxLayout.X_AXIS));
+        rest.add(restwert);
+        rest.add(calcRestwert);
+        add(rest, gbc);
         // Restwert ausgrauen, da Anzeigefeld
         restwert.setEnabledFalse();
 
@@ -63,5 +72,18 @@ public class Kauf extends JPanel{
 
         KaufListener zurueckStart = new KaufListener(buttons.backstart) {
         };buttons.backstart.addActionListener(zurueckStart);
+
+        ActionListener restwert = new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                if(!person.getTextfield().isEmpty()){
+                    Integer eingabePersonID = Integer.valueOf(Kauf.person.getTextfield());
+                    Kauf.restwert.setTextField(String.valueOf(KaufListener.startkapital(eingabePersonID) - KaufListener.aktienkauf(eingabePersonID)));
+                } else {
+                    JOptionPane.showMessageDialog(null, "Es wurde keine PersonID angegeben.", "Berechnung nicht möglich", JOptionPane.ERROR_MESSAGE);
+                }
+            }
+        };
+        calcRestwert.addActionListener(restwert);
     }
 }
