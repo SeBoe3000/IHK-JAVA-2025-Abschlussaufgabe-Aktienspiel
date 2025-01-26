@@ -53,6 +53,10 @@ public class WertListener extends MyActionListenerInsert {
 
     @Override
     protected void nextChecks() {
+        // Aktie muss in Tabelle Aktien vorhanden sein.
+        if(!SQL.checkElementAlreadyInDatenbankOneString(eingabeAktieIsin, "isin","Aktien")){
+            errorMessages.add("Die ausgewählte Aktie ist nicht in der Tabelle Aktien vorhanden.");
+        }
         // Prüfung, ob Element in der Liste vorhanden ist.
         if(checkElementAlreadyInList(eingabeAktieIsin)){
             errorMessages.add("Das Element befindet sich bereits in der ElementListe. Bitte einen anderen Datensatz angeben.");
@@ -62,7 +66,8 @@ public class WertListener extends MyActionListenerInsert {
         if(SQL.checkElementAlreadyInDatenbankIntegerIntegerString(Start.getAktuelleRunde(), Start.getAktuelleRunde(), eingabeAktieIsin, "Runde", "Runde", "AktieIsin","Aktienverlauf")){
             errorMessages.add("Das Element befindet sich bereits in der Datenbank. Bitte einen anderen Datensatz angeben.");
         }
-        if(SQLSpiel.getOneFloat("SELECT Kapital FROM Kapitalverlauf " +
+        // Startkurs muss zu der Aktie vorhanden sein.
+        if(SQLSpiel.getOneFloat("SELECT Aktienkurs FROM Aktienverlauf " +
                 "WHERE Runde = 0 AND AktieISIN = " + "'" + eingabeAktieIsin + "'") == 0){
             errorMessages.add("Zu der Aktie " + eingabeAktieIsin + " ist kein Startkurs vorhanden. Bitte zuerst einen erfassen.");
         }
