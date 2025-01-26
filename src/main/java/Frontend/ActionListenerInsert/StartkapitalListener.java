@@ -75,13 +75,17 @@ public class StartkapitalListener extends MyActionListenerInsert {
     @Override
     protected boolean checkFieldsfilled() {
         Boolean filled = true;
-        if (!Checks.checkOneFieldfilled(Startkapital.person)){
-            filled = false;
-        }
-        // Nur wenn Feld bearbeitbar ist und es gefüllt ist, zählt es als filled.
-        if(!Checks.checkOneFieldfilled(Startkapital.betrag) &&
-        EinstellungenPersonenListener.getEinstellungString("defaultStrartkapitalBearbeitbar").equals("J")){
-            filled = false;
+        // Betrag zählt nur als filled, wenn Default bearbeitbar und das Feld geändert wurde ist.
+        if(EinstellungenPersonenListener.getEinstellungString("defaultStrartkapitalBearbeitbar").equals("J") &&
+                !String.valueOf(EinstellungenPersonenListener.getEinstellungFloat("defaultStrartkapital")).
+                        equals((Startkapital.betrag.getTextfield()))){
+            if (!Checks.checkOneFieldfilled(Startkapital.person) && !Checks.checkOneFieldfilled(Startkapital.betrag)){
+                filled = false;
+            }
+        } else {
+            if (!Checks.checkOneFieldfilled(Startkapital.person)){
+                filled = false;
+            }
         }
         // System.out.println("filled: " +  filled);
         return filled;
