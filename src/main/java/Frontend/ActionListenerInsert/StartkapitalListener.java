@@ -46,7 +46,7 @@ public class StartkapitalListener extends MyActionListenerInsert {
             errorMessages.add("Das Element befindet sich bereits in der ElementListe. Bitte einen anderen Datensatz angeben.");
         }
         // Prüfung, ob Element bereits in Datenbank vorhanden ist
-        if(SQL.checkElementAlreadyInDatenbankIntegerInteger(eingabePersonID, 0, "id", "Runde", "Kapitalverlauf")){
+        if(SQL.checkElementAlreadyInDatenbankIntegerInteger(eingabePersonID, 0, "Personid", "Runde", "Kapitalverlauf")){
             errorMessages.add("Das Element befindet sich bereits in der Datenbank. Bitte einen anderen Datensatz angeben.");
         }
     }
