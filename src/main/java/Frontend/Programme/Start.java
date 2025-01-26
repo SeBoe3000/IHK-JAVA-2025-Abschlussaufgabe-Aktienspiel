@@ -1,10 +1,8 @@
 package Frontend.Programme;
 
 import Backend.ElementKapitalverlauf;
-import Datenbank.SQL;
-import Datenbank.SQLEinstellungen;
-import Datenbank.SQLKapitalverlauf;
-import Datenbank.SQLSpiel;
+import Backend.ElementSpielstand;
+import Datenbank.*;
 import Frontend.ActionListenerUpdate.EinstellungenTransaktionenListener;
 import Frontend.Cards;
 import Frontend.Checks.Checks;
@@ -380,8 +378,18 @@ public class Start extends JPanel {
                         // Anlegen Datensatz in Tabelle Kapitalverlauf mit dem aktuellen Spielstand
                         updateKapital();
 
+                        // Spielstand speichern
+                        String gewinnerSpiel = SQLSpielstand.abfrageGewinnerSpieler();
+                        String maxAktienSpieler = SQLSpielstand.abfrageMaxAktienSpieler();
+                        String maxAktienUnternehmen = SQLSpielstand.abfrageMaxAktienUnternehmen();
+                        String gewinnUnternehmen = SQLSpielstand.abfrageGewinnUnternehmen();
+                        ElementSpielstand spielstand = new ElementSpielstand(getAktuelleRunde(), gewinnerSpiel, maxAktienSpieler, maxAktienUnternehmen, gewinnUnternehmen);
+                        SQLSpielstand.insertTableSpielstand(spielstand);
+
                         // Runde erhöhen
                         aktuelleRundePlusOne();
+                        // Anzeige Runde aktualisieren
+                        Start.runde.setTextField(String.valueOf(getAktuelleRunde()));
                         JOptionPane.showMessageDialog(null, "Runde wurde erfolgreich gespielt.", "Erfolg", JOptionPane.INFORMATION_MESSAGE);
 
                         // TODO: Abfragen für Spielstand ggf. aktualisieren

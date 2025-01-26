@@ -355,9 +355,9 @@ public class DatenReset extends JPanel {
 
             if (errorMessages.isEmpty()){
                 // Dividenden löschen
-                SQL.table("UPDATE Kapitalverlauf SET Dividende = 0 WHERE Runde = " + (rundeEinstellung - 1));
+                SQL.table("UPDATE Transaktionen SET Dividende = 0 WHERE Runde = " + (rundeEinstellung - 1));
                 // Kapitalverlauf löschen
-                SQL.table("DELETE Kapitalverlauf WHERE Runde = " + (rundeEinstellung - 1));
+                SQL.table("DELETE FROM Kapitalverlauf WHERE Runde = " + (rundeEinstellung - 1));
                 // Runde verringern
                 SQLEinstellungen.setEinstellung("RND", String.valueOf((rundeEinstellung - 1)));
             }
@@ -393,7 +393,7 @@ public class DatenReset extends JPanel {
                 // Werte und Dividenden löschen
                 if(wert_chb.isSelected()){
                     SQL.table("DELETE FROM Aktienverlauf WHERE Runde = " + (rundeEinstellung - 1));
-                    SQL.table("UPDATE Kapitalverlauf SET Dividende = 0 WHERE Runde = " + (rundeEinstellung - 1));
+                    SQL.table("UPDATE Transaktionen SET Dividende = 0 WHERE Runde = " + (rundeEinstellung - 1));
                 }
                 // Kapitalverlauf löschen
                 SQL.table("DELETE FROM Kapitalverlauf WHERE Runde = " + (rundeEinstellung - 1));
@@ -452,6 +452,9 @@ public class DatenReset extends JPanel {
         if(SQLSpiel.getOneInteger("SELECT COUNT(*) FROM Kapitalverlauf") == 0){
             SQLSpiel.getOneInteger("SELECT setval('kapitalverlauf_id_seq', 1, false)");
         }
+
+        // Anzeige Runde aktualisieren
+        Start.runde.setTextField(String.valueOf(Start.getAktuelleRunde()));
     }
 
     // Checkboxen demarkieren
