@@ -77,6 +77,7 @@ public class Kauf extends JPanel{
         ActionListener restwert = new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
+                Checks.clearOneField(Kauf.restwert); // Wert aus Berechnung zuvor löschen
                 if(aktie.getTextfield().isEmpty() && anzahl.getTextfield().isEmpty()) {
                     if(!person.getTextfield().isEmpty()){
                         berechnungRestwert();
