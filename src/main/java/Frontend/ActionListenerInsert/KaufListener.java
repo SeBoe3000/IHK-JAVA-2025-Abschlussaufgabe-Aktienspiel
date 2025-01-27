@@ -79,7 +79,7 @@ public class KaufListener extends MyActionListenerInsert {
             // Prüfung nicht zu viele Aktien verwendet (Mindestanzahl wird beim Spielen der nächsten Runde geprüft)
             if (anzahlAktien() > EinstellungenTransaktionenListener.getEinstellungInteger("maxAktieRunde")) {
                 errorMessages.add("Es dürfen maximal " +
-                        EinstellungenTransaktionenListener.getEinstellungInteger("maxPersonRunde") +
+                        EinstellungenTransaktionenListener.getEinstellungInteger("maxAktieRunde") +
                         " Aktien an der Runde teilnehmen.");
             }
             // Prüfung eine Person darf nur eine gewisse Anzahl an Aktien kaufen
@@ -94,7 +94,7 @@ public class KaufListener extends MyActionListenerInsert {
                 errorMessages.add("Von einem Unternehmen dürfen maximal " +
                         EinstellungenAktienListener.getEinstellungInteger("maxAnzahlAktien") +
                         " Aktien gekauft werden. Mit dem aktuellen Kauf sind es aber " +
-                        anzahlAktienanzahlPerson() + " Aktien. Bitte die Anzahl korrigieren.");
+                        anzahlAktienanzahlUnternehmen() + " Aktien. Bitte die Anzahl korrigieren.");
             }
             // Prüfung eine Person kann nur so viel Kaufen, bis das Startkapital aufgebraucht ist.
             if (aktienkauf(eingabePersonID) > startkapital(eingabePersonID)) {
@@ -198,7 +198,7 @@ public class KaufListener extends MyActionListenerInsert {
     protected Integer anzahlAktienanzahlPerson() {
         Integer runde = Start.getAktuelleRunde();
         // Summe Aktienanzahl aus Datenbank ermitteln
-        int aktienanzahlDB = SQLSpiel.getOneInteger("SELECT COUNT(DISTINCT Aktienanzahl) FROM Transaktionen " +
+        int aktienanzahlDB = SQLSpiel.getOneInteger("SELECT SUM(Aktienanzahl) FROM Transaktionen " +
                 "WHERE Runde = " + runde + " " +
                 "AND PersonID = " + eingabePersonID);
         // Aktienanzahl aus Liste dazuzählen
@@ -210,20 +210,20 @@ public class KaufListener extends MyActionListenerInsert {
         }
         // Summe Aktienanzahl berechnen (mit Eingabe)
         int aktienanzahl = aktienanzahlDB + aktienanzahlListe + eingabeAnzahl;
-        // System.out.println("Anzahl Aktienanzahl Person: " + aktienanzahl);
+        // System.out.println("Datenbank: " + aktienanzahlDB + " Liste: " + aktienanzahlListe + " Eingabe: " + eingabeAnzahl);
         return aktienanzahl;
     }
 
     protected Integer anzahlAktienanzahlUnternehmen() {
         Integer runde = Start.getAktuelleRunde();
         // Summe Aktienanzahl aus Datenbank ermitteln
-        int aktienanzahlDB = SQLSpiel.getOneInteger("SELECT COUNT(DISTINCT Aktienanzahl) FROM Transaktionen " +
+        int aktienanzahlDB = SQLSpiel.getOneInteger("SELECT SUM(Aktienanzahl) FROM Transaktionen " +
                 "WHERE Runde = " + runde + " " +
                 "AND AktieISIN = " + "'" + eingabeAktie + "'");
         // Aktienanzahl aus Liste dazuzählen
         int aktienanzahlListe = 0;
         for (ElementTransaktionen transaktion : TransaktionenList) {
-            if (transaktion.getAktie() == eingabeAktie) {
+            if (transaktion.getAktie().equals(eingabeAktie)) {
                 aktienanzahlListe += transaktion.getAnzahl();
             }
         }
@@ -260,7 +260,7 @@ public class KaufListener extends MyActionListenerInsert {
                     "WHERE Runde = " + (runde - 1) + " " +
                     "AND AktieISIN = " + "'" + eingabeAktie + "'");
         }
-        // System.out.println("Eingabe "+ aktienkaufEingabe + " Liste " + aktienkaufListe);
+        // System.out.println("Datenbank " + aktienkaufDatenbank + "Eingabe "+ aktienkaufEingabe + " Liste " + aktienkaufListe);
         // Summe
         float aktienkaufSumme = aktienkaufDatenbank + aktienkaufListe + aktienkaufEingabe;
         return aktienkaufSumme;
