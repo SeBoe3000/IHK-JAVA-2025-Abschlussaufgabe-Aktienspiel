@@ -78,15 +78,17 @@ public class Kauf extends JPanel{
             @Override
             public void actionPerformed(ActionEvent e) {
                 Checks.clearOneField(Kauf.restwert); // Wert aus Berechnung zuvor löschen
+                // Objekt der Klasse erzeugen, um auf die Methode zuzugreifen, ohne diese statisch zu machen.
+                KaufListener listener = new KaufListener();
                 if(aktie.getTextfield().isEmpty() && anzahl.getTextfield().isEmpty()) {
-                    if(!person.getTextfield().isEmpty()){
+                    Checks.checkField(Kauf.person, "isValidInteger", "Bitte eine gültige Zahl im Feld Person (ID) angeben.", listener.errorMessages, listener.errorFlags);
+                    if(listener.errorMessages.isEmpty()){
                         berechnungRestwert();
                     } else {
-                        JOptionPane.showMessageDialog(null, "Es wurde keine PersonID angegeben.", "Berechnung nicht möglich", JOptionPane.ERROR_MESSAGE);
+                        listener.changeFieldFarbe(); // Feldfarbe ändern
+                        Checks.showError(listener.errorMessages); // Ausgabe Fehlermeldung(en)
                     }
                 } else {
-                    // Objekt der Klasse erzeugen, um auf die Methode zuzugreifen, ohne diese statisch zu machen.
-                    KaufListener listener = new KaufListener();
                     listener.checkFields();
                     if (listener.errorMessages.isEmpty()) {
                         listener.fillFields();

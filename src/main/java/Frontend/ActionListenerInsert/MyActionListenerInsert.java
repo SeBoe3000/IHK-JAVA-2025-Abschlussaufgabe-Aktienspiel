@@ -14,7 +14,7 @@ import java.util.List;
 public abstract class MyActionListenerInsert implements ActionListener {
     // Zum Speichern der Fehlermeldungen und Feldfarbe
     public ArrayList<String> errorMessages = new ArrayList<>();
-    List<Fehler> errorFlags = new ArrayList<>();
+    public List<Fehler> errorFlags = new ArrayList<>();
 
     // Von der aufrufenden Methode wird Btn übergeben und über den Konstruktor in der Variable gespeichert.
     private JButton Btn;

@@ -69,37 +69,39 @@ public class KaufListener extends MyActionListenerInsert {
             // TODO: ggf. den Kauf erhöhen
             errorMessages.add("Das Element befindet sich bereits in der Datenbank. Bitte einen anderen Datensatz angeben.");
         }
-        // Prüfung nicht zu viele Personen verwendet (Mindestanzahl wird beim Spielen der nächsten Runde geprüft)
-        if(anzahlPersonen() > EinstellungenTransaktionenListener.getEinstellungInteger("maxPersonRunde")){
-            errorMessages.add("Es dürfen maximal " +
-                    EinstellungenTransaktionenListener.getEinstellungInteger("maxPersonRunde") +
-                    " Personen an der Runde teilnehmen.");
-        }
-        // Prüfung nicht zu viele Aktien verwendet (Mindestanzahl wird beim Spielen der nächsten Runde geprüft)
-        if(anzahlAktien() > EinstellungenTransaktionenListener.getEinstellungInteger("maxAktieRunde")){
-            errorMessages.add("Es dürfen maximal " +
-                    EinstellungenTransaktionenListener.getEinstellungInteger("maxPersonRunde") +
-                    " Aktien an der Runde teilnehmen.");
-        }
-        // Prüfung eine Person darf nur eine gewisse Anzahl an Aktien kaufen
-        if(anzahlAktienanzahlPerson() > EinstellungenTransaktionenListener.getEinstellungInteger("maxAktienPersonRunde")){
-            errorMessages.add("Eine Person darf maximal " +
-                    EinstellungenTransaktionenListener.getEinstellungInteger("maxAktienPersonRunde") +
-                    " pro Runde gekauft werden. Mit dem aktuellen Kauf sind es aber " +
-                    anzahlAktienanzahlPerson() + " Aktien. Bitte die Anzahl korrigieren.");
-        }
-        // Prüfung es kann nur eine gewisse Anzahl an Unternehmensaktien gekauft werden
-        if(anzahlAktienanzahlUnternehmen() > EinstellungenAktienListener.getEinstellungInteger("maxAnzahlAktien")){
-            errorMessages.add("Von einem Unternehmen dürfen maximal " +
-                    EinstellungenAktienListener.getEinstellungInteger("maxAnzahlAktien") +
-                    " Aktien gekauft werden. Mit dem aktuellen Kauf sind es aber " +
-                    anzahlAktienanzahlPerson() + " Aktien. Bitte die Anzahl korrigieren.");
-        }
-        // Prüfung eine Person kann nur so viel Kaufen, bis das Startkapital aufgebraucht ist.
-        if(aktienkauf(eingabePersonID) > startkapital(eingabePersonID)) {
-            errorMessages.add("Die Person hat ein Startkapital von " + startkapital(eingabePersonID) +
-                    " und mit dem aktuellen Kauf wären es " + aktienkauf(eingabePersonID) +
-                    " . Bitte weniger kaufen.");
+        if(errorMessages.isEmpty()) {
+            // Prüfung nicht zu viele Personen verwendet (Mindestanzahl wird beim Spielen der nächsten Runde geprüft)
+            if (anzahlPersonen() > EinstellungenTransaktionenListener.getEinstellungInteger("maxPersonRunde")) {
+                errorMessages.add("Es dürfen maximal " +
+                        EinstellungenTransaktionenListener.getEinstellungInteger("maxPersonRunde") +
+                        " Personen an der Runde teilnehmen.");
+            }
+            // Prüfung nicht zu viele Aktien verwendet (Mindestanzahl wird beim Spielen der nächsten Runde geprüft)
+            if (anzahlAktien() > EinstellungenTransaktionenListener.getEinstellungInteger("maxAktieRunde")) {
+                errorMessages.add("Es dürfen maximal " +
+                        EinstellungenTransaktionenListener.getEinstellungInteger("maxPersonRunde") +
+                        " Aktien an der Runde teilnehmen.");
+            }
+            // Prüfung eine Person darf nur eine gewisse Anzahl an Aktien kaufen
+            if (anzahlAktienanzahlPerson() > EinstellungenTransaktionenListener.getEinstellungInteger("maxAktienPersonRunde")) {
+                errorMessages.add("Eine Person darf maximal " +
+                        EinstellungenTransaktionenListener.getEinstellungInteger("maxAktienPersonRunde") +
+                        " pro Runde gekauft werden. Mit dem aktuellen Kauf sind es aber " +
+                        anzahlAktienanzahlPerson() + " Aktien. Bitte die Anzahl korrigieren.");
+            }
+            // Prüfung es kann nur eine gewisse Anzahl an Unternehmensaktien gekauft werden
+            if (anzahlAktienanzahlUnternehmen() > EinstellungenAktienListener.getEinstellungInteger("maxAnzahlAktien")) {
+                errorMessages.add("Von einem Unternehmen dürfen maximal " +
+                        EinstellungenAktienListener.getEinstellungInteger("maxAnzahlAktien") +
+                        " Aktien gekauft werden. Mit dem aktuellen Kauf sind es aber " +
+                        anzahlAktienanzahlPerson() + " Aktien. Bitte die Anzahl korrigieren.");
+            }
+            // Prüfung eine Person kann nur so viel Kaufen, bis das Startkapital aufgebraucht ist.
+            if (aktienkauf(eingabePersonID) > startkapital(eingabePersonID)) {
+                errorMessages.add("Die Person hat ein Startkapital von " + startkapital(eingabePersonID) +
+                        " und mit dem aktuellen Kauf wären es " + aktienkauf(eingabePersonID) +
+                        " . Bitte weniger kaufen.");
+            }
         }
     }
 
