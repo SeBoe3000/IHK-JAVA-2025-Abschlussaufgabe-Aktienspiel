@@ -1,6 +1,5 @@
 package Frontend.Programme.Sonstiges;
 
-import Datenbank.SQLSpiel;
 import Datenbank.SQLSpielstand;
 import Frontend.Cards;
 

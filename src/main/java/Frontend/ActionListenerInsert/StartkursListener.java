@@ -103,7 +103,6 @@ public class StartkursListener extends MyActionListenerInsert {
         } else {
             JOptionPane.showMessageDialog(null, "Es waren doppelte Datensätze vorhanden. Diese wurden nicht erfasst. Der Rest wurde verarbeitet.");
         }
-        // TODO: Option 2 prüfen, siehe AktienListener
     }
 
     @Override

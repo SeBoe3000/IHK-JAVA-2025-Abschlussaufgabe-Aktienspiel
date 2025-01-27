@@ -144,7 +144,7 @@ public class KaufListener extends MyActionListenerInsert {
         }
         // Summe Personen berechnen
         int anzahlAktien = aktienDB + aktien.size();
-        System.out.println("Anzahl Aktien: " + anzahlAktien);
+        // System.out.println("Anzahl Aktien: " + anzahlAktien);
         aktien.clear();
         return anzahlAktien;
     }
@@ -183,7 +183,7 @@ public class KaufListener extends MyActionListenerInsert {
         }
         // Summe Personen berechnen
         int anzahlPersonen = personenDB + personen.size();
-        System.out.println("Anzahl Personen: " + anzahlPersonen);
+        // System.out.println("Anzahl Personen: " + anzahlPersonen);
         personen.clear();
         return anzahlPersonen;
     }
@@ -203,7 +203,7 @@ public class KaufListener extends MyActionListenerInsert {
         }
         // Summe Aktienanzahl berechnen (mit Eingabe)
         int aktienanzahl = aktienanzahlDB + aktienanzahlListe + eingabeAnzahl;
-        System.out.println("Anzahl Aktienanzahl Person: " + aktienanzahl);
+        // System.out.println("Anzahl Aktienanzahl Person: " + aktienanzahl);
         return aktienanzahl;
     }
 
@@ -222,7 +222,7 @@ public class KaufListener extends MyActionListenerInsert {
         }
         // Summe Aktienanzahl berechnen (mit Eingabe)
         int aktienanzahl = aktienanzahlDB + aktienanzahlListe + eingabeAnzahl;
-        System.out.println("Anzahl Aktienanzahl Unternehmen: " + aktienanzahl);
+        // System.out.println("Anzahl Aktienanzahl Unternehmen: " + aktienanzahl);
         return aktienanzahl;
     }
 
@@ -294,7 +294,6 @@ public class KaufListener extends MyActionListenerInsert {
         } else {
             JOptionPane.showMessageDialog(null, "Es waren doppelte Datensätze vorhanden. Diese wurden nicht erfasst. Der Rest wurde verarbeitet.");
         }
-        // TODO: Option 2 prüfen, siehe AktienListener
     }
 
     @Override

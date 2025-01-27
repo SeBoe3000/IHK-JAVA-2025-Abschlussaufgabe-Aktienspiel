@@ -41,7 +41,7 @@ public abstract class MyActionListenerInsert implements ActionListener {
     public void ok(){
         boolean notInWork = !checkFieldsfilled(); // Prüfung, ob ein Feld gefüllt ist
         boolean noElement = checkElementInList(); // Prüfung, ob Element in Liste vorhanden ist
-        System.out.println("Ergebnis Check - notInWork: " + notInWork + " und noElement: " + noElement);
+        // System.out.println("Ergebnis Check - notInWork: " + notInWork + " und noElement: " + noElement);
 
         // Bei keiner Angabe und keinem Element - Fehlermeldungen hochbringen
         if(notInWork == true && noElement == true) {
@@ -63,7 +63,7 @@ public abstract class MyActionListenerInsert implements ActionListener {
     public void abbrechen() {
         boolean notInWork = !checkFieldsfilled(); // Prüfung, ob 1 Feld gefüllt ist
         boolean noElement = checkElementInList(); // Prüfung, ob Element in Liste vorhanden ist
-        System.out.println("Ergebnis Check - notInWork: " + notInWork + " und noElement: " + noElement);
+        // System.out.println("Ergebnis Check - notInWork: " + notInWork + " und noElement: " + noElement);
 
         // Nachfrage, wenn mind. 1 Feld gefüllt oder noch ein Element in der Liste drin ist
         if(notInWork == false || noElement == false) {

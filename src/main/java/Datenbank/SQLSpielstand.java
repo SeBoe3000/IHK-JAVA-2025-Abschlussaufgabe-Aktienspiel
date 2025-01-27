@@ -91,7 +91,6 @@ public class SQLSpielstand {
         return ergebnis;
     }
 
-
     public static String abfrageMaxAktienUnternehmen(){
         String ergebnis = "";
         String query = "SELECT string_agg(DISTINCT Summe.Name, ' und ') AS Unternehmen, Summe.SummAktien " +
@@ -125,7 +124,6 @@ public class SQLSpielstand {
         }
         return ergebnis;
     }
-
 
     public static String abfrageGewinnUnternehmen(){
         String ergebnis = "";

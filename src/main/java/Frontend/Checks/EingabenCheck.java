@@ -1,7 +1,5 @@
 package Frontend.Checks;
 
-import java.sql.Timestamp;
-import java.time.LocalDateTime;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -36,7 +34,7 @@ public class EingabenCheck {
                 anzahlPunkte ++;
             }
         }
-        //System.out.println("Punkte: " + anzahlPunkte + " Zahlen: " + anzahlZahl + " Nullen: " + anzahlZahlNull);
+        // System.out.println("Punkte: " + anzahlPunkte + " Zahlen: " + anzahlZahl + " Nullen: " + anzahlZahlNull);
 
         // nur ein Punkt ist gültig
         if (anzahlPunkte > 1) {
@@ -115,21 +113,6 @@ public class EingabenCheck {
         return isValid;
     }
 
-    // Überprüfung Integer zwischen von bis (darf nicht leer, d.h. null sein)
-    public static boolean isValidIntegerVonBis(String eingabe, Integer von, Integer bis){
-        boolean isValid = true;
-        Integer zahl = 0;
-        try {
-            zahl = Integer.parseInt(eingabe);
-        } catch (Exception e) {
-            isValid = false;
-        }
-        if(zahl < von || zahl > bis){
-            isValid = false;
-        }
-        return isValid;
-    }
-
     /* Überprüfung String auf
     - mind. ein Zeichen.
     - kein DROP TABLE, DELETE, GRANT, REVOKE vorhanden
@@ -161,87 +144,6 @@ public class EingabenCheck {
         return isValid;
     }
 
-    /* Überprüfung String auf Datumsformat
-    - Prüfung auf richtiges Datums- / Uhrzeitformat
-    */
-    public static boolean isValidDatum(String eingabe){
-        boolean isValid = true;
-
-        // Überprüfung auf korrektem Aufbau
-        String os = System.getProperty("os.name");
-        Pattern pattern;
-        if (os.contains("Wind")) {
-            pattern = Pattern.compile("(^[0-9]{4}(-[0-9]{2}){2}\\s([0-9]{2}:){2}[0-9]{2}$)");
-        } else {
-            pattern = Pattern.compile("(^[0-9]{4}(-[0-9]{2}){2}/s([0-9]{2}:){2}[0-9]{2}$)");
-        }
-        Matcher matcher = pattern.matcher(eingabe);
-        boolean datum = matcher.find();
-
-        if(datum == false) {
-            isValid = false;
-        }
-        return isValid;
-    }
-
-
-    /* Überprüfung String auf gültiges Datum
-    - Datums- / Uhrzeitformat und in Bestandteile für Prüfung zerlegen
-    - Prüfung auf Tage nicht größer 31, bei Monat
-    - Prüfung auf Monate nicht größer 12
-    - Prüfung auf Tage nicht größer 30 bei Monat 04, 06, 09, 11
-    - Prüfung auf Tage nicht größer 29 bei Monat 02
-    - Prüfung auf Tage nicht größer 28 bei Monat 02 und keinem Schaltjahr
-    - Prüfung auf Stunden nicht größer 23
-    - Prüfung auf Minuten nicht größer 59
-    - Prüfung auf Sekunden nicht größer 59
-    */
-    public static boolean isValidDatumCorrect(String eingabe){
-        boolean isValid = true;
-        // Eingabe in einzelne Bestandteile zerlegen
-        Integer Jahr = Integer.parseInt(eingabe.substring(0,4));
-        Integer Monat = Integer.parseInt(eingabe.substring(5,7));
-        Integer Tag = Integer.parseInt(eingabe.substring(8,10));
-        Integer Stunden = Integer.parseInt(eingabe.substring(11,13));
-        Integer Minuten = Integer.parseInt(eingabe.substring(14,16));
-        Integer Sekunden = Integer.parseInt(eingabe.substring(17,19));
-
-        /*System.out.println("Jahr: " + eingabe.substring(0,4) + " Monat: " + eingabe.substring(5,7) + " Tag: " +
-                eingabe.substring(8,10) + " Stunden: " + eingabe.substring(11,13) + " Minuten: " +
-                eingabe.substring(14,16) + " Sekunden: " + eingabe.substring(17,19));
-         */
-
-        if (Tag > 31 ||
-                Monat > 12 ||
-                ((Monat == 4 || Monat == 6 || Monat == 9 || Monat == 11) && Tag > 30 ) ||
-                (Monat == 2 && Tag > 29) ||
-                (Monat == 2 && Tag > 28 && !((Jahr % 4 == 0 && Jahr % 100 != 0) || Jahr % 400 == 0)) ||
-                (Stunden > 23) ||
-                (Minuten > 59) ||
-                (Sekunden > 59)
-        ) {
-            isValid = false;
-        }
-        return isValid;
-    }
-
-    // Überprüfung Datum und Uhrzeit nicht in Zukunft
-    public static boolean isValidDatumNotInFuture(String eingabe){
-        boolean isValid = true;
-        Timestamp eingabeTageszeit = Timestamp.valueOf(eingabe);
-        // aktuelles Datum mit Uhrzeit in java Datum umwandeln
-        LocalDateTime localDateTime = LocalDateTime.now();
-        Timestamp sqldate = Timestamp.valueOf(localDateTime);
-        // System.out.println("sqldate ist: " + sqldate + " eingabe ist: " + eingabeTageszeit);
-        if (eingabeTageszeit.after(sqldate)) {
-            isValid = false;
-        }
-
-        return isValid;
-    }
-
-
-
     // Überprüfung auf Länge von bis
     public static boolean isValidStringLaenge(String eingabe, Integer von, Integer bis){
         boolean isValid = true;
@@ -256,6 +158,22 @@ public class EingabenCheck {
         return isValid;
     }
 
+    // Überprüfung Integer zwischen von bis (darf nicht leer, d.h. null sein)
+    public static boolean isValidIntegerVonBis(String eingabe, Integer von, Integer bis){
+        boolean isValid = true;
+        Integer zahl = 0;
+        try {
+            zahl = Integer.parseInt(eingabe);
+        } catch (Exception e) {
+            isValid = false;
+        }
+        if(zahl < von || zahl > bis){
+            isValid = false;
+        }
+        return isValid;
+    }
+
+    // Überprüfung Float zwischen von bis (darf nicht leer, d.h. null sein)
     public static boolean isValidFloatVonBis(String eingabe, Float von, Float bis) {
         boolean isValid = true;
         Float zahl = 0F;

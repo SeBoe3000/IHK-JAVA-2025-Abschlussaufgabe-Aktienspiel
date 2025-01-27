@@ -40,7 +40,6 @@ public class ElementAktienverlauf {
 
     public void setAnzahl(Integer anzahl) {
         this.anzahl = anzahl;
-        // TODO: Prüfung genau 100 einbauen, ggf. auch in GUI Feld anzeigen und nicht bearbeitbar machen
     }
 
     public Float getKurs() {
@@ -49,7 +48,6 @@ public class ElementAktienverlauf {
 
     public void setKurs(Float kurs) {
         this.kurs = kurs;
-        // TODO: Prüfung Kurs nicht kleiner 10
     }
 
     public Float getKassenbestand() {
@@ -58,6 +56,5 @@ public class ElementAktienverlauf {
 
     public void setKassenbestand(Float kassenbestand) {
         this.kassenbestand = kassenbestand;
-        // TODO: Prüfung zwischen 0 und 100.000 möglich
     }
 }

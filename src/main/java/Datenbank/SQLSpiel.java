@@ -73,10 +73,10 @@ public class SQLSpiel {
             }
         } catch (SQLException e){
             Interaction.noDatabase();
-             e.printStackTrace();
+            // e.printStackTrace();
         } catch (Exception e){
             Interaction.noDatabase();
-             e.printStackTrace();
+            // e.printStackTrace();
         }
         return ergebnis;
     }
@@ -93,7 +93,7 @@ public class SQLSpiel {
                 result.add(rs.getString(1));
             }
         } catch (SQLException e) {
-            e.printStackTrace();
+           // e.printStackTrace();
         }
         return result;
     }
@@ -110,7 +110,7 @@ public class SQLSpiel {
                 result.add(rs.getInt(1));
             }
         } catch (SQLException e) {
-            e.printStackTrace();
+           // e.printStackTrace();
         }
         return result;
     }

@@ -3,7 +3,6 @@ package Frontend.Programme.Bewegungsdaten;
 import Frontend.ActionListenerInsert.KaufListener;
 import Frontend.Komponenten.Buttons;
 import Frontend.Komponenten.EingabePanel;
-import Frontend.Komponenten.Interaction;
 
 import javax.swing.*;
 import java.awt.*;

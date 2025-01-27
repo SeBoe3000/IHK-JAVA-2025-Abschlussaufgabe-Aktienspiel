@@ -391,10 +391,6 @@ public class Start extends JPanel {
                         // Anzeige Runde aktualisieren
                         Start.runde.setTextField(String.valueOf(getAktuelleRunde()));
                         JOptionPane.showMessageDialog(null, "Runde wurde erfolgreich gespielt.", "Erfolg", JOptionPane.INFORMATION_MESSAGE);
-
-                        // TODO: Abfragen für Spielstand ggf. aktualisieren
-
-
                     }
                 }
                 Checks.showError(errorMessages); // Ausgabe Fehlermeldung(en)

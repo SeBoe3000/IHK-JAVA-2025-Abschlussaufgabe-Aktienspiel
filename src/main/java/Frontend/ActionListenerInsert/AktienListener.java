@@ -9,7 +9,6 @@ import Frontend.Programme.Stammdaten.Aktie;
 
 import javax.swing.*;
 import java.util.ArrayList;
-import java.util.List;
 
 public class AktienListener extends MyActionListenerInsert {
     public AktienListener(JButton Btn) {
@@ -103,9 +102,7 @@ public class AktienListener extends MyActionListenerInsert {
 
         /*
         // Option 2: Datensätze nur verarbeiten, wenn Elemente in der Zwischenzeit nicht in Datenbank erfasst wurden
-        // TODO: Daten nachträglich bearbeitbar machen (Liste anzeigen)
-        // TODO: Rückgabe, damit Dialog nur bei erfolgreicher Verarbeitung geschlossen wird
-        // TODO: prüfen, ob Select-SQL gesammelt im Batch verarbeitet werden könnte
+        // Hierfür Daten nachträglich bearbeitbar machen (Liste anzeigen) und Dialog nur bei erfolgreicher Verarbeitung schließen
         if(checkInDatenbank(AktieList)) {
             JOptionPane.showMessageDialog(null, "Datensatz aus ElementListe ist bereits in Datenbank vorhanden.");
         } else {
@@ -117,7 +114,7 @@ public class AktienListener extends MyActionListenerInsert {
 
     // prüfen, ob Element aus ElementListe in Datenbank vorhanden ist
     // Für Option 2 im AktienListener.elementInsert benötigt.
-    public static Boolean checkInDatenbank(List<ElementAktie> aktie){
+    /*public static Boolean checkInDatenbank(List<ElementAktie> aktie){
         Boolean inDatenbank = false;
         for(ElementAktie Aktie: aktie){
             if(SQL.checkElementAlreadyInDatenbankOneString(eingabeIsin, "isin","Aktien")){
@@ -126,7 +123,7 @@ public class AktienListener extends MyActionListenerInsert {
             }
         }
         return inDatenbank;
-    }
+    } */
 
     @Override
     protected void clearliste() {

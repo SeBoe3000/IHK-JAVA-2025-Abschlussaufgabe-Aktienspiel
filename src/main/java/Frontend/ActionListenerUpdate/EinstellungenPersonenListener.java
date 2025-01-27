@@ -67,7 +67,7 @@ public class EinstellungenPersonenListener extends MyActionListenerUpdate {
     @Override
     protected void checkfields() {
         Checks.checkField(EinstellungenPersonen.defaultStrartkapital, "isValidFloatEmpty", "Bitte einen gültiges Startkapital angeben.", errorMessages, errorFlags);
-        System.out.println("Startkapital: " +EinstellungenPersonen.defaultStrartkapital.getTextfield() );
+        // System.out.println("Startkapital: " +EinstellungenPersonen.defaultStrartkapital.getTextfield() );
 
         // Sofern die Checkbox markiert ist, darf nicht 0 oder nichts angegeben sein.
         // Zuerst auf leere Eingabe prüfen und dann über parsen alle möglichen Variationen von 0 abdecken.
