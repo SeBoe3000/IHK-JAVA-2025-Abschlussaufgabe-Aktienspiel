@@ -19,6 +19,7 @@ public class EinstellungenTransaktionenListener extends MyActionListenerUpdate {
     public static String maxAktieRunde;
     public static String firstDividende;
     public static String secondDividende;
+    public static String generelleDividende;
 
     String eingabeMaxAktienPersonRunde;
     String eingabeMinPersonRunde;
@@ -27,6 +28,7 @@ public class EinstellungenTransaktionenListener extends MyActionListenerUpdate {
     String eingabeMaxAktieRunde;
     String eingabeFirstDividende;
     String eingabeSecondDividende;
+    String eingabeGenerelleDividende;
 
     public static void setDefaults() {
         getDefaults();
@@ -38,6 +40,7 @@ public class EinstellungenTransaktionenListener extends MyActionListenerUpdate {
         EinstellungenTransaktionen.aktieRunde.setTextFieldBis(maxAktieRunde);
         EinstellungenTransaktionen.firstDividende.setTextField(firstDividende);
         EinstellungenTransaktionen.secondDividende.setTextField(secondDividende);
+        EinstellungenTransaktionen.generelleDividende.setTextField(generelleDividende);
     }
 
     protected static void getDefaults(){
@@ -49,6 +52,7 @@ public class EinstellungenTransaktionenListener extends MyActionListenerUpdate {
         int trenner4 = einstellung.indexOf(",", trenner3 + 1);
         int trenner5 = einstellung.indexOf(",", trenner4 + 1);
         int trenner6 = einstellung.indexOf(",", trenner5 + 1);
+        int trenner7 = einstellung.indexOf(",", trenner6 + 1);
 
         try {
             maxAktienPersonRunde = einstellung.substring(0, trenner1);
@@ -57,7 +61,8 @@ public class EinstellungenTransaktionenListener extends MyActionListenerUpdate {
             minAktieRunde = einstellung.substring(trenner3 + 1, trenner4);
             maxAktieRunde = einstellung.substring(trenner4 + 1, trenner5);
             firstDividende = einstellung.substring(trenner5 + 1, trenner6);
-            secondDividende = einstellung.substring(trenner6 + 1, einstellung.length());
+            secondDividende = einstellung.substring(trenner6 + 1, trenner7);
+            generelleDividende = einstellung.substring(trenner7 + 1, einstellung.length());
         } catch (Exception e) {
             Interaction.noDatabase();
             // e.printStackTrace();
@@ -89,6 +94,8 @@ public class EinstellungenTransaktionenListener extends MyActionListenerUpdate {
             einstellung = Float.valueOf(firstDividende);
         } else if (field == "secondDividende") {
             einstellung = Float.valueOf(secondDividende);
+        } else if (field == "generelleDividende") {
+            einstellung = Float.valueOf(generelleDividende);
         }
         return einstellung;
     }
@@ -106,6 +113,7 @@ public class EinstellungenTransaktionenListener extends MyActionListenerUpdate {
         if(Float.valueOf(EinstellungenTransaktionen.firstDividende.getTextfield()) < Float.valueOf(EinstellungenTransaktionen.secondDividende.getTextfield())){
             errorMessages.add("Die Dividende für den zweiten Platz darf nicht größer als die des ersten sein.");
         }
+        Checks.checkField(EinstellungenTransaktionen.generelleDividende, "isValidFloatNull", "Bitte einen gültigen Prozentsatz für die generelle Dividende angeben.", errorMessages, errorFlags);
     }
 
     @Override
@@ -117,6 +125,7 @@ public class EinstellungenTransaktionenListener extends MyActionListenerUpdate {
         eingabeMaxAktieRunde = EinstellungenTransaktionen.aktieRunde.getTextfieldBis();
         eingabeFirstDividende = EinstellungenTransaktionen.firstDividende.getTextfield();
         eingabeSecondDividende = EinstellungenTransaktionen.secondDividende.getTextfield();
+        eingabeGenerelleDividende = EinstellungenTransaktionen.generelleDividende.getTextfield();
     }
 
     @Override
@@ -129,7 +138,8 @@ public class EinstellungenTransaktionenListener extends MyActionListenerUpdate {
                 !eingabeMinAktieRunde.equals(minAktieRunde) ||
                 !eingabeMaxAktieRunde.equals(maxAktieRunde) ||
                 !eingabeFirstDividende.equals(firstDividende) ||
-                !eingabeSecondDividende.equals(secondDividende)){
+                !eingabeSecondDividende.equals(secondDividende) ||
+                !eingabeGenerelleDividende.equals(generelleDividende)){
             check = true;
         }
         return check;
@@ -143,7 +153,8 @@ public class EinstellungenTransaktionenListener extends MyActionListenerUpdate {
                 eingabeMinAktieRunde  + "," +
                 eingabeMaxAktieRunde  + "," +
                 eingabeFirstDividende  + "," +
-                eingabeSecondDividende;
+                eingabeSecondDividende + "," +
+                eingabeGenerelleDividende;
         SQLEinstellungen.setEinstellung("TRN", update);
     }
 
@@ -154,5 +165,6 @@ public class EinstellungenTransaktionenListener extends MyActionListenerUpdate {
         Checks.clearOneFieldVonBis(EinstellungenTransaktionen.aktieRunde);
         Checks.clearOneField(EinstellungenTransaktionen.firstDividende);
         Checks.clearOneField(EinstellungenTransaktionen.secondDividende);
+        Checks.clearOneField(EinstellungenTransaktionen.generelleDividende);
     }
 }

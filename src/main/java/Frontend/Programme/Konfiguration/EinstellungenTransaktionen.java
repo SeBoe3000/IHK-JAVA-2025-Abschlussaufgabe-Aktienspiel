@@ -12,8 +12,10 @@ public class EinstellungenTransaktionen extends JPanel{
     public static EingabePanel maxAktienPersonRunde = new EingabePanel("Maximale Aktien pro Person und Runde: ");
     public static EingabePanelVonBis personRunde = new EingabePanelVonBis("Personen pro Runde: ");
     public static EingabePanelVonBis aktieRunde = new EingabePanelVonBis("Unternehmen pro Runde: ");
-    public static EingabePanel firstDividende = new EingabePanel("Prozentuale Dividende erster Platz: ");
-    public static EingabePanel secondDividende = new EingabePanel("Prozentuale Dividende zweiter Platz: ");
+    JLabel dividende = new JLabel("Prozentuale Dividende ");
+    public static EingabePanel firstDividende = new EingabePanel("erster Platz: ");
+    public static EingabePanel secondDividende = new EingabePanel("zweiter Platz: ");
+    public static EingabePanel generelleDividende = new EingabePanel("Generelle Dividende: ");
 
     static Buttons buttons = new Buttons();
 
@@ -38,13 +40,20 @@ public class EinstellungenTransaktionen extends JPanel{
         gbc.gridy = 2; // Zeile
         add(aktieRunde, gbc);
 
-        // firstDividende hinzufügen
+        // generelleDividende hinzufügen
         gbc.gridy = 3; // Zeile
-        add(firstDividende, gbc);
+        add(generelleDividende, gbc);
 
-        // secondDividende hinzufügen
+        // firstDividende und secondDividende hinzufügen
         gbc.gridy = 4; // Zeile
-        add(secondDividende, gbc);
+        JPanel sonderdividende = new JPanel();
+        sonderdividende.setLayout(new BoxLayout(sonderdividende, BoxLayout.X_AXIS));
+        sonderdividende.add(dividende);
+        sonderdividende.add(firstDividende);
+        sonderdividende.add(secondDividende);
+        firstDividende.setPreferredSize(90,50);
+        secondDividende.setPreferredSize(90,50);
+        add(sonderdividende, gbc);
 
         // Buttons hinzufügen
         gbc.gridy = 5; // Zeile

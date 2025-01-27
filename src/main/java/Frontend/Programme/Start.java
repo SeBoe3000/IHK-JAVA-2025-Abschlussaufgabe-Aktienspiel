@@ -86,7 +86,6 @@ public class Start extends JPanel {
         runde.setTextField(String.valueOf(getAktuelleRunde()));
         runde.setEnabledFalse();
         runde.setPreferredSize(30,30);
-
         add(group_runde, gbc);
 
         // Label Sonstiges hinzufügen
@@ -162,7 +161,7 @@ public class Start extends JPanel {
                 Integer rundeAktienverlauf = SQLSpiel.getOneInteger("SELECT Runde FROM Aktienverlauf " +
                         "ORDER BY Runde DESC LIMIT 1");
 
-                System.out.println("Runde Transaktionen: " + rundeTransaktionen + " Aktienverlauf: " + rundeAktienverlauf);
+                // System.out.println("Runde Transaktionen: " + rundeTransaktionen + " Aktienverlauf: " + rundeAktienverlauf);
 
                 if (existsStartkapital == 0 || existsStartkurs == 0){
                     if(existsStartkapital == 0) {
@@ -184,7 +183,7 @@ public class Start extends JPanel {
                     Integer anzahlAktien = SQLSpiel.getOneInteger("SELECT COUNT(DISTINCT aktieisin) " +
                             "FROM Transaktionen WHERE Runde = (SELECT MAX(Runde) FROM Transaktionen)");
 
-                    System.out.println("Anzahl Personen: " + anzahlPersonen + " Aktien: " + anzahlAktien);
+                    // System.out.println("Anzahl Personen: " + anzahlPersonen + " Aktien: " + anzahlAktien);
 
                     // Einstellungen holen
                     Integer minPersonRunde = EinstellungenTransaktionenListener.getEinstellungInteger("minPersonRunde");
@@ -204,7 +203,6 @@ public class Start extends JPanel {
 
                     if(errorMessages.isEmpty()){
                         // Prüfung, zu jeder gekauften Aktie liegt ein Aktienkurs und Kassenbestand vor
-                        // TODO: Prüfen, auch ein Kassenbestand von 0 ist gültig.
                         Integer anzahlAktienOhneWertRunde = SQLSpiel.getOneInteger("SELECT " +
                                 "COUNT(CASE WHEN aktienverlauf.kassenbestand IS NULL THEN 1 END) " +
                                 "FROM Transaktionen LEFT JOIN Aktienverlauf ON " +
@@ -212,7 +210,7 @@ public class Start extends JPanel {
                                 "Transaktionen.Aktieisin = Aktienverlauf.Aktieisin " +
                                 "WHERE Transaktionen.Runde = (SELECT MAX(Transaktionen.Runde) FROM Transaktionen)");
 
-                        System.out.println("Anzahl Aktien ohne Wert: " + anzahlAktienOhneWertRunde);
+                        // System.out.println("Anzahl Aktien ohne Wert: " + anzahlAktienOhneWertRunde);
 
                         if(anzahlAktienOhneWertRunde > 0) {
                             String aktienOhneWertRunde = SQLSpiel.getAktienOhneWert();
@@ -299,11 +297,11 @@ public class Start extends JPanel {
                                     "AND Aktieisin = " + "'" + aktieisin + "'" + " " +
                                     "AND Runde = (SELECT MAX(Runde) FROM Transaktionen)");
 
-                            System.out.println("Aktien aus Arrayliste: " + aktieisin + "   " +
+                            /*System.out.println("Aktien aus Arrayliste: " + aktieisin + "   " +
                                     " Erster Platz Personen: " + anzahlPersonenErsterPlatz + " Wert: " + aktienkursErsterPlatz + "   " +
                                     " Zweiter Platz Personen: " + anzahlPersonenZweiterPlatz + " Wert: " + aktienkursZweiterPlatz + "   " +
                                     " Kassenbestand: " + kassenbestandAktie +
-                                    " Dividende erste: " + firstDividende + " zweite: " + secondDividende);
+                                    " Dividende erste: " + firstDividende + " zweite: " + secondDividende);*/
 
                             Float dividendeGenerell = 0F; // 10% vom Aktienwert
                             Float dividendeSonderErster = 0F;
@@ -325,18 +323,20 @@ public class Start extends JPanel {
                                         dividendeSonderZweiter = Float.valueOf(kassenbestandAktie / 100 * (secondDividende) / anzahlPersonenZweiterPlatz);
                                     }
                                 }
-                                System.out.println("Kassenbestand: " + kassenbestandAktie +
+                                /*System.out.println("Kassenbestand: " + kassenbestandAktie +
                                         " Prozentzahl 1: " + firstDividende + " Prozentzahl 2: " + secondDividende +
                                         " Anzahl Personen 1: " + anzahlPersonenErsterPlatz +
                                         " Anzahl Personen 2: " + anzahlPersonenZweiterPlatz +
                                         " Sonderdividende 1: " + dividendeSonderErster +
-                                        " Sonderdividende 2: " + dividendeSonderZweiter);
+                                        " Sonderdividende 2: " + dividendeSonderZweiter);*/
                             }
+
+                            // Generelle Dividende ermitteln
+                            Float generelleDividende = EinstellungenTransaktionenListener.getEinstellungFloat("generelleDividende");
 
                             // Dividenden updaten
                             for (Integer personid : PersonenAktieErsterPlatz) {
-                                // TODO: generelle Dividende variabel machen (Einstellungen)
-                                dividendeGenerell = aktienwertBerechnen(personid, 0) / 100 * 10; // generelle Dividende berechnen
+                                dividendeGenerell = aktienwertBerechnen(personid, 0) / 100 * generelleDividende; // generelle Dividende berechnen
                                 updateDividende(personid, aktieisin, dividendeSonderErster + dividendeGenerell);
                                 /*
                                 SQL.table("UPDATE Transaktionen " +
@@ -350,7 +350,7 @@ public class Start extends JPanel {
                             PersonenAktieErsterPlatz.clear();
 
                             for (Integer personid : PersonenAktieZweiterPlatz) {
-                                dividendeGenerell = aktienwertBerechnen(personid, 0) / 100 * 10; // generelle Dividende berechnen
+                                dividendeGenerell = aktienwertBerechnen(personid, 0) / 100 * generelleDividende; // generelle Dividende berechnen
                                 updateDividende(personid, aktieisin, dividendeSonderZweiter + dividendeGenerell);
                                 /*SQL.table("UPDATE Transaktionen " +
                                         "SET Dividende = " + (dividendeSonderZweiter + dividendeGenerell) + " " +
@@ -363,7 +363,7 @@ public class Start extends JPanel {
                             PersonenAktieZweiterPlatz.clear();
 
                             for (Integer personid : PersonenAktieRestlicherPlatz) {
-                                dividendeGenerell = aktienwertBerechnen(personid, 0) / 100 * 10; // generelle Dividende berechnen
+                                dividendeGenerell = aktienwertBerechnen(personid, 0) / 100 * generelleDividende; // generelle Dividende berechnen
                                 updateDividende(personid, aktieisin, dividendeGenerell);
                                 /*SQL.table("UPDATE Transaktionen " +
                                         "SET Dividende = " + (dividendeGenerell) + " " +
