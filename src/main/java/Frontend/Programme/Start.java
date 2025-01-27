@@ -466,8 +466,8 @@ public class Start extends JPanel {
                 "SUM((Transaktionen.Aktienanzahl * Aktienverlauf.Aktienkurs)) " +
                 "FROM Transaktionen JOIN Aktienverlauf " +
                 "ON Transaktionen.Aktieisin = Aktienverlauf.Aktieisin " +
-                "AND Transaktionen.Runde = Aktienverlauf.Runde " +
-                "WHERE Transaktionen.Runde = (SELECT MAX(Transaktionen.Runde - " + runde + ") FROM Transaktionen) " +
+                "WHERE Transaktionen.Runde = (SELECT MAX(Transaktionen.Runde) FROM Transaktionen) " +
+                "AND Aktienverlauf.Runde = (SELECT MAX(Aktienverlauf.Runde - " + runde + ") FROM Aktienverlauf) " +
                 "AND Transaktionen.Personid = " + "'" + personid + "'");
         return aktienwert;
     }
