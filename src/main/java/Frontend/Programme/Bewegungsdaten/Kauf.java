@@ -79,8 +79,7 @@ public class Kauf extends JPanel{
             public void actionPerformed(ActionEvent e) {
                 if(aktie.getTextfield().isEmpty() && anzahl.getTextfield().isEmpty()) {
                     if(!person.getTextfield().isEmpty()){
-                        Integer eingabePersonID = Integer.valueOf(Kauf.person.getTextfield());
-                        Kauf.restwert.setTextField(String.valueOf(KaufListener.startkapital(eingabePersonID) - KaufListener.aktienkauf(eingabePersonID)));
+                        berechnungRestwert();
                     } else {
                         JOptionPane.showMessageDialog(null, "Es wurde keine PersonID angegeben.", "Berechnung nicht möglich", JOptionPane.ERROR_MESSAGE);
                     }
@@ -90,8 +89,7 @@ public class Kauf extends JPanel{
                     listener.checkFields();
                     if (listener.errorMessages.isEmpty()) {
                         listener.fillFields();
-                        Integer eingabePersonID = Integer.valueOf(Kauf.person.getTextfield());
-                        Kauf.restwert.setTextField(String.valueOf(KaufListener.startkapital(eingabePersonID) - KaufListener.aktienkauf(eingabePersonID)));
+                        berechnungRestwert();
                     } else {
                         listener.changeFieldFarbe(); // Feldfarbe ändern
                         Checks.showError(listener.errorMessages); // Ausgabe Fehlermeldung(en)
@@ -100,5 +98,15 @@ public class Kauf extends JPanel{
             }
         };
         calcRestwert.addActionListener(restwert);
+    }
+
+    private static void berechnungRestwert(){
+        Integer eingabePersonID = Integer.valueOf(Kauf.person.getTextfield());
+        Float startkapital = KaufListener.startkapital(eingabePersonID);
+        if(startkapital > 0) {
+            Kauf.restwert.setTextField(String.valueOf(KaufListener.startkapital(eingabePersonID) - KaufListener.aktienkauf(eingabePersonID)));
+        } else {
+            JOptionPane.showMessageDialog(null, "Für die Person konnte kein Startkapital ermittelt werden.", "Berechnung nicht möglich", JOptionPane.ERROR_MESSAGE);
+        }
     }
 }
