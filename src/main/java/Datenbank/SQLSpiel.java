@@ -27,7 +27,7 @@ public class SQLSpiel {
         return ergebnis;
     }
 
-    // Ermittlung eines Integers
+    // Ermittlung eines Flots
     public static Float getOneFloat(String sql){
         Float ergebnis = 0F;
         try(

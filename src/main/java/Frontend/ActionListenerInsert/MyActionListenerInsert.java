@@ -13,13 +13,17 @@ import java.util.List;
 
 public abstract class MyActionListenerInsert implements ActionListener {
     // Zum Speichern der Fehlermeldungen und Feldfarbe
-    ArrayList<String> errorMessages = new ArrayList<>();
+    public ArrayList<String> errorMessages = new ArrayList<>();
     List<Fehler> errorFlags = new ArrayList<>();
 
     // Von der aufrufenden Methode wird Btn übergeben und über den Konstruktor in der Variable gespeichert.
     private JButton Btn;
     public MyActionListenerInsert(JButton Btn) {
         this.Btn = Btn;
+    }
+
+    // Damit vomKaufListener die Methode CheckFields in der Klasse Kauf aufgerufen werden kann, ohne statisch zu sein.
+    public MyActionListenerInsert() {
     }
 
     // In Abhängigkeit vom ausgewählten Button eine andere Funktionen aufrufen
@@ -130,7 +134,7 @@ public abstract class MyActionListenerInsert implements ActionListener {
         changePanel();
     }
 
-    protected void changeFieldFarbe(){
+    public void changeFieldFarbe(){
         Checks.setFarbeFelder(errorFlags);
         errorFlags.clear();
     }

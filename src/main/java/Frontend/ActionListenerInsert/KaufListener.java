@@ -29,8 +29,13 @@ public class KaufListener extends MyActionListenerInsert {
     static String eingabeAktie = "";
     static Integer eingabeAnzahl = 0;
 
+    // Damit die Methode CheckFields in der Klasse Kauf aufgerufen werden kann, ohne statisch zu sein.
+    public KaufListener() {
+        super();
+    }
+
     @Override
-    protected void checkFields() {
+    public void checkFields() {
         Checks.checkField(Kauf.person, "isValidInteger", "Bitte eine gültige Zahl im Feld Person (ID) angeben.", errorMessages, errorFlags);
         Checks.checkField(Kauf.aktie, "isValidString", "Bitte eine gültige ISIN angeben.", errorMessages, errorFlags);
         Checks.checkFieldLenght(Kauf.aktie, 12,12,"isValidStringLaenge", "Die ISIN muss 12 Stellen lang sein.", errorMessages, errorFlags);
@@ -38,7 +43,7 @@ public class KaufListener extends MyActionListenerInsert {
     }
 
     @Override
-    protected void fillFields() {
+    public void fillFields() {
         eingabePersonID = Integer.valueOf(Kauf.person.getTextfield());
         eingabeAktie = Kauf.aktie.getTextfield();
         eingabeAnzahl = Integer.valueOf(Kauf.anzahl.getTextfield());
@@ -114,7 +119,7 @@ public class KaufListener extends MyActionListenerInsert {
         Set<String> aktien = new HashSet<>();
         Integer runde = Start.getAktuelleRunde();
         // Summe Aktien aus Datenbank ermitteln
-        int aktienDB = SQLSpiel.getOneInteger("SELECT COUNT(DISTINCT AktienISIN) FROM Transaktionen " +
+        int aktienDB = SQLSpiel.getOneInteger("SELECT COUNT(DISTINCT AktieISIN) FROM Transaktionen " +
                 "WHERE Runde = " + runde);
         // Aktien, die nicht in Datenbank aber in bisherigen Liste sind dem Set dazuzählen
         for (ElementTransaktionen transaktion : TransaktionenList) {
@@ -239,15 +244,21 @@ public class KaufListener extends MyActionListenerInsert {
                 Float aktienwertListe = SQLSpiel.getOneFloat("SELECT Aktienkurs " +
                                 "FROM Aktienverlauf " +
                                 "WHERE Runde = " + (runde - 1) + " " +
-                                "AND AktieISIN = " + "'" + eingabeAktie + "'");
+                                "AND AktieISIN = " + "'" + transaktion.getAktie() + "'");
                 aktienkaufListe += (aktienanzahlListe * aktienwertListe);
             }
         }
         // Wert Eingabe
-        float aktienkaufEingabe = eingabeAnzahl * SQLSpiel.getOneFloat("SELECT Aktienkurs " +
-                "FROM Aktienverlauf " +
-                "WHERE Runde = " + (runde - 1) + " " +
-                "AND AktieISIN = " + "'" + eingabeAktie + "'");
+        // Wert Eingabe nur berücksichtigen, wenn Feld Aktie gefüllt ist. Ist für die Berechnung vom Restwert relevant,
+        // da die Felder hier nicht erneut gefüllt oder geleert werden und ansonsten mit dem Wert davor gerechnet wird.
+        float aktienkaufEingabe = 0F;
+        if(!Kauf.aktie.getTextfield().isEmpty()) {
+            aktienkaufEingabe = eingabeAnzahl * SQLSpiel.getOneFloat("SELECT Aktienkurs " +
+                    "FROM Aktienverlauf " +
+                    "WHERE Runde = " + (runde - 1) + " " +
+                    "AND AktieISIN = " + "'" + eingabeAktie + "'");
+        }
+        // System.out.println("Eingabe "+ aktienkaufEingabe + " Liste " + aktienkaufListe);
         // Summe
         float aktienkaufSumme = aktienkaufDatenbank + aktienkaufListe + aktienkaufEingabe;
         return aktienkaufSumme;

@@ -1,6 +1,8 @@
 package Frontend.Programme.Bewegungsdaten;
 
 import Frontend.ActionListenerInsert.KaufListener;
+import Frontend.ActionListenerInsert.MyActionListenerInsert;
+import Frontend.Checks.Checks;
 import Frontend.Komponenten.Buttons;
 import Frontend.Komponenten.EingabePanel;
 
@@ -75,11 +77,25 @@ public class Kauf extends JPanel{
         ActionListener restwert = new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                if(!person.getTextfield().isEmpty()){
-                    Integer eingabePersonID = Integer.valueOf(Kauf.person.getTextfield());
-                    Kauf.restwert.setTextField(String.valueOf(KaufListener.startkapital(eingabePersonID) - KaufListener.aktienkauf(eingabePersonID)));
+                if(aktie.getTextfield().isEmpty() && anzahl.getTextfield().isEmpty()) {
+                    if(!person.getTextfield().isEmpty()){
+                        Integer eingabePersonID = Integer.valueOf(Kauf.person.getTextfield());
+                        Kauf.restwert.setTextField(String.valueOf(KaufListener.startkapital(eingabePersonID) - KaufListener.aktienkauf(eingabePersonID)));
+                    } else {
+                        JOptionPane.showMessageDialog(null, "Es wurde keine PersonID angegeben.", "Berechnung nicht möglich", JOptionPane.ERROR_MESSAGE);
+                    }
                 } else {
-                    JOptionPane.showMessageDialog(null, "Es wurde keine PersonID angegeben.", "Berechnung nicht möglich", JOptionPane.ERROR_MESSAGE);
+                    // Objekt der Klasse erzeugen, um auf die Methode zuzugreifen, ohne diese statisch zu machen.
+                    KaufListener listener = new KaufListener();
+                    listener.checkFields();
+                    if (listener.errorMessages.isEmpty()) {
+                        listener.fillFields();
+                        Integer eingabePersonID = Integer.valueOf(Kauf.person.getTextfield());
+                        Kauf.restwert.setTextField(String.valueOf(KaufListener.startkapital(eingabePersonID) - KaufListener.aktienkauf(eingabePersonID)));
+                    } else {
+                        listener.changeFieldFarbe(); // Feldfarbe ändern
+                        Checks.showError(listener.errorMessages); // Ausgabe Fehlermeldung(en)
+                    }
                 }
             }
         };
