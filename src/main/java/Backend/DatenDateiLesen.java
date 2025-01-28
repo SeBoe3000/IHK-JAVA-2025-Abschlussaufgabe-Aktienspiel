@@ -177,9 +177,11 @@ public class DatenDateiLesen {
 
                     if(!SQL.checkElementAlreadyInDatenbankOneInteger(personID, "id","Personen")){
                         BeispieldatenImportieren.errorMessages.add("Die Person ist nicht in der Tabelle Personen vorhanden. Daten: " + line);
+                        insert = false;
                     }
                 } catch(Exception e){
                     BeispieldatenImportieren.errorMessages.add("Fehler beim Parsen der PersonID des importierten Startkapitals. Daten: " + line);
+                    insert = false;
                     // e.printStackTrace();
                 }
 
@@ -205,8 +207,13 @@ public class DatenDateiLesen {
                     } else {
                         try {
                             kapital = Float.parseFloat(splitted[1]);
+                            if(!EingabenCheck.isValidFloat(splitted[1], "NOTNULL")){
+                                BeispieldatenImportieren.errorMessages.add("Es wurde keinen gültigen Betrag angegeben. Daten: " + line);
+                                insert = false;
+                            }
                         } catch (Exception e) {
                             BeispieldatenImportieren.errorMessages.add("Fehler beim Parsen vom Betrag des importierten Startkapitals. Daten: " + line);
+                            insert = false;
                             // e.printStackTrace();
                         }
                     }
@@ -244,6 +251,7 @@ public class DatenDateiLesen {
                     // Aktie muss in Tabelle Aktien vorhanden sein.
                     if(!SQL.checkElementAlreadyInDatenbankOneString(splitted[0], "isin","Aktien")){
                         BeispieldatenImportieren.errorMessages.add("Die Aktie ist nicht in der Tabelle Aktien vorhanden. Daten: " + line);
+                        insert = false;
                     }
                 } catch (Exception e){
                     BeispieldatenImportieren.errorMessages.add("Keine AktienISIN angegeben. Daten: " + line);
@@ -265,6 +273,7 @@ public class DatenDateiLesen {
                     }
                 } catch(Exception e){
                     BeispieldatenImportieren.errorMessages.add("Fehler beim Parsen vom Kurs des importierten Aktienverlauf.");
+                    insert = false;
                     // e.printStackTrace();
                 }
 
