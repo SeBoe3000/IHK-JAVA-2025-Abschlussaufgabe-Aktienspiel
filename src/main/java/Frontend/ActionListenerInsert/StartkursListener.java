@@ -1,6 +1,7 @@
 package Frontend.ActionListenerInsert;
 
 import Backend.ElementAktienverlauf;
+import Backend.ElementPerson;
 import Datenbank.SQL;
 import Datenbank.SQLAktienverlauf;
 import Frontend.ActionListenerUpdate.EinstellungenAktienListener;
@@ -47,7 +48,7 @@ public class StartkursListener extends MyActionListenerInsert {
             errorMessages.add("Die ausgewählte Aktie ist nicht in der Tabelle Aktien vorhanden.");
         }
         // Prüfung, ob Element in der Liste vorhanden ist.
-        if(checkElementAlreadyInList(eingabeAktieIsin)){
+        if(checkElementAlreadyInList(AktienverlaufList, eingabeAktieIsin)){
             errorMessages.add("Das Element befindet sich bereits in der ElementListe. Bitte einen anderen Datensatz angeben.");
         }
         // Prüfung, ob Element bereits in Datenbank vorhanden ist
@@ -58,7 +59,7 @@ public class StartkursListener extends MyActionListenerInsert {
     }
 
     // Prüfung, ob der Wert bereits in der Liste vorhanden ist
-    public static boolean checkElementAlreadyInList(String AktieIsin){
+    public static boolean checkElementAlreadyInList(ArrayList<ElementAktienverlauf> AktienverlaufList, String AktieIsin){
         boolean inList = false;
         for(ElementAktienverlauf Aktienverlauf: AktienverlaufList){
             if (AktieIsin.equals(Aktienverlauf.getAktie())){

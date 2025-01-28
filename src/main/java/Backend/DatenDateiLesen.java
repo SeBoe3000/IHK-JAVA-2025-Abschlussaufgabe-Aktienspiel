@@ -1,6 +1,10 @@
 package Backend;
 
 import Datenbank.SQL;
+import Frontend.ActionListenerInsert.AktienListener;
+import Frontend.ActionListenerInsert.PersonListener;
+import Frontend.ActionListenerInsert.StartkapitalListener;
+import Frontend.ActionListenerInsert.StartkursListener;
 import Frontend.ActionListenerUpdate.EinstellungenAktienListener;
 import Frontend.ActionListenerUpdate.EinstellungenAktienverlaufListener;
 import Frontend.ActionListenerUpdate.EinstellungenPersonenListener;
@@ -27,7 +31,7 @@ public class DatenDateiLesen {
 
     // Import Personen
     public static ArrayList<ElementPerson> readPerson(){
-        ArrayList<ElementPerson> elementsList = new ArrayList<>();
+        ArrayList<ElementPerson> PersonList = new ArrayList<>();
         File myFile = new File(String.valueOf(ermittelnFile("Personen")));
         try{
             Scanner myFileReader = new Scanner(myFile);
@@ -71,10 +75,14 @@ public class DatenDateiLesen {
                     insert = false;
                 }
 
-                // Prüfung Datensatz nicht vorhanden
+                // Prüfung Datensatz nicht vorhanden in Datenbank und Liste
                 if(insert) {
                     if (SQL.checkElementAlreadyInDatenbankStringStringInteger(splitted[0], splitted[1], alter, "Vorname", "Nachname", "Alter", "Personen")) {
                         BeispieldatenImportieren.errorMessages.add("Der Datensatz befindet sich bereits in der Datenbank. Daten: " + line);
+                        insert = false;
+                    }
+                    if(PersonListener.checkElementAlreadyInList(PersonList, splitted[0], splitted[1], alter)){
+                        BeispieldatenImportieren.errorMessages.add("Der Datensatz befindet sich bereits in der Datei. Daten: " + line);
                         insert = false;
                     }
                 }
@@ -82,19 +90,19 @@ public class DatenDateiLesen {
                 // Objekte erzeugen
                 if(insert) {
                     ElementPerson element = new ElementPerson(splitted[0], splitted[1], alter);
-                    elementsList.add(element);
+                    PersonList.add(element);
                 }
             }
         } catch (FileNotFoundException e){
             BeispieldatenImportieren.errorMessages.add("Die Datei Personen existiert nicht.");
             // e.printStackTrace();
         }
-        return elementsList;
+        return PersonList;
     }
 
     // Import Aktien
     public static ArrayList<ElementAktie> readAktie(){
-        ArrayList<ElementAktie> elementsList = new ArrayList<>();
+        ArrayList<ElementAktie> AktieList = new ArrayList<>();
         File myFile = new File(String.valueOf(ermittelnFile("Aktien")));
         try{
             Scanner myFileReader = new Scanner(myFile);
@@ -122,10 +130,14 @@ public class DatenDateiLesen {
                     // e.printStackTrace();
                 }
 
-                // Prüfung Datensatz nicht vorhanden
+                // Prüfung Datensatz nicht vorhanden in Datenbank und Liste
                 if(insert) {
                     if (SQL.checkElementAlreadyInDatenbankOneString(splitted[0], "isin","Aktien")) {
                         BeispieldatenImportieren.errorMessages.add("Der Datensatz befindet sich bereits in der Datenbank. Daten: " + line);
+                        insert = false;
+                    }
+                    if(AktienListener.checkElementAlreadyInList(AktieList, splitted[0])){
+                        BeispieldatenImportieren.errorMessages.add("Der Datensatz befindet sich bereits in der Datei. Daten: " + line);
                         insert = false;
                     }
                 }
@@ -133,18 +145,18 @@ public class DatenDateiLesen {
                 // Objekte erzeugen
                 if(insert) {
                     ElementAktie element = new ElementAktie(splitted[0], splitted[1]);
-                    elementsList.add(element);
+                    AktieList.add(element);
                 }
             }
         } catch (FileNotFoundException e){
             BeispieldatenImportieren.errorMessages.add("Die Datei Aktien existiert nicht.");
         }
-        return elementsList;
+        return AktieList;
     }
 
     // Import Startkapital
     public static ArrayList<ElementKapitalverlauf> readStartkapital(){
-        ArrayList<ElementKapitalverlauf> elementsList = new ArrayList<>();
+        ArrayList<ElementKapitalverlauf> StartkapitalList = new ArrayList<>();
         File myFile = new File(String.valueOf(ermittelnFile("Startkapital")));
         try{
             Scanner myFileReader = new Scanner(myFile);
@@ -171,10 +183,14 @@ public class DatenDateiLesen {
                     // e.printStackTrace();
                 }
 
-                // Prüfung Datensatz nicht vorhanden
+                // Prüfung Datensatz nicht vorhanden in Datenbank und Liste
                 if(insert) {
                     if (SQL.checkElementAlreadyInDatenbankIntegerInteger(personID, 0, "id", "Runde", "Kapitalverlauf")) {
                         BeispieldatenImportieren.errorMessages.add("Der Datensatz befindet sich bereits in der Datenbank. Daten: " + line);
+                        insert = false;
+                    }
+                    if(StartkapitalListener.checkElementAlreadyInList(StartkapitalList, personID)){
+                        BeispieldatenImportieren.errorMessages.add("Der Datensatz befindet sich bereits in der Datei. Daten: " + line);
                         insert = false;
                     }
                 }
@@ -199,19 +215,19 @@ public class DatenDateiLesen {
                 // Objekte erzeugen
                 if(insert) {
                     ElementKapitalverlauf element = new ElementKapitalverlauf(0, personID, kapital);
-                    elementsList.add(element);
+                    StartkapitalList.add(element);
                 }
             }
         } catch (FileNotFoundException e){
             BeispieldatenImportieren.errorMessages.add("Die Datei Startkapital existiert nicht.");
             // e.printStackTrace();
         }
-        return elementsList;
+        return StartkapitalList;
     }
 
     // Import Startkurs
     public static ArrayList<ElementAktienverlauf> readStartkurs(){
-        ArrayList<ElementAktienverlauf> elementsList = new ArrayList<>();
+        ArrayList<ElementAktienverlauf> AktienverlaufList = new ArrayList<>();
         File myFile = new File(String.valueOf(ermittelnFile("Startkurs")));
         try{
             Scanner myFileReader = new Scanner(myFile);
@@ -252,23 +268,28 @@ public class DatenDateiLesen {
                     // e.printStackTrace();
                 }
 
-                // Prüfung Datensatz nicht vorhanden
+                // Prüfung Datensatz nicht vorhanden in Datenbank und Liste
                 if(insert){
                     if(SQL.checkElementAlreadyInDatenbankIntegerIntegerString(0,0, splitted[0], "Runde", "Runde", "AktieIsin", "Aktienverlauf")){
                         BeispieldatenImportieren.errorMessages.add("Der Datensatz befindet sich bereits in der Datenbank. Daten: " + line);
+                        insert = false;
+                    }
+                    if(StartkursListener.checkElementAlreadyInList(AktienverlaufList, splitted[0])){
+                        BeispieldatenImportieren.errorMessages.add("Der Datensatz befindet sich bereits in der Datei. Daten: " + line);
+                        insert = false;
                     }
                 }
 
                 // Objekte erzeugen
                 if(insert) {
                     ElementAktienverlauf element = new ElementAktienverlauf(0, splitted[0], anzahl, kurs, 0F);
-                    elementsList.add(element);
+                    AktienverlaufList.add(element);
                 }
             }
         } catch (FileNotFoundException e){
             BeispieldatenImportieren.errorMessages.add("Die Datei Startkapital existiert nicht.");
             // e.printStackTrace();
         }
-        return elementsList;
+        return AktienverlaufList;
     }
 }

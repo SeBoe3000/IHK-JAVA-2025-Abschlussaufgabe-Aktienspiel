@@ -44,7 +44,7 @@ public class AktienListener extends MyActionListenerInsert {
     @Override
     public void nextChecks() {
         // Prüfung, ob Element in der Liste vorhanden ist.
-        if(checkElementAlreadyInList(eingabeIsin)){
+        if(checkElementAlreadyInList(AktieList,eingabeIsin)){
             errorMessages.add("Das Element befindet sich bereits in der ElementListe. Bitte einen anderen Datensatz angeben.");
         }
         // Prüfung, ob Element bereits in Datenbank vorhanden ist
@@ -54,7 +54,7 @@ public class AktienListener extends MyActionListenerInsert {
     }
 
     // Prüfung, ob der Wert bereits in der Liste vorhanden ist
-    public static boolean checkElementAlreadyInList(String Isin){
+    public static boolean checkElementAlreadyInList(ArrayList<ElementAktie> AktieList, String Isin){
         boolean inList = false;
         for(ElementAktie Aktie: AktieList){
             if (Isin.equals(Aktie.getIsin())){

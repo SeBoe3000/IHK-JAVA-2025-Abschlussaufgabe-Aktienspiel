@@ -42,7 +42,7 @@ public class PersonListener extends MyActionListenerInsert {
     @Override
     protected void nextChecks() {
         // Prüfung, ob Element in der Liste vorhanden ist.
-        if(checkElementAlreadyInList(eingabeVorname, eingabeNachname, eingabeAlter)){
+        if(checkElementAlreadyInList(PersonList, eingabeVorname, eingabeNachname, eingabeAlter)){
             errorMessages.add("Das Element befindet sich bereits in der ElementListe. Bitte einen anderen Datensatz angeben.");
         }
         // Prüfung, ob Element bereits in Datenbank vorhanden ist
@@ -52,7 +52,7 @@ public class PersonListener extends MyActionListenerInsert {
     }
 
     // Prüfung, ob der Wert bereits in der Liste vorhanden ist
-    public static boolean checkElementAlreadyInList(String vorname, String nachname, Integer alter){
+    public static boolean checkElementAlreadyInList(ArrayList<ElementPerson> PersonList, String vorname, String nachname, Integer alter){
         boolean inList = false;
         for(ElementPerson Person: PersonList){
             if (vorname.equals(Person.getVorname()) &&

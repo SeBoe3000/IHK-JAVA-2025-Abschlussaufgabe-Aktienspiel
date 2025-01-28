@@ -42,7 +42,7 @@ public class StartkapitalListener extends MyActionListenerInsert {
             errorMessages.add("Die ausgewählte Person ist nicht in der Tabelle Personen vorhanden.");
         }
         // Prüfung, ob Element in der Liste vorhanden ist.
-        if(checkElementAlreadyInList(eingabePersonID)){
+        if(checkElementAlreadyInList(StartkapitalList,eingabePersonID)){
             errorMessages.add("Das Element befindet sich bereits in der ElementListe. Bitte einen anderen Datensatz angeben.");
         }
         // Prüfung, ob Element bereits in Datenbank vorhanden ist
@@ -52,7 +52,7 @@ public class StartkapitalListener extends MyActionListenerInsert {
     }
 
     // Prüfung, ob der Wert bereits in der Liste vorhanden ist
-    public static boolean checkElementAlreadyInList(Integer personID){
+    public static boolean checkElementAlreadyInList(ArrayList<ElementKapitalverlauf> StartkapitalList, Integer personID){
         boolean inList = false;
         for(ElementKapitalverlauf Startkapital: StartkapitalList){
             if (personID.equals(Startkapital.getPerson())){
