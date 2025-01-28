@@ -1,5 +1,6 @@
 package Frontend.Programme.Stammdaten;
 
+import Frontend.ActionListenerInsert.StartkapitalListener;
 import Frontend.ActionListenerUpdate.EinstellungenPersonenListener;
 import Frontend.Cards;
 
@@ -90,9 +91,7 @@ public class Stammdaten extends JPanel{
                 } else {
                     Startkapital.betrag.setEnabledTrue();
                 }
-                if(EinstellungenPersonenListener.getEinstellungFloat("defaultStrartkapital") != null) {
-                    Startkapital.betrag.setTextField(String.valueOf(EinstellungenPersonenListener.getEinstellungFloat("defaultStrartkapital")));
-                }
+                StartkapitalListener.setDefaultStartkapitalInBetrag();
             }
         };
         create_startkapital.addActionListener(startkapital);

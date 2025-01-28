@@ -117,6 +117,13 @@ public class StartkapitalListener extends MyActionListenerInsert {
     protected void felderLeeren(){
         Checks.clearOneField(Startkapital.person);
         Checks.clearOneField(Startkapital.betrag);
+        setDefaultStartkapitalInBetrag();
+    }
+
+    public static void setDefaultStartkapitalInBetrag(){
+        if(EinstellungenPersonenListener.getEinstellungFloat("defaultStrartkapital") != null) {
+            Startkapital.betrag.setTextField(String.valueOf(EinstellungenPersonenListener.getEinstellungFloat("defaultStrartkapital")));
+        }
     }
 
     @Override
