@@ -145,12 +145,18 @@ public class Checks {
                 if(von > bis){
                     errorMessages.add("Von ("+ input.getTextfieldVon() + ") darf nicht größer als Bis (" + input.getTextfieldBis() + ") sein, im Feld: " + input.getTextlabel());
                     errorFlags.add(new Fehler(true, input));
+                } else if (bis == 0) {
+                    errorMessages.add("Bis darf nicht Null sein, Feld: " + input.getTextlabel());
+                    errorFlags.add(new Fehler(true, input));
                 }
             } else if (checkType == "isValidFloat" || checkType == "isValidFloatNull") {
                 Float von = Float.valueOf(input.getTextfieldVon());
                 Float bis = Float.valueOf(input.getTextfieldBis());
                 if(von > bis){
                     errorMessages.add("Von ("+ input.getTextfieldVon() + ") darf nicht größer als Bis (" + input.getTextfieldBis() + ") sein, im Feld: " + input.getTextlabel());
+                    errorFlags.add(new Fehler(true, input));
+                } else if (bis == 0) {
+                    errorMessages.add("Bis darf nicht Null sein, Feld: " + input.getTextlabel());
                     errorFlags.add(new Fehler(true, input));
                 }
             }

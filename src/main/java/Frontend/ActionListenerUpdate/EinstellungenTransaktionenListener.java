@@ -103,8 +103,8 @@ public class EinstellungenTransaktionenListener extends MyActionListenerUpdate {
     @Override
     protected void checkfields() {
         Checks.checkField(EinstellungenTransaktionen.maxAktienPersonRunde, "isValidInteger", "Bitte eine gültige Anzahl maximaler Aktien pro Runde angeben.", errorMessages, errorFlags);
-        Checks.checkFieldVonBis(EinstellungenTransaktionen.personRunde, "isValidIntegerNull", "Bitte eine gültige Anzahl an Personen pro Runde angeben.", errorMessages, errorFlagsVonBis);
-        Checks.checkFieldVonBis(EinstellungenTransaktionen.aktieRunde, "isValidIntegerNull", "Bitte eine gültige Anzahl an Aktien pro Runde angeben.", errorMessages, errorFlagsVonBis);
+        Checks.checkFieldVonBis(EinstellungenTransaktionen.personRunde, "isValidInteger", "Bitte eine gültige Anzahl an Personen pro Runde angeben.", errorMessages, errorFlagsVonBis);
+        Checks.checkFieldVonBis(EinstellungenTransaktionen.aktieRunde, "isValidInteger", "Bitte eine gültige Anzahl an Aktien pro Runde angeben.", errorMessages, errorFlagsVonBis);
         Checks.checkField(EinstellungenTransaktionen.firstDividende, "isValidFloatNull", "Bitte einen gültigen Prozentsatz für den ersten Platz angeben.", errorMessages, errorFlags);
         Checks.checkField(EinstellungenTransaktionen.secondDividende, "isValidFloatNull", "Bitte einen gültigen Prozentsatz für den zweiten Platz angeben.", errorMessages, errorFlags);
         if((Float.valueOf(EinstellungenTransaktionen.firstDividende.getTextfield()) + Float.valueOf(EinstellungenTransaktionen.secondDividende.getTextfield())) > 100){
