@@ -469,7 +469,7 @@ public class DatenReset extends JPanel {
         rundeLast_chb.setSelected(false);
         rundeOpen_chb.setSelected(false);
         kauf_chb.setSelected(false);
-        kauf_chb.setSelected(false);
+        wert_chb.setSelected(false);
         all_chb.setSelected(false);
         person_chb.setSelected(false);
         startkapital_chb.setSelected(false);

@@ -59,10 +59,12 @@ public class BeispieldatenImportieren extends JPanel{
 
         // Käufe importieren hinzufügen
         gbc.gridy = 4; // Zeile
+        kauf_chb.setVisible(false);
         add(kauf_chb, gbc);
 
         // Werte importieren hinzufügen
         gbc.gridy = 5; // Zeile
+        wert_chb.setVisible(false);
         add(wert_chb, gbc);
 
         // Buttons hinzufügen
