@@ -76,7 +76,7 @@ public class EinstellungenPersonenListener extends MyActionListenerUpdate {
 
         // Sofern die Checkbox markiert ist, darf nicht 0 oder nichts angegeben sein.
         // Zuerst auf leere Eingabe prüfen und dann über parsen alle möglichen Variationen von 0 abdecken.
-        if ((EinstellungenPersonen.defaultStrartkapital.getTextfield().isEmpty() || Double.parseDouble(EinstellungenPersonen.defaultStrartkapital.getTextfield()) == 0) &&
+        if (errorMessages.isEmpty() && (EinstellungenPersonen.defaultStrartkapital.getTextfield().isEmpty() || Double.parseDouble(EinstellungenPersonen.defaultStrartkapital.getTextfield()) == 0) &&
                 !EinstellungenPersonen.defaultStartkapitalBearbeitbar.isSelected()) {
             errorMessages.add("Default bearbeitbar kann nur demarkiert werden, wenn ein Startkapital größer 0 angegeben wurde.");
         }
