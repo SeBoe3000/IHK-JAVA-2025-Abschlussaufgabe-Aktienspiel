@@ -132,14 +132,14 @@ public class EinstellungenTransaktionenListener extends MyActionListenerUpdate {
     protected Boolean checkChanged() {
         Boolean check = false;
         // Aufgrund einer möglichen anderen Interpretation (Datenbank und Textfeld), werden Strings verglichen
-        if(!eingabeMaxAktienPersonRunde.equals(maxAktienPersonRunde) ||
-                !eingabeMinPersonRunde.equals( minPersonRunde) ||
-                !eingabeMaxPersonRunde.equals(maxPersonRunde) ||
-                !eingabeMinAktieRunde.equals(minAktieRunde) ||
-                !eingabeMaxAktieRunde.equals(maxAktieRunde) ||
-                !eingabeFirstDividende.equals(firstDividende) ||
-                !eingabeSecondDividende.equals(secondDividende) ||
-                !eingabeGenerelleDividende.equals(generelleDividende)){
+        if((maxAktienPersonRunde != null && !eingabeMaxAktienPersonRunde.equals(maxAktienPersonRunde)) ||
+                (minPersonRunde != null && !eingabeMinPersonRunde.equals( minPersonRunde)) ||
+                (maxPersonRunde != null && !eingabeMaxPersonRunde.equals(maxPersonRunde)) ||
+                (minAktieRunde != null && !eingabeMinAktieRunde.equals(minAktieRunde)) ||
+                (maxAktieRunde != null && !eingabeMaxAktieRunde.equals(maxAktieRunde)) ||
+                (firstDividende != null && !eingabeFirstDividende.equals(firstDividende)) ||
+                (secondDividende != null && !eingabeSecondDividende.equals(secondDividende)) ||
+                (generelleDividende != null && !eingabeGenerelleDividende.equals(generelleDividende))){
             check = true;
         }
         return check;

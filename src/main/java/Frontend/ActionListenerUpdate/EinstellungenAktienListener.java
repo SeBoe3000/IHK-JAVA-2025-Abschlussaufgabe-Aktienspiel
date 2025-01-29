@@ -55,7 +55,7 @@ public class EinstellungenAktienListener extends MyActionListenerUpdate {
     protected Boolean checkChanged() {
         Boolean check = false;
         // Aufgrund einer möglichen anderen Interpretation (Datenbank und Textfeld), werden Strings verglichen
-        if(!maxAnzahlAktien.equals(eingabeMaxAnzahlAktien)){
+        if(maxAnzahlAktien != null && !maxAnzahlAktien.equals(eingabeMaxAnzahlAktien)){
             check = true;
         }
         return check;

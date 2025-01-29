@@ -12,8 +12,8 @@ public class EinstellungenPersonenListener extends MyActionListenerUpdate {
         super(Btn);
     }
 
-    public static String defaultStrartkapital;
-    public static String defaultStrartkapitalBearbeitbar;
+    public static String defaultStrartkapital = "";
+    public static String defaultStrartkapitalBearbeitbar = "";
 
     static String eingabeDefaultStrartkapital;
     static String eingabeDefaultStrartkapitalBearbeitbar;
@@ -47,8 +47,13 @@ public class EinstellungenPersonenListener extends MyActionListenerUpdate {
         Float einstellung = null;
         getDefaults();
 
-        if(field == "defaultStrartkapital" && !defaultStrartkapital.isEmpty()){
-            einstellung = Float.valueOf(defaultStrartkapital);
+        if(field == "defaultStrartkapital" && !defaultStrartkapital.isEmpty() && defaultStrartkapital != null){
+            try {
+                einstellung = Float.valueOf(defaultStrartkapital);
+            } catch (NumberFormatException e) {
+                //
+                einstellung = null;
+            }
         }
         return einstellung;
     }
@@ -87,7 +92,8 @@ public class EinstellungenPersonenListener extends MyActionListenerUpdate {
     protected Boolean checkChanged() {
         Boolean check = false;
         // Aufgrund einer möglichen anderen Interpretation (Datenbank und Textfeld), werden Strings verglichen
-        if(!defaultStrartkapital.equals(eingabeDefaultStrartkapital) || !defaultStrartkapitalBearbeitbar.equals(eingabeDefaultStrartkapitalBearbeitbar)){
+        if((defaultStrartkapital != null && !defaultStrartkapital.equals(eingabeDefaultStrartkapital)) ||
+                (defaultStrartkapitalBearbeitbar != null && !defaultStrartkapitalBearbeitbar.equals(eingabeDefaultStrartkapitalBearbeitbar))){
             check = true;
         }
         return check;
