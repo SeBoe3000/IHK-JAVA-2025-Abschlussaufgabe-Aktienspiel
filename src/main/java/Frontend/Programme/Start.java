@@ -330,31 +330,31 @@ public class Start extends JPanel {
 
                             // Dividenden updaten
                             for (Integer personid : PersonenAktieErsterPlatz) {
-                                dividendeGenerell = aktienwertAktieBerechnen(personid, aktieisin) / 100 * generelleDividende; // generelle Dividende berechnen
+                                dividendeGenerell = aktienwertAktieBerechnen(aktieisin, personid, 0) / 100 * generelleDividende; // generelle Dividende berechnen
                                 updateDividende(personid, aktieisin, dividendeSonderErster + dividendeGenerell);
 
-                                /*System.out.println("Erste Plätze - Person: " + personid + " Aktie: " + aktieisin +
+                                System.out.println("Erste Plätze - Person: " + personid + " Aktie: " + aktieisin +
                                         " Sonderdividende: " + dividendeSonderErster +
-                                        " generelle Dividende: " + dividendeGenerell); */
+                                        " generelle Dividende: " + dividendeGenerell);
                             }
                             PersonenAktieErsterPlatz.clear();
 
                             for (Integer personid : PersonenAktieZweiterPlatz) {
-                                dividendeGenerell = aktienwertAktieBerechnen(personid, aktieisin) / 100 * generelleDividende; // generelle Dividende berechnen
+                                dividendeGenerell = aktienwertAktieBerechnen(aktieisin, personid, 0) / 100 * generelleDividende; // generelle Dividende berechnen
                                 updateDividende(personid, aktieisin, dividendeSonderZweiter + dividendeGenerell);
 
-                                /*System.out.println("Zweite Plätze - Person: " + personid + " Aktie: " + aktieisin +
+                                System.out.println("Zweite Plätze - Person: " + personid + " Aktie: " + aktieisin +
                                         " Sonderdividende: " + dividendeSonderZweiter +
-                                        " generelle Dividende: " + dividendeGenerell);*/
+                                        " generelle Dividende: " + dividendeGenerell);
                             }
                             PersonenAktieZweiterPlatz.clear();
 
                             for (Integer personid : PersonenAktieRestlicherPlatz) {
-                                dividendeGenerell = aktienwertAktieBerechnen(personid, aktieisin) / 100 * generelleDividende; // generelle Dividende berechnen
+                                dividendeGenerell = aktienwertAktieBerechnen(aktieisin, personid, 0) / 100 * generelleDividende; // generelle Dividende berechnen
                                 updateDividende(personid, aktieisin, dividendeGenerell);
 
-                                /*System.out.println("Restlichen Plätze - Person: " + personid + " Aktie: " + aktieisin +
-                                        " generelle Dividende: " + dividendeGenerell);*/
+                                System.out.println("Restlichen Plätze - Person: " + personid + " Aktie: " + aktieisin +
+                                        " generelle Dividende: " + dividendeGenerell);
                             }
                             PersonenAktieRestlicherPlatz.clear();
                         }
@@ -408,6 +408,12 @@ public class Start extends JPanel {
     }
 
     private static void updateKapital(){
+        // Aktien abspeichern
+        ArrayList<String> AktienRunde =  SQLSpiel.getArrayListeString("SELECT Aktieisin " +
+                "FROM Transaktionen " +
+                "WHERE Runde = (SELECT MAX(Runde) FROM Transaktionen) " +
+                "GROUP BY Aktieisin ORDER BY Aktieisin ASC");
+
         // Abspeichern vom Kapitalverlauf
         ArrayList<ElementKapitalverlauf> KapitalverlaufList = new ArrayList<>();
 
@@ -427,13 +433,15 @@ public class Start extends JPanel {
                     "WHERE Runde = (SELECT MAX(Runde) FROM Transaktionen) " +
                     "AND Personid = " + "'" + personid + "'" + " " +
                     "GROUP BY Personid");
-            Float aktienwertKauf = aktienwertBerechnen(personid, 1);
-            Float aktienwertVerkauf = aktienwertBerechnen(personid, 0);
+            Float aktienwertKauf = aktienwertBerechnen(AktienRunde, personid, 1);
+            Float aktienwertVerkauf = aktienwertBerechnen(AktienRunde, personid, 0);
 
             // Um Exceptions zu verhindern
             if (dividende == null) dividende = 0f;
 
             Float summe = startkapital - aktienwertKauf + aktienwertVerkauf + dividende;
+            System.out.println("Startkapital:" + startkapital + " Diff Aktienwert: " + (aktienwertKauf - aktienwertVerkauf)
+             + " Dividende: " + dividende);
 
             // Elemente der Liste hinzufügen
             ElementKapitalverlauf kapitalverlauf = new ElementKapitalverlauf(getAktuelleRunde(), personid, summe);
@@ -445,26 +453,39 @@ public class Start extends JPanel {
         PersonenRunde.clear();
     }
 
-    public static Float aktienwertAktieBerechnen(Integer personid, String aktieisin){
-        Float aktienwert = SQLSpiel.getOneFloat("SELECT " +
-                "SUM((Transaktionen.Aktienanzahl * Aktienverlauf.Aktienkurs)) " +
-                "FROM Transaktionen JOIN Aktienverlauf " +
-                "ON Transaktionen.Aktieisin = Aktienverlauf.Aktieisin " +
-                "WHERE Transaktionen.Runde = (SELECT MAX(Transaktionen.Runde) FROM Transaktionen) " +
-                "AND Aktienverlauf.Runde = (SELECT MAX(Aktienverlauf.Runde - " + 1 + ") FROM Aktienverlauf) " +
-                "AND Transaktionen.Aktieisin = " + "'" + aktieisin + "'" + " " +
-                "AND Transaktionen.Personid = " + "'" + personid + "'");
+    public static Float aktienwertAktieBerechnen(String aktieisin,Integer personid, Integer runde){
+          Float aktienwert = SQLSpiel.getOneFloat("SELECT SUM(Transaktionen.Aktienanzahl * Aktienverlauf.Aktienkurs) " +
+                    "FROM Transaktionen JOIN Aktienverlauf " +
+                    "ON Transaktionen.Aktieisin = Aktienverlauf.Aktieisin " +
+                    "AND Aktienverlauf.Runde = (" +
+                    "SELECT Runde FROM Aktienverlauf " +
+                    "WHERE Aktieisin = " + "'" + aktieisin + "'" + " " +
+                    "AND Runde <= (SELECT MAX(Runde) FROM Transaktionen) " +
+                    "ORDER BY Runde desc LIMIT 1 OFFSET " + runde + ") " +
+                    // -- Für die letzte Runde und 1 für die vorletzte
+                    "WHERE Transaktionen.Runde = (SELECT MAX(Runde) FROM Transaktionen) " +
+                    "AND Transaktionen.Aktieisin = " + "'" + aktieisin + "'" + " " +
+                    "AND Transaktionen.Personid = " + "'" + personid + "'");
         return aktienwert;
     }
 
-    public static Float aktienwertBerechnen(Integer personid, Integer runde){
-        Float aktienwert = SQLSpiel.getOneFloat("SELECT " +
-                "SUM((Transaktionen.Aktienanzahl * Aktienverlauf.Aktienkurs)) " +
-                "FROM Transaktionen JOIN Aktienverlauf " +
-                "ON Transaktionen.Aktieisin = Aktienverlauf.Aktieisin " +
-                "WHERE Transaktionen.Runde = (SELECT MAX(Transaktionen.Runde) FROM Transaktionen) " +
-                "AND Aktienverlauf.Runde = (SELECT MAX(Aktienverlauf.Runde - " + runde + ") FROM Aktienverlauf) " +
-                "AND Transaktionen.Personid = " + "'" + personid + "'");
+   public static Float aktienwertBerechnen(ArrayList<String> AktienRunde,Integer personid, Integer runde){
+        Float aktienwert = 0F;
+        for (String aktieisin: AktienRunde) {
+            aktienwert += SQLSpiel.getOneFloat("SELECT SUM(Transaktionen.Aktienanzahl * Aktienverlauf.Aktienkurs) " +
+                    "FROM Transaktionen JOIN Aktienverlauf " +
+                    "ON Transaktionen.Aktieisin = Aktienverlauf.Aktieisin " +
+                    "AND Aktienverlauf.Runde = (" +
+                    "SELECT Runde FROM Aktienverlauf " +
+                    "WHERE Aktieisin = " + "'" + aktieisin + "'" + " " +
+                    "AND Runde <= (SELECT MAX(Runde) FROM Transaktionen) " +
+                    "ORDER BY Runde desc LIMIT 1 OFFSET " + runde + ") " +
+                    // -- Für die letzte Runde und 1 für die vorletzte
+                    "WHERE Transaktionen.Runde = (SELECT MAX(Runde) FROM Transaktionen) " +
+                    "AND Transaktionen.Aktieisin = " + "'" + aktieisin + "'" + " " +
+                    "AND Transaktionen.Personid = " + "'" + personid + "'");
+            System.out.println("Aktienwert: " +aktienwert);
+        }
         return aktienwert;
     }
 

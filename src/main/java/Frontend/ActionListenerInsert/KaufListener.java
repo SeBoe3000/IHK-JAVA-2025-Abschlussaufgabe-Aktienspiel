@@ -236,7 +236,12 @@ public class KaufListener extends MyActionListenerInsert {
     public static Float aktienkauf(Integer eingabePersonID){
         Integer runde = Start.getAktuelleRunde();
         // Wert Datenbank
-        float aktienkaufDatenbank = Start.aktienwertBerechnen(eingabePersonID, 1);
+        // Aktien abspeichern
+        ArrayList<String> AktienRunde =  SQLSpiel.getArrayListeString("SELECT Aktieisin " +
+                "FROM Transaktionen " +
+                "WHERE Runde = (SELECT MAX(Runde) FROM Transaktionen) " +
+                "GROUP BY Aktieisin ORDER BY Aktieisin ASC");
+        float aktienkaufDatenbank = Start.aktienwertBerechnen(AktienRunde, eingabePersonID, 1);
         // Wert Liste
         float aktienkaufListe = 0F;
         for (ElementTransaktionen transaktion : TransaktionenList) {
