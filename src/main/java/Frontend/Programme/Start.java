@@ -362,6 +362,7 @@ public class Start extends JPanel {
                         // Anzeige Runde aktualisieren
                         Start.runde.setTextField(String.valueOf(getAktuelleRunde()));
                         JOptionPane.showMessageDialog(null, "Runde wurde erfolgreich gespielt.", "Erfolg", JOptionPane.INFORMATION_MESSAGE);
+                        AktienRunde.clear();
                     }
                 }
                 Checks.showError(errorMessages); // Ausgabe Fehlermeldung(en)
@@ -407,7 +408,7 @@ public class Start extends JPanel {
         ArrayList<ElementKapitalverlauf> KapitalverlaufList = new ArrayList<>();
 
         // Abspeichern aller Personen
-        ArrayList<Integer> PersonenRunde = SQLSpiel.getArrayListeInteger("SELECT Personen.ID " +
+        ArrayList<Integer> PersonenRunde = SQLSpiel.getArrayListeInteger("SELECT DISTINCT Personen.ID " +
                 "FROM Personen " +
                 "JOIN Kapitalverlauf ON Personen.ID = Kapitalverlauf.PersonID " +
                 "WHERE Kapitalverlauf.Kapital IS NOT NULL AND Kapitalverlauf.Kapital > 0;");
@@ -429,8 +430,8 @@ public class Start extends JPanel {
             if (dividende == null) dividende = 0f;
 
             Float summe = startkapital - aktienwertKauf + aktienwertVerkauf + dividende;
-            System.out.println("Startkapital:" + startkapital + " Diff Aktienwert: " + (aktienwertKauf - aktienwertVerkauf)
-             + " Dividende: " + dividende);
+            /* m.out.println("Startkapital:" + startkapital + " Diff Aktienwert: " + (aktienwertKauf - aktienwertVerkauf)
+             + " Dividende: " + dividende); */
 
             // Elemente der Liste hinzufügen
             ElementKapitalverlauf kapitalverlauf = new ElementKapitalverlauf(getAktuelleRunde(), personid, summe);
@@ -439,6 +440,8 @@ public class Start extends JPanel {
 
         // Insert durchführen
         SQLKapitalverlauf.selectInsertTableKapitalverlauf(KapitalverlaufList);
+        AktienRunde.clear();
+        KapitalverlaufList.clear();
         PersonenRunde.clear();
     }
 
@@ -473,7 +476,7 @@ public class Start extends JPanel {
                     "WHERE Transaktionen.Runde = (SELECT MAX(Runde) FROM Transaktionen) " +
                     "AND Transaktionen.Aktieisin = " + "'" + aktieisin + "'" + " " +
                     "AND Transaktionen.Personid = " + "'" + personid + "'");
-            System.out.println("Aktienwert: " +aktienwert);
+            // System.out.println("Aktienwert: " +aktienwert);
         }
         return aktienwert;
     }
