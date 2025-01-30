@@ -8,6 +8,7 @@ import Frontend.Cards;
 import Frontend.Checks.Checks;
 import Frontend.Komponenten.EingabePanel;
 import Frontend.Komponenten.Interaction;
+import Frontend.Programme.Sonstiges.Spielstand;
 
 import javax.swing.*;
 import java.awt.*;
@@ -48,11 +49,9 @@ public class Start extends JPanel {
         gbc.weightx = 0.1;
         gbc.weighty = 0.1;
         gbc.fill = GridBagConstraints.CENTER;
-
         group_stammdaten.add(create_importExample);
         group_stammdaten.add(open_stammdaten);
         group_stammdaten.add(open_einstellung);
-
         JPanel group_stammdaten = new JPanel();
         group_stammdaten.setLayout(new BoxLayout(group_stammdaten, BoxLayout.X_AXIS));
         group_stammdaten.add(create_importExample);
@@ -66,10 +65,8 @@ public class Start extends JPanel {
 
         // Bewegungsdaten (Kauf und Wert) hinzufügen
         gbc.gridy = 2; // Zeile
-
         group_bewegungsdaten.add(create_kauf);
         group_bewegungsdaten.add(create_wert);
-
         JPanel group_bewegungsdaten = new JPanel();
         group_bewegungsdaten.setLayout(new BoxLayout(group_bewegungsdaten, BoxLayout.X_AXIS));
         group_bewegungsdaten.add(create_kauf);
@@ -78,7 +75,6 @@ public class Start extends JPanel {
 
         // Runde und Nächste Runde hinzufügen
         gbc.gridy = 3; // Zeile
-
         JPanel group_runde = new JPanel();
         group_runde.setLayout(new BoxLayout(group_runde, BoxLayout.X_AXIS));
         group_runde.add(runde);
@@ -94,10 +90,8 @@ public class Start extends JPanel {
 
         // Spielstand anzeigen und Zurücksetzen hinzufügen
         gbc.gridy = 5; // Zeile
-
         group_sonstiges.add(show_spielstand);
         group_sonstiges.add(reset_data);
-
         JPanel group_sonstiges = new JPanel();
         group_sonstiges.setLayout(new BoxLayout(group_sonstiges, BoxLayout.X_AXIS));
         group_sonstiges.add(show_spielstand);
@@ -109,7 +103,6 @@ public class Start extends JPanel {
     }
 
     private void buttonListener() {
-
         ActionListener importExample = new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -160,7 +153,6 @@ public class Start extends JPanel {
                         "ORDER BY Runde DESC LIMIT 1");
                 Integer rundeAktienverlauf = SQLSpiel.getOneInteger("SELECT Runde FROM Aktienverlauf " +
                         "ORDER BY Runde DESC LIMIT 1");
-
                 // System.out.println("Runde Transaktionen: " + rundeTransaktionen + " Aktienverlauf: " + rundeAktienverlauf);
 
                 if (existsStartkapital == 0 || existsStartkurs == 0){
@@ -182,7 +174,6 @@ public class Start extends JPanel {
                             "FROM Transaktionen WHERE Runde = (SELECT MAX(Runde) FROM Transaktionen)");
                     Integer anzahlAktien = SQLSpiel.getOneInteger("SELECT COUNT(DISTINCT aktieisin) " +
                             "FROM Transaktionen WHERE Runde = (SELECT MAX(Runde) FROM Transaktionen)");
-
                     // System.out.println("Anzahl Personen: " + anzahlPersonen + " Aktien: " + anzahlAktien);
 
                     // Einstellungen holen
@@ -209,7 +200,6 @@ public class Start extends JPanel {
                                 "Transaktionen.Runde = Aktienverlauf.Runde AND " +
                                 "Transaktionen.Aktieisin = Aktienverlauf.Aktieisin " +
                                 "WHERE Transaktionen.Runde = (SELECT MAX(Transaktionen.Runde) FROM Transaktionen)");
-
                         // System.out.println("Anzahl Aktien ohne Wert: " + anzahlAktienOhneWertRunde);
 
                         if(anzahlAktienOhneWertRunde > 0) {
@@ -332,29 +322,26 @@ public class Start extends JPanel {
                             for (Integer personid : PersonenAktieErsterPlatz) {
                                 dividendeGenerell = aktienwertAktieBerechnen(aktieisin, personid, 0) / 100 * generelleDividende; // generelle Dividende berechnen
                                 updateDividende(personid, aktieisin, dividendeSonderErster + dividendeGenerell);
-
-                                System.out.println("Erste Plätze - Person: " + personid + " Aktie: " + aktieisin +
+                                /* System.out.println("Erste Plätze - Person: " + personid + " Aktie: " + aktieisin +
                                         " Sonderdividende: " + dividendeSonderErster +
-                                        " generelle Dividende: " + dividendeGenerell);
+                                        " generelle Dividende: " + dividendeGenerell);*/
                             }
                             PersonenAktieErsterPlatz.clear();
 
                             for (Integer personid : PersonenAktieZweiterPlatz) {
                                 dividendeGenerell = aktienwertAktieBerechnen(aktieisin, personid, 0) / 100 * generelleDividende; // generelle Dividende berechnen
                                 updateDividende(personid, aktieisin, dividendeSonderZweiter + dividendeGenerell);
-
-                                System.out.println("Zweite Plätze - Person: " + personid + " Aktie: " + aktieisin +
+                                /*System.out.println("Zweite Plätze - Person: " + personid + " Aktie: " + aktieisin +
                                         " Sonderdividende: " + dividendeSonderZweiter +
-                                        " generelle Dividende: " + dividendeGenerell);
+                                        " generelle Dividende: " + dividendeGenerell);*/
                             }
                             PersonenAktieZweiterPlatz.clear();
 
                             for (Integer personid : PersonenAktieRestlicherPlatz) {
                                 dividendeGenerell = aktienwertAktieBerechnen(aktieisin, personid, 0) / 100 * generelleDividende; // generelle Dividende berechnen
                                 updateDividende(personid, aktieisin, dividendeGenerell);
-
-                                System.out.println("Restlichen Plätze - Person: " + personid + " Aktie: " + aktieisin +
-                                        " generelle Dividende: " + dividendeGenerell);
+                                /*System.out.println("Restlichen Plätze - Person: " + personid + " Aktie: " + aktieisin +
+                                        " generelle Dividende: " + dividendeGenerell);*/
                             }
                             PersonenAktieRestlicherPlatz.clear();
                         }
@@ -386,6 +373,8 @@ public class Start extends JPanel {
             @Override
             public void actionPerformed(ActionEvent e) {
                 Cards.changeCard(Cards.nameSpielstand);
+                // SQL's aktualisieren
+                Spielstand.spielstandAktualisieren();
             }
         };
         show_spielstand.addActionListener(spielstand);
