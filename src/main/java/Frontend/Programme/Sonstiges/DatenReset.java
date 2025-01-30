@@ -392,7 +392,7 @@ public class DatenReset extends JPanel {
             } else {
                 // Kauf löschen
                 if(kauf_chb.isSelected()){
-                    SQL.table("DELETE FROM Kapitalverlauf WHERE Runde = " + (rundeEinstellung - 1));
+                    SQL.table("DELETE FROM Transaktionen WHERE Runde = " + (rundeEinstellung - 1));
                 }
                 // Werte und Dividenden löschen
                 if(wert_chb.isSelected()){
