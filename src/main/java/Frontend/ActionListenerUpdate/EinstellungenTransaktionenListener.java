@@ -1,5 +1,6 @@
 package Frontend.ActionListenerUpdate;
 
+import Backend.Fehler;
 import Datenbank.SQLEinstellungen;
 import Frontend.Checks.Checks;
 import Frontend.Komponenten.Interaction;
@@ -107,13 +108,20 @@ public class EinstellungenTransaktionenListener extends MyActionListenerUpdate {
         Checks.checkFieldVonBis(EinstellungenTransaktionen.aktieRunde, "isValidInteger", "Bitte eine gültige Anzahl an Aktien pro Runde angeben.", errorMessages, errorFlagsVonBis);
         Checks.checkField(EinstellungenTransaktionen.firstDividende, "isValidFloatNull", "Bitte einen gültigen Prozentsatz für den ersten Platz angeben.", errorMessages, errorFlags);
         Checks.checkField(EinstellungenTransaktionen.secondDividende, "isValidFloatNull", "Bitte einen gültigen Prozentsatz für den zweiten Platz angeben.", errorMessages, errorFlags);
-        if((Float.valueOf(EinstellungenTransaktionen.firstDividende.getTextfield()) + Float.valueOf(EinstellungenTransaktionen.secondDividende.getTextfield())) > 100){
-            errorMessages.add("Die Dividende für den ersten und zweiten Platz zusammen dürfen nicht mehr als 100% ergeben.");
-        }
-        if(Float.valueOf(EinstellungenTransaktionen.firstDividende.getTextfield()) < Float.valueOf(EinstellungenTransaktionen.secondDividende.getTextfield())){
-            errorMessages.add("Die Dividende für den zweiten Platz darf nicht größer als die des ersten sein.");
-        }
         Checks.checkField(EinstellungenTransaktionen.generelleDividende, "isValidFloatNull", "Bitte einen gültigen Prozentsatz für die generelle Dividende angeben.", errorMessages, errorFlags);
+
+        if(errorMessages.isEmpty()){
+            if((Float.valueOf(EinstellungenTransaktionen.firstDividende.getTextfield()) + Float.valueOf(EinstellungenTransaktionen.secondDividende.getTextfield())) > 100){
+                errorMessages.add("Die Dividende für den ersten und zweiten Platz zusammen dürfen nicht mehr als 100% ergeben.");
+                errorFlags.add(new Fehler(true, EinstellungenTransaktionen.firstDividende));
+                errorFlags.add(new Fehler(true, EinstellungenTransaktionen.secondDividende));
+            }
+            if(Float.valueOf(EinstellungenTransaktionen.firstDividende.getTextfield()) < Float.valueOf(EinstellungenTransaktionen.secondDividende.getTextfield())){
+                errorMessages.add("Die Dividende für den zweiten Platz darf nicht größer als die des ersten sein.");
+                errorFlags.add(new Fehler(true, EinstellungenTransaktionen.firstDividende));
+                errorFlags.add(new Fehler(true, EinstellungenTransaktionen.secondDividende));
+            }
+        }
     }
 
     @Override
