@@ -353,6 +353,8 @@ public class DatenReset extends JPanel {
                errorMessages.add("Die Runde ist offen. Käufe liegen in der aktuellen Runde vor.");
             } else if (rundeEinstellung == rundeAktienverlauf) {
                 errorMessages.add("Die Runde ist offen. Unternehmenswerte liegen in der aktuellen Runde vor.");
+            } else if (rundeEinstellung == 1) {
+                errorMessages.add("Die Runde 1 kann nicht gelöscht werden.");
             }
 
             if (errorMessages.isEmpty()){
@@ -378,18 +380,32 @@ public class DatenReset extends JPanel {
                 openRunde = true;
             }
 
+            // Runde 1 nicht löschen
+            if(rundeEinstellung == 1){
+                errorMessages.add("Die Runde 1 kann nicht gelöscht werden.");
+            }
+
             // Runde offen
-            if(openRunde) {
+            if(openRunde && errorMessages.isEmpty()) {
                 // Kauf löschen, wenn Runden identisch
-                if(kauf_chb.isSelected() && rundeEinstellung == rundeTransaktionen){
-                    SQL.table("DELETE FROM Transaktionen WHERE Runde = (SELECT MAX(Runde) FROM Transaktionen)");
+                if(kauf_chb.isSelected()){
+                    if (rundeEinstellung == rundeTransaktionen) {
+                        SQL.table("DELETE FROM Transaktionen WHERE Runde = (SELECT MAX(Runde) FROM Transaktionen)");
+                    } else {
+                        errorMessages.add("Es waren keine Käufe zum Löschen vorhanden.");
+                    }
                 }
+
                 // Wert löschen, wenn Runden identisch
-                if(wert_chb.isSelected() && rundeEinstellung == rundeAktienverlauf){
-                    SQL.table("DELETE FROM Aktienverlauf WHERE Runde = (SELECT MAX(Runde) FROM Aktienverlauf)");
+                if(wert_chb.isSelected()) {
+                    if (rundeEinstellung == rundeAktienverlauf) {
+                        SQL.table("DELETE FROM Aktienverlauf WHERE Runde = (SELECT MAX(Runde) FROM Aktienverlauf)");
+                    } else {
+                        errorMessages.add("Es waren keine Unternehmenswere zum Löschen vorhanden.");
+                    }
                 }
             // Runde geschlossen
-            } else {
+            } else if (errorMessages.isEmpty()) {
                 // Kauf löschen
                 if(kauf_chb.isSelected()){
                     SQL.table("DELETE FROM Transaktionen WHERE Runde = " + (rundeEinstellung - 1));
