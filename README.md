@@ -22,3 +22,15 @@ Weitere Informationen:
 -	Es werden keine Steuern gezahlt von den Privatpersonen. 20% vom Kassenbestand bezahlen die Unternehmen an Steuern (nicht Teil dieser Arbeit)
 -	Der Startkurs von einem Unternehmen muss angegeben werden können.
 -	Bruchstücke von Aktien können nicht erworben werden.
+
+Anlage vom Container in Docker mit dem externen Port 1731, dem Namen Abschlussaufgabe und der Datenbank aktienrechner:
+- Voraussetung: Docker Desktop geöffnet und Postgres heruntergeladen (docker pull postgres)
+- docker run --name Abschlussaufgabe -e POSTGRES_PASSWORD=verysecure -p 1731:5432 -d postgres
+- docker start Abschlussaufgabe
+- docker exec -it Abschlussaufgabe psql -U postgres
+- CREATE DATABASE aktienrechner;
+- \c aktienrechner
+
+Für jede weitere Verbindung durchführen:
+- docker exec -it Abschlussaufgabe psql -U postgres
+- \c aktienrechner
